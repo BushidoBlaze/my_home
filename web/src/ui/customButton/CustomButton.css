@@ -1,0 +1,16 @@
+.custom__button {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+
+    color: #FDFBEF;
+    background-color: #40553E;
+    border: 1px solid rgba(253, 251, 239, 0.4);
+
+    border-radius: 16px;
+    width: 236px;
+    height: 58px;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
