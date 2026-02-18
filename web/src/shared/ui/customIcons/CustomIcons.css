@@ -1,0 +1,23 @@
+.custom__icon {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    /* Сохранение пропорций */
+    object-fit: contain;
+
+    /* Отключение выделения */
+    user-select: none;
+    -webkit-user-drag: none;
+
+    /*z-index: 0;*/
+    /*overflow: hidden;*/
+}
+
+.custom__icon-1 {
+    top: -360px;
+    left: 1102px;
+
+    width: 434px;
+    height: 600px;
+}

@@ -8,7 +8,8 @@ import MainLayout from "./layouts/MainLayout.tsx";
 import Home from "./pages/Home.tsx";
 
 // styles
-import "./assets/styles/reset.css";
+import "./shared/assets/styles/reset.css";
+import "./shared/assets/styles/global.css";
 
 export default function App() {
     return (

@@ -1,0 +1,264 @@
+/*Service Management Section*/
+/*Основной контейнер секции*/
+.service-management {
+    width: 100%;
+    height: 90vh;
+    margin: 40px 0;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/*Контейнер для карточек*/
+.service-management__cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/*Service Management Card*/
+.service-management-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    width: 100%;
+    height: 455px;
+
+    padding: 30px;
+    background-color: #f5f5f5;
+
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+
+    transition: 0.4s all;
+}
+
+/*Hover эффекты для первых двух карточек*/
+.service-management-card:nth-child(1):hover,
+.service-management-card:nth-child(2):hover {
+    background-color: #4fa64f;
+}
+
+.service-management-card:nth-child(1):hover .service-management-card__title,
+.service-management-card:nth-child(2):hover .service-management-card__title {
+    color: #ffffff;
+}
+
+.service-management-card:nth-child(1):hover .service-management-card__description,
+.service-management-card:nth-child(2):hover .service-management-card__description {
+    color: #ffffff;
+}
+
+.service-management-card:hover .service-management__button {
+    border-color: #ffffff;
+}
+
+/*Заголовок карточки*/
+.service-management-card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/*Специальный случай для третьей карточки*/
+.service-management-card:nth-child(3) > .service-management-card__header {
+    height: 25%;
+}
+
+/*Контент внутри карточки*/
+.service-management-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/*Заголовок и описание карточки*/
+.service-management-card__title,
+.service-management-card__description {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    color: #000000;
+}
+
+.service-management-card__title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.service-management-card__description {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+/*Buttons*/
+/*Общий стиль кнопки*/
+.service-management__button {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+
+    width: auto;
+    height: auto;
+    padding: 16px;
+
+    color: #ffffff;
+    background-color: #4FA64F;
+
+    border-radius: 10px;
+    border: 1px solid #4fa64f;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.service-management__button:hover {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+/*List Items*/
+.service-management__list-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    cursor: pointer;
+    font-weight: 300;
+    padding: 16px 0;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+
+    color: #416fb1;
+
+    text-decoration: underline #416fb1;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 4px;
+
+    transition: 0.2s ease;
+}
+
+.service-management__list-item:hover {
+    transform: translateX(12px);
+}
+
+/*Detail Panel*/
+/*Панель деталей (по умолчанию скрыта)*/
+.service-management__detail-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    padding-right: 30px;
+    background-color: #f5f5f5;
+
+    transform: translateX(100%);
+    transition: 0.6s all;
+    pointer-events: none;
+}
+
+/*Панель открыта*/
+.service-management__detail-panel.open {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/*Контент панели деталей*/
+.service-management__detail-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+
+    height: 100%;
+    padding: 30px;
+}
+
+/*Заголовок панели*/
+.service-management__detail-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.service-management__detail-title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.service-management__detail-description {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #000000;
+}
+
+/*Навигация панели*/
+.service-management__detail-navigation {
+    display: flex;
+    gap: 12px;
+
+    position: relative;
+    z-index: 10;
+}
+
+.service-management__detail-switch-button,
+.service-management__detail-close {
+    width: 120px;
+    height: 50px;
+    padding: 10px;
+
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+
+    border-radius: 8px;
+    transition: 0.3s all;
+    cursor: pointer;
+}
+
+/*Кнопки навигации*/
+.service-management__detail-switch-button {
+    color: #000000;
+    border: 1px solid #4fa64f;
+}
+
+.service-management__detail-switch-button:hover {
+    color: #ffffff;
+    background-color: #4fa64f;
+}
+
+/*Кнопка закрытия*/
+.service-management__detail-close {
+    color: #000000;
+    border: 1px solid #c5382b;
+}
+
+.service-management__detail-close:hover {
+    color: #ffffff;
+    background-color: #c5382b;
+}
+
+/*Footer*/
+.service-management__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}

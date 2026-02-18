@@ -1,0 +1,17 @@
+.back-to-top__button {
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    color: #ffffff;
+    background-color: #4eba4e;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}

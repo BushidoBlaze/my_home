@@ -1,0 +1,18 @@
+.custom__background-icon {
+    position: absolute;
+    top: 180px;
+    left: 280px;
+
+    width: 35%;
+    height: 35%;
+
+    color: #ffffff;
+    filter: brightness(0.8);
+    stroke-width: 0.45;
+    z-index: 1;
+
+    transition: all 0.6s ease;
+    opacity: 0.9;
+
+    pointer-events: none;
+}
