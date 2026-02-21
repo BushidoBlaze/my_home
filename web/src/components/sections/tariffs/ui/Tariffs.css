@@ -1,0 +1,128 @@
+/*Внешний контейнер всей секции*/
+.tariffs-section {
+    width: 100%;
+    height: 90vh;
+    margin: 40px 0;
+    padding: 0 20px;
+}
+
+/*Универсальная карточка секции*/
+.plans-and-pricing-section,
+.tariffs-possibilities-tables {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    
+    background-color: #f5f5f5;
+    border-radius: 30px;
+
+    padding: 60px;
+    margin: 20px 0;
+}
+
+/*Cтроки с кнопками и ценой*/
+.plans-section,
+.pricing-section {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+/*базовые ui элементы (информационный текст поля / кнопка тарифов / цена)*/
+.designation-text,
+.plans-button,
+.price {
+    width: 100%;
+
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    text-align: center;
+
+    padding: 25px;
+    border: 2px solid transparent;
+    border-radius: 18px;
+
+    color: #000000;
+    background-color: #ffffff;
+
+    user-select: none; /*Нельзя выделить текст*/
+}
+
+/*Информационный текст поля*/
+.designation-text {
+    font-weight: 600;
+}
+
+/*Кнопка тарифов*/
+.plans-button {
+    font-size: 16px;
+    font-weight: 300;
+    cursor: pointer;
+
+    transition: 0.3s border-color;
+}
+
+.plans-button:hover {
+    border-color: #4EBA4E;
+}
+
+.plans-button--active {
+    color: #ffffff;
+    background-color: #4EBA4E;
+    font-weight: 600;
+}
+
+/*Цена*/
+.price {
+    font-size: 22px;
+    font-weight: 500;
+}
+
+/*Таблица возможностей*/
+.tariffs-table {
+    border-collapse: collapse;
+}
+
+/*Заголовок категории*/
+.tariffs-table__category-title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+
+    color: #4eba4e;
+    background-color: #ffffff;
+
+    border-radius: 12px;
+    padding: 12px;
+}
+
+/*Строка таблицы*/
+.tariffs-table__row {
+    padding: 8px 0;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+/*Текст - возможности*/
+.tariffs-table__feature {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #000000;
+    width: 100%;
+
+    padding: 12px;
+}
+
+/*Иконки*/
+.tariffs-table__icon {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2px;
+}
+
+.tariffs-table__icon--available {
+    color: #00A333;
+}
+
+.tariffs-table__icon--unavailable {
+    color: #c5382b;
+}
