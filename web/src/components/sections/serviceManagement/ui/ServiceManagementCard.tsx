@@ -11,7 +11,7 @@ export function ServiceManagementCard(props: ServiceManagementContentProps) {
     const {isOpen, currentItem, open, close, next, prev} = useServiceDetails(details);
 
     return (
-        <div className="service-management-card">
+        <section className="service-management-card">
             <CardHeader {...props} />
 
             {details && (
@@ -31,6 +31,6 @@ export function ServiceManagementCard(props: ServiceManagementContentProps) {
                     onPrev={prev}
                 />
             )}
-        </div>
+        </section>
     );
 }
