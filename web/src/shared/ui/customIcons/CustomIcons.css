@@ -9,9 +9,6 @@
     /* Отключение выделения */
     user-select: none;
     -webkit-user-drag: none;
-
-    /*z-index: 0;*/
-    /*overflow: hidden;*/
 }
 
 .custom__icon-1 {

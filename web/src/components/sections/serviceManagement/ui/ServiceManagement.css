@@ -1,8 +1,7 @@
-/*Service Management Section*/
 /*Основной контейнер секции*/
 .service-management {
     width: 100%;
-    height: 90vh;
+    height: 80vh;
     margin: 40px 0;
     padding: 0 20px;
     display: flex;
@@ -82,11 +81,12 @@
 /*Заголовок и описание карточки*/
 .service-management-card__title,
 .service-management-card__description {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     color: #000000;
 }
 
 .service-management-card__title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
     font-size: 22px;
     font-weight: 600;
     line-height: 1.2;
@@ -94,16 +94,15 @@
 
 .service-management-card__description {
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.5;
 }
 
-/*Buttons*/
 /*Общий стиль кнопки*/
 .service-management__button {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 500;
 
     width: auto;
     height: auto;
@@ -129,19 +128,18 @@
     align-items: center;
     gap: 3px;
 
-    cursor: pointer;
-    font-weight: 300;
-    padding: 16px 0;
-
     font-family: Inter, Arial, Helvetica, sans-serif;
     font-size: 16px;
+    font-weight: 400;
 
     color: #416fb1;
+    padding: 16px 0;
 
     text-decoration: underline #416fb1;
     text-decoration-thickness: 1.5px;
     text-underline-offset: 4px;
 
+    cursor: pointer;
     transition: 0.2s ease;
 }
 
@@ -149,7 +147,6 @@
     transform: translateX(12px);
 }
 
-/*Detail Panel*/
 /*Панель деталей (по умолчанию скрыта)*/
 .service-management__detail-panel {
     position: absolute;
@@ -202,7 +199,7 @@
 }
 
 .service-management__detail-description {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     font-weight: 300;

@@ -34,7 +34,6 @@
 .price {
     width: 100%;
 
-    font-family: "SF Pro", Arial, Helvetica, sans-serif;
     font-size: 18px;
     text-align: center;
 
@@ -50,13 +49,15 @@
 
 /*Информационный текст поля*/
 .designation-text {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
     font-weight: 600;
 }
 
 /*Кнопка тарифов*/
 .plans-button {
+    font-family: "Raleway", Arial, Helvetica, sans-serif;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 500;
     cursor: pointer;
 
     transition: 0.3s border-color;
@@ -74,6 +75,7 @@
 
 /*Цена*/
 .price {
+    font-family: "Inter", Arial, Helvetica, sans-serif;
     font-size: 22px;
     font-weight: 500;
 }
@@ -104,7 +106,7 @@
 
 /*Текст - возможности*/
 .tariffs-table__feature {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #000000;
     width: 100%;
