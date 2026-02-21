@@ -1,6 +1,8 @@
+import BackToTopButton from "@/widgets/backToTop/BackToTopButton.tsx";
 import HeroSection from "@/components/sections/hero/ui/HeroSection.tsx";
 import ServiceManagementSection from "@/components/sections/serviceManagement/ui/ServiceManagementSection.tsx";
-import BackToTopButton from "@/widgets/backToTop/BackToTopButton.tsx";
+import SloganLabel from "@/shared/ui/sloganLabel/SloganLabel.tsx";
+import TariffsSection from "@/components/sections/tariffs/ui/TariffsSection.tsx";
 
 export default function Home() {
     return (
@@ -13,6 +15,12 @@ export default function Home() {
 
             {/*Секция - управление сервисом*/}
             <ServiceManagementSection/>
+
+            {/*Слоган (UI - элемент)*/}
+            <SloganLabel sloganText="Вам больше времени на важные задачи, а мы автоматизируем рутину"/>
+
+            {/*Секция тарифов и цен*/}
+            <TariffsSection/>
         </>
     )
 }
