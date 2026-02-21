@@ -10,6 +10,7 @@ import Home from "./pages/Home.tsx";
 // styles
 import "./shared/assets/styles/reset.css";
 import "./shared/assets/styles/global.css";
+import "./shared/assets/styles/fonts.css";
 
 export default function App() {
     return (

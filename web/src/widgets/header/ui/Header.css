@@ -42,7 +42,7 @@
 }
 
 .header-nav__link {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #FDFBEF;
     transition: color 0.3s ease;
@@ -63,7 +63,7 @@
     font-family: Inter, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #FDFBEF;
-    font-weight: 700;
+    font-weight: 500;
     transition: 0.3s ease;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .header__login-button {
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #FDFBEF;
 
