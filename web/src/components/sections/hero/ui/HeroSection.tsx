@@ -20,7 +20,7 @@ export default function HeroSection() {
             </div>
 
             <div className="hero-buttons">
-                <CustomButton text="Попробовать бесплатно" className="hero__button hero__button--active "/>
+                <CustomButton text="Попробовать бесплатно" className="hero__button hero__button--active"/>
                 <CustomButton text="Тарифы" className="hero__button"/>
             </div>
 
