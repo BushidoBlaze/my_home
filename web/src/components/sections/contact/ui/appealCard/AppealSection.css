@@ -1,0 +1,104 @@
+/*Слайдер*/
+.appeal-slider {
+    position: relative;
+    height: 450px;
+    overflow: hidden;
+}
+
+.slider-window {
+    transition:
+            transform 0.8s ease-in-out,
+            opacity 0.8s ease-in-out;
+}
+
+.slider-window.leave {
+    transform: translateY(-60%);
+    opacity: 0;
+}
+
+/*Карточка*/
+.decorative-appeal-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+
+    position: relative;
+
+    width: 450px;
+    min-height: 72px;
+
+    border-radius: 12px;
+}
+
+/* Bubble-сообщения (обрывки-сообщений)*/
+.decorative-appeal-card__bubble {
+    padding: 12px 14px;
+    border-radius: 10px;
+    max-width: 85%;
+    animation: appeal-message-in 0.6s ease; /*Анимация @keyframes -- appeal-message-in*/
+}
+
+@keyframes appeal-message-in {
+    from {
+        opacity: 0;
+        transform: translateX(100px) scale(1);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Сообщение пользователя и финальное сообщение */
+.decorative-appeal-card__bubble--user,
+.decorative-appeal-card__bubble--thanks {
+    background-color: #ffffff;
+}
+
+/* Сообщение поддержки */
+.decorative-appeal-card__bubble--support {
+    background-color: #eefaf0;
+    align-self: flex-end;
+}
+
+/*Имя пользователя*/
+.decorative-appeal-card__user {
+    display: inline-block;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+
+    color: #000000;
+
+    margin-bottom: 6px;
+}
+
+/* Вопрос и ответ */
+.decorative-appeal-card__question,
+.decorative-appeal-card__answer {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #000000;
+}
+
+/* безопасный запас высоты*/
+.decorative-appeal-card.expanded,
+.decorative-appeal-card__support-block {
+    max-height: 1000px;
+    opacity: 1;
+}
+
+/*Имя поддержки*/
+.decorative-appeal-card__support {
+    display: inline-block;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #4EBA4E;
+    margin-bottom: 6px;
+}
