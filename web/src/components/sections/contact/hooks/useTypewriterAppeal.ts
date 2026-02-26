@@ -96,7 +96,8 @@ export function useTypewriterAppeal(
                 clearTimeout(timeoutRef.current);
             }
         };
-    }, [question, answer, thanks, startDelay, onComplete]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Возвращаем данные в компонент
     return {
