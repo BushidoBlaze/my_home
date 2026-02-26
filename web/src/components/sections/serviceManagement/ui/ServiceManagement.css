@@ -1,7 +1,7 @@
 /*Основной контейнер секции*/
 .service-management {
     width: 100%;
-    height: 80vh;
+    /*height: 80vh;*/
     margin: 40px 0;
     padding: 0 20px;
     display: flex;
