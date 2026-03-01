@@ -1,0 +1,130 @@
+/*Главный контейнер FAQ*/
+.FAQ-section {
+    width: 100%;
+    padding: 40px 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/*Заголовок секции*/
+.FAQ-main-title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: #000000;
+}
+
+.FAQ-main-description {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #979797;
+
+    text-align: center;
+}
+
+/*Основные контейнеры - title / ul*/
+.FAQ-main-title-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 30%;
+    max-width: 30%;
+    min-width: 30%;
+}
+
+.FAQ-list-container {
+    width: 70%;
+    max-width: 70%;
+    min-width: 70%;
+}
+
+/*Список вопросов*/
+.FAQ-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+/*Вопрос из списка*/
+.FAQ-list__item {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    padding: 12px;
+    border: 1px solid #CDCDCD;
+    border-radius: 12px;
+
+    cursor: pointer;
+}
+
+/*Контент вопроса с иконкой*/
+.FAQ-list-item__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/*Ответ на вопрос*/
+.FAQ-list-item__content {
+    width: 100%;
+    max-height: 0;
+
+    opacity: 0;
+    overflow: hidden;
+    transition: 0.3s ease all;
+}
+
+.FAQ-list-item__content--open {
+    max-height: 300px;
+    opacity: 1;
+}
+
+/*Заголовок, текст и ссылка на ресурс*/
+.FAQ-list-item__title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.FAQ-list-item__description {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    width: 95%;
+
+    margin: 6px 0;
+}
+
+.FAQ-list-item__link {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    color: #416FB1;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+
+    padding: 6px 0;
+}
+
+/*Иконки - Плюс и Минус (Открыто / Закрыто)*/
+.FAQ-list-item__icon {
+    color: #00A333;
+}
+
+.FAQ-list-item__icon--active {
+    color: #C5382B;
+}
