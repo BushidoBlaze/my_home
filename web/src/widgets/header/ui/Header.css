@@ -1,4 +1,8 @@
 .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     position: absolute;
     top: 0;
     left: 0;
@@ -8,47 +12,20 @@
     z-index: 100;
 }
 
-.header__nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/*Блок логотипа*/
-.header__logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header__logo-icon {
-    width: 36px;
-    height: 36px;
-    color: #ffffff;
-}
-
-.header__logo-text {
-    font-family: "SF Pro", Arial, Helvetica, sans-serif;
-    font-size: 24px;
-    font-weight: 400;
-    text-transform: uppercase;
-    color: #ffffff;
-}
-
 /* Навигационное меню */
-.header__list {
+.header__nav-list {
     display: flex;
     gap: 20px;
 }
 
-.header-nav__link {
+.header__nav-link {
     font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #FDFBEF;
     transition: color 0.3s ease;
 }
 
-.header-nav__link:hover {
+.header__nav-link:hover {
     color: #51e889;
 }
 

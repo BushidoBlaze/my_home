@@ -1,21 +1,19 @@
 import HeaderMenu from "./HeaderMenu.tsx";
-import HeaderLogo from "./HeaderLogo.tsx";
+import Logo from "@/shared/ui/logo/Logo.tsx";
 import HeaderDefaultInfo from "./HeaderDefaultInfo.tsx";
 import "./Header.css";
 
 export default function Header() {
     return (
         <header className="header">
-            <nav className="header__nav">
-                {/* Блок логотипа */}
-                <HeaderLogo/>
+            {/* Блок логотипа */}
+            <Logo/>
 
-                {/* Навигационное меню */}
-                <HeaderMenu/>
+            {/* Навигационное меню */}
+            <HeaderMenu/>
 
-                {/* Блок контактов и авторизации */}
-                <HeaderDefaultInfo/>
-            </nav>
+            {/* Блок контактов и авторизации */}
+            <HeaderDefaultInfo/>
         </header>
     );
 }
