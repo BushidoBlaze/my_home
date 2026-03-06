@@ -34,7 +34,12 @@ export default function TariffsSection() {
                 currentPrice={currentPrice}
             />
 
-            <MainTitle title={`Возможности тарифа: ${selectedTariffName}`}/>
+            <MainTitle title={
+                <>
+                    Возможности тарифа: <span style={{color: "#4EBA4E"}}>{selectedTariffName}</span>
+                </>
+            }/>
+
             <TariffsTablePossibilities selectedTariff={selectedTariff}/>
         </div>
     );
