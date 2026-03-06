@@ -1,4 +1,4 @@
-export const NAV_LINKS = [
+export const HEADER_NAV_LINKS = [
     {
         label: "Главная",
         to: "/",

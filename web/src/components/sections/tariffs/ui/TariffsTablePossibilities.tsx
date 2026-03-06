@@ -23,7 +23,7 @@ export default function TariffsTablePossibilities({selectedTariff}: TariffsTable
                 <tbody>
                 {categories.map((category) => (
                     <>
-                        {/* Заголовок категории */}
+                        {/*Заголовок категории*/}
                         <tr>
                             <td colSpan={2} className="tariffs-table__category-title">
                                 {category}
