@@ -10,9 +10,7 @@ interface PricingPlansProps {
 }
 export default function PricingPlans({selectedTariff, setSelectedTariff, currentPrice}: PricingPlansProps) {
     return (
-        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
-        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
-        <div className="plans-and-pricing-section" data-reveal>
+        <div className="plans-and-pricing-section">
             <div className="plans-section">
                 <p className="designation-text">
                     Тариф

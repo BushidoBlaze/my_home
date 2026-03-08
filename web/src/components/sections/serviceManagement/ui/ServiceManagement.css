@@ -33,12 +33,12 @@
     z-index: 2;
 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: 0.4s all;
+    transition: 0.3s all;
 }
 
 /*Hover эффекты для первых двух карточек*/
 .service-management-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06), 0 20px 48px rgba(0, 0, 0, 0.12);
 }
 
