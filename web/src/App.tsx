@@ -19,18 +19,23 @@ import "./shared/assets/styles/fonts.css";
 // Определяем basename в зависимости от окружения
 const basename = import.meta.env.PROD ? '/my_home' : '/';
 
-export default function App() {
+function AppRoutes() {
     useScrollReveal();
 
     return (
-        <BrowserRouter basename={basename}>
-            <Routes>
-                <Route element={<MainLayout/>}>
-                    <Route path="/" element={<Home/>}/>
-                </Route>
+        <Routes>
+            <Route element={<MainLayout/>}>
+                <Route path="/" element={<Home/>}/>
+            </Route>
+            <Route path="*" element={<NotFound/>}/>
+        </Routes>
+    );
+}
 
-                <Route path="*" element={<NotFound/>}/>
-            </Routes>
+export default function App() {
+    return (
+        <BrowserRouter basename={basename}>
+            <AppRoutes/>
         </BrowserRouter>
-    )
+    );
 }

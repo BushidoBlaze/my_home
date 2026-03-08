@@ -4,17 +4,16 @@ import "../Contact.css";
 export default function ContactCardForm() {
     return (
         <form className="contact-card__form">
-            {CONTACT_CARD.map((item) => {
-                return (
-                    <input
-                        type={item.type}
-                        placeholder={item.placeholder}
-                        required={item.required}
-                        className={item.className}
-                        pattern={item.pattern}
-                    />
-                );
-            })}
+            {CONTACT_CARD.map((item, index) => (
+                <input
+                    key={index}
+                    type={item.type}
+                    placeholder={item.placeholder}
+                    required={item.required}
+                    className={item.className}
+                    pattern={item.pattern}
+                />
+            ))}
 
             <textarea
                 placeholder="Ваш вопрос*"
