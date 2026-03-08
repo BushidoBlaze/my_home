@@ -19,9 +19,7 @@ export default function TariffsTablePossibilities({selectedTariff}: TariffsTable
     );
 
     return (
-        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
-        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
-        <div className="tariffs-possibilities-tables" data-reveal>
+        <div className="tariffs-possibilities-tables">
             <table className="tariffs-table">
                 <tbody>
                 {categories.map((category) => (

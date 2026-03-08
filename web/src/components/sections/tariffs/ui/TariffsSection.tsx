@@ -25,7 +25,9 @@ export default function TariffsSection() {
         )?.tariffName ?? "";
 
     return (
-        <div className="tariffs-section">
+        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
+        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
+        <div className="tariffs-section" data-reveal>
             <MainTitle title="Тарифы"/>
 
             <PricingPlans
