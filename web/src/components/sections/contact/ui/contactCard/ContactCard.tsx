@@ -4,7 +4,9 @@ import "../Contact.css";
 
 export default function ContactCard() {
     return (
-        <div className="contact-card">
+        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
+        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
+        <div className="contact-card" data-reveal>
             {/*Заголовок формы*/}
             <ContactCardHeader/>
 

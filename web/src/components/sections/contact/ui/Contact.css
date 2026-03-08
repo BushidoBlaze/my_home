@@ -29,7 +29,7 @@
     padding: 30px;
     border-radius: 18px;
 
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
@@ -56,9 +56,10 @@
     width: 100%;
     padding: 12px 16px;
 
-    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 16px;
     font-weight: 400;
+    letter-spacing: 0.4px;
 
     border: 1px solid #cdcdcd;
     border-radius: 8px;
@@ -118,13 +119,12 @@
     background-color: #4FA64F;
 }
 
-
 .contact-card__note {
     font-family: Inter, Arial, Helvetica, sans-serif;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 300;
 
-    color: #a3a3a3;
+    color: #000000;
     text-align: left;
 
     margin-top: 10px;

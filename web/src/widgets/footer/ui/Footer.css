@@ -59,7 +59,7 @@
 
 /*Вертикальный разделитель между колонками*/
 .footer__divider {
-    background: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     align-self: stretch;
 }
 

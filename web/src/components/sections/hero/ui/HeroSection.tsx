@@ -7,7 +7,9 @@ import "./HeroSection.css";
 export default function HeroSection() {
     return (
         <div className="hero-section">
-            <div className="hero__intro">
+            {/*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/}
+            {/*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/}
+            <div className="hero__intro" data-reveal>
                 <CustomTitle
                     title="Центр управления вашим домом"
                     className="hero__title"
@@ -19,12 +21,12 @@ export default function HeroSection() {
                 />
             </div>
 
-            <div className="hero-buttons">
+            <div className="hero-buttons" data-reveal>
                 <CustomButton text="Попробовать бесплатно" className="hero__button hero__button--active"/>
                 <CustomButton text="Тарифы" className="hero__button"/>
             </div>
 
-            <div className="hero-stats">
+            <div className="hero-stats" data-reveal>
                 {STATS_CONTENT.map((stat, index) => (
                     <div key={index} className="stat-item">
                         <CustomTitle
