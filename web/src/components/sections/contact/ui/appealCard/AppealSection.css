@@ -6,9 +6,7 @@
 }
 
 .slider-window {
-    transition:
-            transform 0.8s ease-in-out,
-            opacity 0.8s ease-in-out;
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
 }
 
 .slider-window.leave {
@@ -62,11 +60,16 @@
     align-self: flex-end;
 }
 
+.decorative-appeal-card__user,
+.decorative-appeal-card__question,
+.decorative-appeal-card__answer {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+}
+
 /*Имя пользователя*/
 .decorative-appeal-card__user {
     display: inline-block;
 
-    font-family: Inter, Arial, Helvetica, sans-serif;
     font-weight: 600;
     font-size: 16px;
 
@@ -78,7 +81,6 @@
 /* Вопрос и ответ */
 .decorative-appeal-card__question,
 .decorative-appeal-card__answer {
-    font-family: Raleway, Arial, Helvetica, sans-serif;
     font-size: 14px;
     line-height: 1.5;
     color: #000000;

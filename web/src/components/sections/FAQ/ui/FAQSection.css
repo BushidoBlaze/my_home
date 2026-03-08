@@ -5,7 +5,30 @@
 
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 60px;
+}
+
+/*Основной контейнер - title*/
+.FAQ-main-title-container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    flex: 0 0 400px;
+}
+
+/*Вертикальный разделитель между колонками*/
+.FAQ__divider {
+    flex: 0 0 1px;
+    background-color: rgba(0, 0, 0, 0.2);
+    align-self: stretch;
+}
+
+/*Основной контейнер - ul*/
+.FAQ-list-container {
+    flex: 1;
 }
 
 /*Заголовок секции*/
@@ -18,50 +41,32 @@
 
 .FAQ-main-description {
     font-family: Raleway, Arial, Helvetica, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     color: #979797;
-
     text-align: center;
 }
 
-/*Основные контейнеры - title / ul*/
-.FAQ-main-title-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
-    width: 30%;
-    max-width: 30%;
-    min-width: 30%;
-}
-
-.FAQ-list-container {
-    width: 70%;
-    max-width: 70%;
-    min-width: 70%;
-}
 
 /*Список вопросов*/
 .FAQ-list {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     gap: 12px;
-    width: 100%;
 }
 
 /*Вопрос из списка*/
 .FAQ-list__item {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
 
-    width: 100%;
-
-    padding: 12px;
-    border: 1px solid #CDCDCD;
-    border-radius: 12px;
-
+    padding: 12px 0;
+    border-bottom: 1px solid #CDCDCD;
     cursor: pointer;
 }
 
@@ -90,8 +95,8 @@
 
 /*Заголовок, текст и ссылка на ресурс*/
 .FAQ-list-item__title {
-    font-family: "SF Pro", Arial, Helvetica, sans-serif;
-    font-size: 20px;
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 16px;
     font-weight: 400;
 }
 

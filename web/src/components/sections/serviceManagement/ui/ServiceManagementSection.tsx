@@ -5,7 +5,9 @@ import "./ServiceManagement.css";
 
 export default function ServiceManagementSection() {
     return (
-        <div className="service-management">
+        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
+        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
+        <div className="service-management" data-reveal>
             <MainTitle title="Управление сервисом"/>
 
             <article className="service-management__cards">

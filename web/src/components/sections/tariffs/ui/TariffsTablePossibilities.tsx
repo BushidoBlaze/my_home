@@ -1,3 +1,4 @@
+import React from "react";
 import {CircleCheck, CircleMinus} from "lucide-react";
 import type {Tariff} from "../model/types.ts";
 import {TARIFFS_POSSIBILITIES} from "../model/data.ts";
@@ -18,11 +19,13 @@ export default function TariffsTablePossibilities({selectedTariff}: TariffsTable
     );
 
     return (
-        <div className="tariffs-possibilities-tables">
+        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
+        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
+        <div className="tariffs-possibilities-tables" data-reveal>
             <table className="tariffs-table">
                 <tbody>
                 {categories.map((category) => (
-                    <>
+                    <React.Fragment key={category}>
                         {/*Заголовок категории*/}
                         <tr>
                             <td colSpan={2} className="tariffs-table__category-title">
@@ -58,7 +61,7 @@ export default function TariffsTablePossibilities({selectedTariff}: TariffsTable
                                     </tr>
                                 );
                             })}
-                    </>
+                    </React.Fragment>
                 ))}
                 </tbody>
             </table>

@@ -1,3 +1,4 @@
+import {Star, Landmark} from "lucide-react";
 import type {Tariff} from "../model/types.ts";
 import {TARIFFS_PLANS_CONTENT} from "../model/data.ts";
 import "./Tariffs.css";
@@ -9,9 +10,14 @@ interface PricingPlansProps {
 }
 export default function PricingPlans({selectedTariff, setSelectedTariff, currentPrice}: PricingPlansProps) {
     return (
-        <div className="plans-and-pricing-section">
+        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
+        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
+        <div className="plans-and-pricing-section" data-reveal>
             <div className="plans-section">
-                <p className="designation-text">Тариф</p>
+                <p className="designation-text">
+                    Тариф
+                    <Star strokeWidth={1.25}/>
+                </p>
 
                 {/*КНОПКИ ТАРИФОВ*/}
                 {TARIFFS_PLANS_CONTENT.map((plan) => (
@@ -31,7 +37,10 @@ export default function PricingPlans({selectedTariff, setSelectedTariff, current
 
             {/*ОТОБРАЖЕНИЕ ЦЕНЫ*/}
             <div className="pricing-section">
-                <p className="designation-text">Цена</p>
+                <p className="designation-text">
+                    Цена
+                    <Landmark strokeWidth={1.25} />
+                </p>
                 <span className="price">{currentPrice} ₽</span>
             </div>
         </div>

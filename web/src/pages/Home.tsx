@@ -19,13 +19,21 @@ export default function Home() {
             <ServiceManagementSection/>
 
             {/*Слоган (UI - элемент)*/}
-            <SloganLabel sloganText="Вам больше времени на важные задачи, а мы автоматизируем рутину"/>
+            <SloganLabel sloganText={
+                <>
+                    Вам больше времени на важные задачи, <br/> а мы автоматизируем рутину
+                </>
+            }/>
 
             {/*Секция тарифов и цен*/}
             <TariffsSection/>
 
             {/*Слоган (UI - элемент)*/}
-            <SloganLabel sloganText="Остались вопросы? Напишите, а мы поможем разобраться"/>
+            <SloganLabel sloganText={
+                <>
+                    Остались вопросы? <br/> Напишите, а мы поможем разобраться
+                </>
+            }/>
 
             {/*Секция контактов*/}
             <ContactSection/>
