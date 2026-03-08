@@ -6,9 +6,7 @@ import "./Footer.css";
 
 export default function Footer() {
     return (
-        /*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/
-        /*используется в глобальном хуке useScrollReveal.ts для плавного скролла секции*/
-        <footer className="footer" data-reveal>
+        <footer className="footer">
             {/*Статус*/}
             <div className="footer__status">
                 <span className="footer__status-dot"/>
