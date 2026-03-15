@@ -13,7 +13,7 @@ export default function Possibilities() {
             <Devices/>
 
             {/*Слоган (UI - элемент)*/}
-            <SloganLabel sloganText={<>Все инструменты для комфортного управления домом в одном месте.</>}/>
+            <SloganLabel sloganText={<>Все инструменты для комфортного управления домом в одном месте</>}/>
 
             {/*Карточки возможностей*/}
             <PossibilitiesCards/>
