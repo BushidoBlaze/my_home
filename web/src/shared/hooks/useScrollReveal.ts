@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import {useEffect} from "react";
+import {useLocation} from "react-router-dom";
 
 export function useScrollReveal() {
     const location = useLocation();
@@ -19,7 +19,7 @@ export function useScrollReveal() {
                     }
                 });
             },
-            { threshold: 0.1 }
+            {threshold: 0.1}
         );
 
         const timeout = setTimeout(() => {

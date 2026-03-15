@@ -1,16 +1,23 @@
 .custom__button {
-    font-family: Inter, Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 
-    color: #FDFBEF;
-    background-color: transparent;
-
-
-    border-radius: 16px;
-    width: 236px;
+    width: 100%;
+    min-width: 150px;
+    max-width: 280px;
     height: 58px;
 
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+
+    color: #ffffff;
+    background: none;
+
+    border-radius: 16px;
     cursor: pointer;
     transition: 0.3s ease-in-out;
 }

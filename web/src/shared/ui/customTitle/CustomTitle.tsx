@@ -1,7 +1,8 @@
+import type {ReactNode} from "react";
 import "./CustomTitle.css";
 
 interface CustomTextProps {
-    title: string;
+    title: ReactNode;
     className?: string;
 }
 

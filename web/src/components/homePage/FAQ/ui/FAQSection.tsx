@@ -1,5 +1,5 @@
 import MainTitle from "@/shared/ui/mainTitle/MainTitle.tsx";
-import FAQList from "@/components/sections/FAQ/ui/FAQList.tsx";
+import FAQList from "./FAQList.tsx";
 import "./FAQSection.css";
 
 export default function FAQSection() {

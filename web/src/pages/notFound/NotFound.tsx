@@ -2,7 +2,7 @@ import {ChevronsRight} from "lucide-react";
 import {Link} from "react-router-dom";
 import "./NotFound.css";
 
-import heroImage from "@/shared/assets/images/background-image-not-found-page.jpg";
+import heroImage from "@/shared/assets/images/notFound/background-image-not-found-page.jpg";
 
 export default function NotFound() {
     return (
@@ -28,7 +28,6 @@ export default function NotFound() {
                     <span className="not-found__button-arrow"><ChevronsRight strokeWidth={0.75}/></span>
                 </Link>
             </main>
-
         </div>
     );
 }
