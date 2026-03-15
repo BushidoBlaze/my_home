@@ -8,7 +8,7 @@
     left: 0;
     right: 0;
     padding: 24px 12px;
-    background-color: transparent;
+    background: none;
     z-index: 100;
 }
 

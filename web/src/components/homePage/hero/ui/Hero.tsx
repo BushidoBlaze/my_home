@@ -2,9 +2,9 @@ import {STATS_CONTENT} from "../model/data.ts";
 import CustomButton from "@/shared/ui/customButton/CustomButton.tsx";
 import CustomTitle from "@/shared/ui/customTitle/CustomTitle.tsx";
 import CustomDescription from "@/shared/ui/customText/CustomDescription.tsx";
-import "./HeroSection.css";
+import "./Hero.css";
 
-export default function HeroSection() {
+export default function Hero() {
     return (
         <div className="hero-section">
             {/*data-reveal - data-атрибут, фича для хранения произвольных данных на элементе,*/}
@@ -16,7 +16,7 @@ export default function HeroSection() {
                 />
 
                 <CustomDescription
-                    description="Ваш личный помощник в сервисах ЖКХ онлайн"
+                    description="Единая платформа для жильцов и управляющих компаний онлайн"
                     className="hero__description"
                 />
             </div>

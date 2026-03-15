@@ -21,3 +21,10 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+#futures
+audience
+possibilitiesCards
+reviews
+stats
+steps
