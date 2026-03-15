@@ -1,0 +1,102 @@
+/*Главный контейнер секции*/
+.possibilities-cards {
+    padding: 60px;
+    background: #f7f7f5;
+}
+
+/*Заголовок секции*/
+.possibilities-cards__title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 38px;
+    font-weight: 600;
+
+    color: #000000;
+
+    margin-bottom: 20px;
+}
+
+/*Сетка карточек*/
+.possibilities-cards__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+/*Карточка*/
+.possibility-card {
+    border-radius: 18px;
+
+    background-color: #ffffff;
+    padding: 28px 26px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03), 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.possibility-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04), 0 16px 36px rgba(0, 0, 0, 0.09);
+}
+
+.possibility-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+/*Контейнер иконки*/
+.possibility-card__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+
+    background-color: rgba(68, 223, 68, 0.14);
+}
+
+.possibility-card__icon {
+    color: #339733;
+}
+
+/*Тег аудитории*/
+.possibility-card__tag {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    color: #4EBA4E;
+    background-color: rgba(78, 186, 78, 0.08);
+
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.possibility-card__tag--uk { /*Управляющая компания*/
+    color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.possibility-card__title {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+.possibility-card__description {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+
+    color: rgba(0, 0, 0, 0.55);
+}
