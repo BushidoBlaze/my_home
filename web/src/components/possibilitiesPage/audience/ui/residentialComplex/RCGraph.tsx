@@ -9,7 +9,7 @@ export default function RCGraph({inView}: RCGraphProps) {
     return (
         <div className="audience-rc-dashboard__chart-wrap">
             <p className="audience-dashboard__chart-title">Расходы ЖКХ, ₽</p>
-            <ResponsiveContainer width={310} height={230}>
+            <ResponsiveContainer width={320} height={240}>
                 <BarChart
                     data={BAR_DATA}
                     barSize={24}

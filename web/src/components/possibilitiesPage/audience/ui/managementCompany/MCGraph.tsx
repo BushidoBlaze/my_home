@@ -9,7 +9,7 @@ export default function MCGraph({inView}: MCGraphProps) {
     return (
         <div className="audience-mc-dashboard__chart-wrap">
             <p className="audience-dashboard__chart-title">Заявки по статусам</p>
-            <ResponsiveContainer width={300} height={230}>
+            <ResponsiveContainer width={320} height={230}>
                 <PieChart>
                     <Pie
                         data={DONUT_DATA}
