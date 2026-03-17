@@ -23,7 +23,6 @@ dist
 *.sw?
 
 #futures
-audience
 reviews
 stats
 steps
