@@ -56,6 +56,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    padding-right: 60px;
 }
 
 /*Вопрос из списка*/
