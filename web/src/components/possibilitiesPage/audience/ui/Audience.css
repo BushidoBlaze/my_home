@@ -1,0 +1,246 @@
+/*Главный контейнер*/
+.possibilities-audience {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #b6b6b6;
+    border-bottom: 1px solid #b6b6b6;
+    background: linear-gradient(to right,
+    #012025 0%,
+    #1D543B 30%,
+    #2F7C4A 60%,
+    #57A35D 85%,
+    #8FCF87 100%
+    );
+}
+
+.possibilities-audience__block {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 80px 60px;
+}
+
+/*Текстовый контейнер - контент*/
+.possibilities-audience__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.possibilities-audience__label {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #4EBA4E;
+    margin-bottom: 16px;
+}
+
+.possibilities-audience__title {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 700;
+    line-height: 1.12;
+    color: #ffffff;
+    margin-bottom: 12px;
+}
+
+.possibilities-audience__description {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.8);
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.possibilities-audience__feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin: 0 0 28px;
+}
+
+.possibilities-audience__feature-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.possibilities-audience__feature-icon {
+    color: #339733;
+    flex-shrink: 0;
+}
+
+.possibilities-audience__button--outline {
+    color: rgba(255, 255, 255, 0.7);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+
+.possibilities-audience__button--outline:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.possibilities-audience__button--green {
+    background: #4EBA4E;
+    color: #ffffff;
+    border: 1.5px solid #4EBA4E;
+}
+
+.possibilities-audience__button--green:hover {
+    background: #3da83d;
+    border-color: #3da83d;
+    transform: translateY(-2px);
+}
+
+/*Общие стили для всех карточек*/
+.audience-mc-dashboard__chart-wrap,
+.audience-mc-dashboard__counter,
+.audience-rc-dashboard__chart-wrap,
+.audience-rc-dashboard__progress-wrap {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+}
+
+/*Дашборд УК*/
+.audience-mc-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 0 0 300px;
+}
+
+.audience-mc-dashboard__legend {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.audience-mc-dashboard__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.audience-mc-dashboard__legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.audience-mc-dashboard__legend-label {
+    font-family: Raleway, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    flex: 1;
+}
+
+.audience-mc-dashboard__legend-value {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.audience-mc-dashboard__counters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.audience-mc-dashboard__counter {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 12px; /* переопределяет общий border-radius */
+}
+
+.audience-mc-dashboard__counter-value {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.audience-mc-dashboard__counter-label {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/*Дашборд Жильцов*/
+.audience-rc-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 0 0 290px;
+}
+
+.audience-dashboard__chart-title {
+    font-family: "SF Pro", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 8px;
+}
+
+.audience-rc-dashboard__progress-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.audience-rc-progress__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.audience-rc-progress__label {
+    font-family: Raleway, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.audience-rc-progress__value {
+    font-family: Inter, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.audience-rc-progress__track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.audience-rc-progress__fill {
+    height: 100%;
+    background: #4EBA4E;
+    border-radius: 2px;
+    transition: width 2s;
+}

@@ -2,6 +2,7 @@ import Hero from "@/components/possibilitiesPage/hero/ui/Hero.tsx";
 import Devices from "@/components/possibilitiesPage/devices/ui/Devices.tsx";
 import SloganLabel from "@/shared/ui/sloganLabel/SloganLabel.tsx";
 import PossibilitiesCards from "@/components/possibilitiesPage/possibilitiesCards/ui/PossibilitiesCards.tsx";
+import Audience from "@/components/possibilitiesPage/audience/ui/Audience.tsx";
 
 export default function Possibilities() {
     return (
@@ -17,6 +18,12 @@ export default function Possibilities() {
 
             {/*Карточки возможностей*/}
             <PossibilitiesCards/>
+
+            {/*Слоган (UI - элемент)*/}
+            <SloganLabel sloganText={<>Прозрачность на каждом шаге <br/>от заявки до закрытия</>}/>
+
+            {/*Дашборды*/}
+            <Audience/>
         </>
     )
 }
