@@ -1,10 +1,10 @@
 # 🏠 Мой Дом / My Home
 
 RUS:
-**Мой Дом** — это мобильное приложение и web-платформа, для жилых комплексов.
+**Мой Дом** — это web-платформа, единого цифрого пространства для ЖК.
 
 ENG:
-**My Home** is a mobile application and web platform for residential complexes.
+**My Home** is a web platform, a single digital space for residential complexes.
 
 ---
 
@@ -20,8 +20,7 @@ ENG:
 
 **My Home** — Unites residents and management companies in a single digital space.
 Allows you to submit applications, vote on improvements, pay utility bills, order services, and communicate with
-neighbors.
-Ensures transparency of expenses and control over the fulfillment of applications.
+neighbors. Ensures transparency of expenses and control over the fulfillment of applications.
 
 ---
 
@@ -46,47 +45,58 @@ Create a digital environment for interaction between all stakeholders involved i
 ## 📋 Основные возможности / Key features
 
 RUS:
-- 📱 **Мобильное приложение и веб-интерфейс** — для жильцов и управляющих компаний.
+
+- 📱 **Веб-интерфейс** — для жильцов и управляющих компаний.
 - 🧾 **Подача заявок онлайн** — ремонт, уборка, обслуживание.
 - 📊 **Индикаторы выполнения заявок** — контроль этапов и сроков работ в реальном времени.
 - 💰 **Прозрачный учёт расходов** — визуализация трат и сборов в виде круговых диаграмм.
 - 🛒 **Встроенный маркетплейс услуг** — клининг, доставка, мелкий ремонт и другие сервисы.
-- 💬 **Голосование и опросы** — быстрые коллективные решения по благоустройству и улучшениям без созвонов 
-(в виде голосования).
+- 💬 **Голосование и опросы** — быстрые коллективные решения по благоустройству и улучшениям как по созвонам, так и
+  голосованием в чате.
 
 ENG:
-- 📱 **Mobile App & Web Interface** — for residents and management companies.
+
+- 📱 **Web Interface** — for residents and management companies.
 - 🧾 **Online Service Requests** — repairs, cleaning, maintenance.
 - 📊 **Request Progress Indicators** — real-time tracking of task stages and deadlines.
 - 💰 **Transparent Expense Tracking** — visualization of costs and collections using pie charts.
 - 🛒 **Built-in Service Marketplace** — cleaning, delivery, minor repairs, and other services.
-- 💬 **Voting & Polls** — fast collective decisions on improvements and upkeep without phone calls
-(in the form of voting).
+- 💬 **Voting and polls** — quick, collaborative decisions on improvements and improvements, both via phone calls and
+  chat voting.
 
 ---
 
 ## 💡 Преимущества / Advantages
 
 RUS:
-- Повышение прозрачности расходов и доверия жильцов к управляющим компаниям;
-- Сокращение времени обработки заявок;
-- Снижение административных издержек управляющих компаний;
-- Рост удовлетворённости жильцов.
+
+- Прозрачность расходов;
+- Встроенный маркетплейс дополнительных услуг;
+  - Отслеживание заявок в реальном времени;
+- Единый портал для всех коммуникаций;
+- История всех операций по квартире;
+- Автоматическое формирование отчетности для УК;
 
 ENG:
-- Increased transparency of expenses and resident trust in management companies;
-- Reduced application processing time;
-- Reduced administrative costs for management companies;
-- Increased resident satisfaction.
+
+- Expense transparency;
+- Integrated marketplace for additional services;
+- Real-time application tracking;
+- Single portal for all communications;
+- History of all apartment transactions;
+- Automatic reporting for the management company;
+
 ---
 
 ## 👥 Целевая аудитория / Target audience
 
 RUS:
+
 - Управляющие компании (B2B).
 - Жильцы и арендаторы квартир (B2C).
 
 ENG:
+
 - Management companies (B2B).
 - Residents and renters (B2C).
 
@@ -95,40 +105,51 @@ ENG:
 ## 🚀 Бизнес-модель / Business model
 
 RUS:
+
 - **Подписка для управляющих компаний** (годовая / месячная).
 - **Комиссия с транзакций** во внутреннем маркетплейсе услуг.
+- **Платные дополнительные модули** и интеграции для УК.
+- **Размещение не навязчивой рекламы** сервисных партнеров.
+- **Реализация товаров и услуг** спонсоров и партнеров на маркетплейсе услуг.
 
 ENG:
+
 - **Subscription for management companies** (annual / monthly).
 - **Transaction fees** in the internal services marketplace.
+- **Paid additional modules** and integrations for the management company.
+- **Placement of non-intrusive advertising** for service partners.
+- **Sale of goods and services** from sponsors and partners on the service marketplace.
 
 ---
 
 ## ⚙️ Технологии / Technologies
 
-- **Backend:** C# / .NET 10
+- **Backend:** C# / .NET 10 + (ASP.NET Core)
 - **Frontend:** React + TypeScript
 - **Database:** PostgreSQL
-- **Аналитика / Analytics:** Grafana (дашборды)
-- **API:** REST / WebSocket
+- **Аналитика / Analytics:** Grafana
+- **API:** REST, SOAP, WebSocket
 
 ---
 
 ## 🧩 Интеграции / Integrations
 
 RUS:
-- 1С / ERP-системы
+
+- 1С / ERP-системы (обдумывается)
 
 ENG:
-- 1C / ERP systems
+
+- 1C / ERP systems (thinking about it)
 
 ---
 
 ## 🆕 Будущие фичи / Future features
 
 RUS:
-- 🗣️ **Интеграция с голосовым помощником “Алиса”** — управление и навигация голосом.
-- ☁️ **Облачная архитектура** — безопасность, надёжность и интеграция с внешними системами.
+- **Мобильное приложение** для Android и iOS
+- **Интеграция с голосовым помощником “Алиса”** — управление и навигация голосом.
+- **Облачная архитектура** — безопасность, надёжность и интеграция с внешними системами.
 -
 - Платёжные шлюзы **СберPay**
 - Голосовой помощник **Алиса**
@@ -140,8 +161,9 @@ RUS:
 - **AI & Voice Integration:** Яндекс Алиса SDK, ML-модуль для обработки обращений
 
 ENG:
-- 🗣️ **Integration with Yandex Alice Voice Assistant** — voice-controlled management and navigation.
-- ☁️ **Cloud Architecture** — security, reliability, and integration with external systems.
+- **Mobile application** for Android and iOS
+- **Integration with Yandex Alice Voice Assistant** — voice-controlled management and navigation.
+- **Cloud Architecture** — security, reliability, and integration with external systems.
 -
 - **SberPay** payment gateways
 - **Yandex Alice** voice assistant
