@@ -1,0 +1,16 @@
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\bin\Debug\net10.0\MyHome.Application.deps.json
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\bin\Debug\net10.0\MyHome.Application.dll
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\bin\Debug\net10.0\MyHome.Application.pdb
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\bin\Debug\net10.0\MyHome.Domain.dll
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\bin\Debug\net10.0\MyHome.Domain.pdb
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.csproj.AssemblyReference.cache
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.AssemblyInfoInputs.cache
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.AssemblyInfo.cs
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.csproj.CoreCompileInputs.cache
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.sourcelink.json
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.A.A8908851.Up2Date
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.dll
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\refint\MyHome.Application.dll
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\MyHome.Application.pdb
+C:\Users\dotar\OneDrive\Рабочий стол\my-home\backend\MyHome.Application\obj\Debug\net10.0\ref\MyHome.Application.dll

@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\MyHome.Api",
+    "\\MyHome.Api\\Controllers",
+    "\\MyHome.Api\\Hubs",
+    "\\MyHome.Application\\bin\\Debug",
+    "\\MyHome.Application\\obj",
+    "\\MyHome.Domain\\Entities",
+    "\\MyHome.Infrastructure\\Persistence"
+  ],
+  "SelectedNode": "\\MyHome.Api\\Controllers\\AuthController.cs",
+  "PreviewInSolutionExplorer": false
+}
