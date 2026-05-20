@@ -125,10 +125,57 @@ ENG:
 ## ⚙️ Технологии / Technologies
 
 - **Backend:** C# / .NET 10 + (ASP.NET Core)
-- **Frontend:** React + TypeScript
+- **Frontend:** React + TypeScript + Vite
 - **Database:** PostgreSQL
+- **Realtime:** SignalR
 - **Аналитика / Analytics:** Grafana
 - **API:** REST, SOAP, WebSocket
+
+---
+
+## 🗂️ Структура проекта / Project structure
+
+```
+my-home/
+├── backend/                      # .NET 10 solution
+│   ├── MyHome.Api/               # ASP.NET Core entry point (controllers, hubs)
+│   ├── MyHome.Application/       # Use cases, services
+│   ├── MyHome.Domain/            # Entities, domain logic
+│   └── MyHome.Infrastructure/    # EF Core, persistence
+└── web/                          # React + Vite frontend
+    └── src/
+        ├── app/                  # Root App component, routing
+        ├── api/                  # API clients (axios)
+        ├── apps/                 # Role-scoped dashboards
+        │   ├── manager/          # Manager-side pages
+        │   └── resident/         # Resident-side pages
+        ├── pages/                # Marketing pages (home, tariffs, blog, auth, …)
+        ├── layouts/              # MarketingLayout, etc.
+        ├── widgets/              # Sidebar, TopBar, Header, TariffsSection
+        └── shared/               # UI primitives, hooks, constants, styles
+```
+
+---
+
+## 🚀 Запуск / Getting started
+
+### Frontend
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Dev-сервер по умолчанию запускается на `http://localhost:5174`.
+
+### Backend
+
+```bash
+cd backend
+dotnet restore
+dotnet run --project MyHome.Api
+```
 
 ---
 
