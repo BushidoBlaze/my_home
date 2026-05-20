@@ -1,0 +1,274 @@
+/* ============================================================
+   Hero.css — /tariffs
+   2-колонки: текст слева, анимированный стек карточек справа
+   ============================================================ */
+
+/* ── Обёртка ──────────────────────────────────────────────── */
+.tariffs-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+    min-height: 100vh;
+    padding: 120px 100px 80px;
+    background: linear-gradient(to bottom, #012025 0%, #1D543B 30%, #2F7C4A 60%, #57A35D 85%, #8FCF87 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Левая колонка ────────────────────────────────────────── */
+.tariffs-hero__left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Заголовок */
+.tariffs-hero__title {
+    font-family: "SF Pro", sans-serif;
+    font-size: clamp(36px, 4.5vw, 72px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin: 0;
+}
+
+.tariffs-hero__title-accent {
+    background: #8FCF87;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Описание */
+.tariffs-hero__desc {
+    font-size: 18px;
+    font-family: Raleway, sans-serif, Arial;
+    font-weight: 300;
+    line-height: 1.55;
+    color: rgb(201, 201, 201);
+    margin: 0;
+    max-width: 440px;
+}
+
+/* Кнопки */
+.tariffs-hero__actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+/* ── Правая колонка: превью-карточки ─────────────────────── */
+.tariffs-hero__preview {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* ── Стек карточек ────────────────────────────────────────── */
+.tc-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ── Одна карточка тарифа ─────────────────────────────────── */
+.tc-card {
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+    transition: background 0.7s ease,
+    border-color 0.7s ease,
+    box-shadow 0.7s ease;
+}
+
+/* Активная карточка */
+.tc-card--active {
+    background: rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+/* Выделенная (популярный) — активная */
+.tc-card--highlight.tc-card--active {
+    border-color: rgba(143, 207, 135, 0.4);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(143, 207, 135, 0.12) inset;
+}
+
+/* Шапка — всегда видна */
+.tc-card__head {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: padding 0.6s ease;
+}
+
+.tc-card--active .tc-card__head {
+    padding: 20px 20px 16px;
+}
+
+.tc-card__name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.tc-card__name {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.6s ease;
+}
+
+.tc-card--active .tc-card__name {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.tc-card__badge {
+    font-family: "Inter", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #8FCF87;
+    background: rgba(143, 207, 135, 0.12);
+    border: 1px solid rgba(143, 207, 135, 0.28);
+    padding: 2px 8px;
+    border-radius: 100px;
+    white-space: nowrap;
+}
+
+.tc-card__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.tc-card__price {
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    transition: font-size 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s ease;
+    line-height: 1;
+}
+
+.tc-card--active .tc-card__price {
+    font-size: 26px;
+}
+
+.tc-card--highlight.tc-card--active .tc-card__price {
+    color: #8FCF87;
+}
+
+.tc-card__period {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Тело: раскрывается анимацией ────────────────────────── */
+.tc-card__body {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s ease 0.15s,
+    padding 0.6s ease;
+    padding: 0 20px;
+}
+
+.tc-card__body--open {
+    max-height: 200px;
+    opacity: 1;
+    padding: 0 20px 20px;
+}
+
+/* Список фич */
+.tc-card__features {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.tc-card__features li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.tc-card__features li svg {
+    color: #8FCF87;
+    flex-shrink: 0;
+}
+
+/* ── Индикатор прогресса (точки) ─────────────────────────── */
+.tc-progress {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-left: 4px;
+}
+
+.tc-progress__dot {
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 20px;
+    transition: width 0.6s ease, background 0.6s ease;
+}
+
+.tc-progress__dot--active {
+    width: 32px;
+    background: #8FCF87;
+}
+
+/* ── Адаптив ──────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .tariffs-hero {
+        grid-template-columns: 1fr;
+        padding: 120px 40px 80px;
+        gap: 48px;
+    }
+
+    .tariffs-hero__preview {
+        max-width: 520px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tariffs-hero {
+        padding: 100px 20px 80px;
+    }
+
+    .tariffs-hero__title {
+        font-size: 36px;
+    }
+
+    .tariffs-hero__desc {
+        font-size: 16px;
+    }
+
+    .tariffs-hero__actions {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,499 @@
+/* ============================================================
+   REGISTER PAGE
+   Страница регистрации с двумя режимами:
+   - Житель (ЖК): форма слева, бренд справа
+   - УК: бренд слева, форма справа
+   Переключение сопровождается плавной анимацией слайда
+   ============================================================ */
+
+
+/* ─── Корневой контейнер ─────────────────────────────────── */
+
+.register {
+    min-height: 100vh;
+    display: grid;
+
+    /*
+      Два равных столбца.
+      При смене режима слоты меняются местами через order,
+      что визуально переставляет форму и бренд.
+    */
+    grid-template-columns: 1fr 1fr;
+
+    font-family: "SF Pro", sans-serif;
+
+    /* Убираем горизонтальный overflow во время анимации */
+    overflow: hidden;
+}
+
+
+/* ─── Слоты (обёртки формы и бренда) ────────────────────── */
+
+/*
+  Каждый слот занимает одну строку сетки.
+  Позиция (order) меняется при смене режима —
+  это и создаёт эффект перестановки.
+*/
+.register__slot {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    grid-row: 1;
+}
+
+/* Слот формы: в режиме жителя — первый (слева) */
+.register__slot--form.register__slot--left {
+    grid-column: 1;
+    order: 1;
+    animation: register-slide-in-left 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Слот формы: в режиме УК — второй (справа) */
+.register__slot--form.register__slot--right {
+    grid-column: 2;
+    order: 2;
+    animation: register-slide-in-right 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Слот бренда: в режиме жителя — второй (справа) */
+.register__slot--brand.register__slot--right {
+    grid-column: 2;
+    order: 2;
+    animation: register-slide-in-right 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Слот бренда: в режиме УК — первый (слева) */
+.register__slot--brand.register__slot--left {
+    grid-column: 1;
+    order: 1;
+    animation: register-slide-in-left 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Бренд и форма-сайд растягиваются на всю высоту слота */
+.register__slot--brand .register__brand,
+.register__slot--form .register__form-side {
+    flex: 1;
+    min-height: 100vh;
+}
+
+
+/* ─── Анимации слайда ────────────────────────────────────── */
+
+@keyframes register-slide-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes register-slide-in-right {
+    from {
+        opacity: 0;
+        transform: translateX(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* ─── Переключатель режимов ──────────────────────────────── */
+
+/*
+  Фиксирован по центру экрана поверх обеих колонок.
+  Использует backdrop-filter для эффекта стекла.
+*/
+.register__switcher {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 30px;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.register__switch-btn {
+    padding: 9px 22px;
+    border-radius: 24px;
+    border: none;
+
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    color: rgba(255, 255, 255, 0.8);
+    background: transparent;
+
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Активная кнопка переключателя */
+.register__switch-btn--active {
+    background: #fff;
+    color: #1a3d1a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ─── Брендинговая секция ────────────────────────────────── */
+
+.register__brand {
+    background: linear-gradient(135deg, #1a3d1a 0%, #2d6e2d 50%, #1f4f1f 100%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 48px;
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Декоративные круги на фоне */
+.register__brand::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    top: -100px;
+    right: -100px;
+    pointer-events: none;
+}
+
+.register__brand::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    bottom: -60px;
+    left: -60px;
+    pointer-events: none;
+}
+
+/* Контент бренда поверх декора */
+.register__brand-content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    max-width: 420px;
+}
+
+.register__brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 48px;
+}
+
+.register__brand-title {
+    font-family: "SF Pro", sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.register__brand-subtitle {
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Список преимуществ */
+.register__brand-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.register__brand-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.register__brand-feature-icon {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ─── Секция формы ───────────────────────────────────────── */
+
+.register__form-side {
+    background: #f7f8fa;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 48px;
+}
+
+/* Карточка с формой */
+.register__card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+}
+
+.register__title {
+    font-family: "SF Pro", sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    color: #111;
+    margin-bottom: 6px;
+}
+
+.register__subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 32px;
+}
+
+/* Сообщение об ошибке */
+.register__error {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #e53e3e;
+}
+
+
+/* ─── Форма и поля ───────────────────────────────────────── */
+
+.register__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.register__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.register__label {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+}
+
+/* Обёртка поля с иконкой */
+.register__input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Иконка слева внутри поля */
+.register__input-icon {
+    position: absolute;
+    left: 14px;
+    color: #aaa;
+    pointer-events: none;
+}
+
+.register__input {
+    width: 100%;
+
+    /* Отступы с учётом иконки слева (и кнопки eye справа) */
+    padding: 12px 42px 12px 42px;
+    border-radius: 10px;
+    border: 1.5px solid #e8e8e8;
+
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: #111;
+    background: #fafafa;
+
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.register__input:focus {
+    border-color: #2d6e2d;
+    background: #fff;
+}
+
+/* Кнопка показать/скрыть пароль */
+.register__toggle-password {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.register__toggle-password:hover {
+    color: #555;
+}
+
+
+/* ─── Чекбокс согласия (только для УК) ──────────────────── */
+
+.register__agree {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.register__agree-checkbox {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: #2d6e2d;
+    cursor: pointer;
+}
+
+.register__agree-text {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.register__agree-link {
+    color: #2d6e2d;
+    text-decoration: underline;
+}
+
+.register__agree-link:hover {
+    color: #1a3d1a;
+}
+
+
+/* ─── Кнопка отправки ────────────────────────────────────── */
+
+.register__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+
+    background: linear-gradient(135deg, #2d6e2d, #3d8c3d);
+    color: #fff;
+
+    font-family: "SF Pro", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.register__button:hover {
+    opacity: 0.9;
+}
+
+.register__button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ─── Ссылка на вход ─────────────────────────────────────── */
+
+.register__link {
+    margin-top: 24px;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #666;
+}
+
+.register__link a {
+    color: #2d6e2d;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.register__link a:hover {
+    text-decoration: underline;
+}
+
+
+/* ─── Адаптив ────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    /* На мобильных — одна колонка, бренд скрываем */
+    .register {
+        grid-template-columns: 1fr;
+    }
+
+    .register__slot--brand {
+        display: none;
+    }
+
+    .register__slot--form {
+        grid-column: 1 !important;
+        order: 1 !important;
+    }
+
+    .register__form-side {
+        padding: 80px 24px 40px;
+        min-height: 100vh;
+    }
+
+    /* Переключатель на мобильных — уже */
+    .register__switch-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+}

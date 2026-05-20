@@ -1,0 +1,222 @@
+/* ============================================================
+   Admin design system — общие стили для УК
+   SF Pro / Inter · изумрудный акцент · 4/8/12/16/24 spacing
+   ============================================================ */
+
+/* ---------- Background ---------- */
+.admin-app {
+    background: #f5f7f5;
+    color: #0f172a;
+    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.admin-app *,
+.admin-app *::before,
+.admin-app *::after {
+    box-sizing: border-box;
+}
+
+/* ---------- Typography helpers ---------- */
+.t-h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: #0f172a;
+}
+
+.t-h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: #0f172a;
+}
+
+.t-h3 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: #0f172a;
+}
+
+.t-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.tnum {
+    font-variant-numeric: tabular-nums;
+}
+
+.mono {
+    font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ---------- Card ---------- */
+.card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn:hover {
+    background: #ECECEC;
+    border-color: #cbd5e1;
+}
+
+.btn--sm {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 12.5px;
+    border-radius: 8px;
+}
+
+.btn--icon {
+    width: 34px;
+    padding: 0;
+}
+
+.btn--sm.btn--icon {
+    width: 28px;
+}
+
+.btn--primary {
+    background: #10b981;
+    border-color: #10b981;
+    color: #ffffff;
+}
+
+.btn--primary:hover {
+    background: #059669;
+    border-color: #059669;
+}
+
+.btn--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: #334155;
+}
+
+.btn--ghost:hover {
+    background: #ececec;
+    border-color: transparent;
+}
+
+.btn--danger {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+.btn--danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+/* ---------- Chip ---------- */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.chip__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 99px;
+    background: currentColor;
+    opacity: 0.85;
+    display: inline-block;
+}
+
+.chip--emerald {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.chip--info {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.chip--warning {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.chip--danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.chip--violet {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+/* ---------- Spark / charts ---------- */
+.spark {
+    overflow: visible;
+}
+
+/* ---------- App shell layout ---------- */
+.app-shell {
+    display: grid;
+    grid-template-columns: 264px 1fr;
+    height: 100vh;
+    background: #f5f7f5;
+}
+
+.app-shell--rail {
+    grid-template-columns: 64px 1fr;
+}
+
+/* ---------- Scrollbar (subtle) ---------- */
+.admin-app ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.admin-app ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.admin-app ::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 99px;
+}
+
+.admin-app ::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}

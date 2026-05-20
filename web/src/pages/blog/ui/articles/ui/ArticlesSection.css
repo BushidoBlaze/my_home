@@ -1,0 +1,85 @@
+/* ============================================================
+   ArticlesSection.css — стили секции статей страницы /blog
+   Фильтр-пилюли и сетка 3 колонки
+   ============================================================ */
+
+/* Внешняя секция */
+.blog-articles {
+    padding: 80px 24px;
+    background-color: #f7faf8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+/* Строка с кнопками-фильтрами */
+.blog-articles__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Кнопка-пилюля категории */
+.blog-articles__filter-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1.5px solid #d8e8e0;
+    background: #ffffff;
+    color: #555;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.blog-articles__filter-btn:hover {
+    border-color: #2ecc71;
+    color: #1f7a5a;
+}
+
+/* Активная кнопка-пилюля */
+.blog-articles__filter-btn--active {
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+/* Сетка карточек — 3 колонки */
+.blog-articles__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Сообщение о пустом фильтре */
+.blog-articles__empty {
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: #aaa;
+    text-align: center;
+    padding: 40px 0;
+}
+
+/* ---- Адаптив 1024px — 2 колонки ---- */
+@media (max-width: 1024px) {
+    .blog-articles__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ---- Адаптив 768px — 1 колонка ---- */
+@media (max-width: 768px) {
+    .blog-articles {
+        padding: 60px 20px;
+        gap: 30px;
+    }
+
+    .blog-articles__grid {
+        grid-template-columns: 1fr;
+    }
+}

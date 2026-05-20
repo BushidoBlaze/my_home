@@ -1,7 +1,8 @@
+import type {ReactNode} from "react";
 import "./CustomDescription.css";
 
 interface CustomDescriptionProps {
-    description: string;
+    description: ReactNode;
     className?: string;
 }
 

@@ -1,0 +1,138 @@
+/* ============================================================
+   NewsletterSection.css — стили секции подписки /blog
+   Тёмный фон, центрированная форма, success-состояние
+   ============================================================ */
+
+/* Внешняя секция — тёмный фон */
+.blog-newsletter {
+    background-color: #0f3d2e;
+    padding: 80px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Ограничение ширины */
+.blog-newsletter__inner {
+    max-width: 560px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Заголовок */
+.blog-newsletter__title {
+    font-family: "SF Pro", sans-serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Описание */
+.blog-newsletter__desc {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Форма — input + кнопка в ряд */
+.blog-newsletter__form {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    max-width: 420px;
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Поле ввода email */
+.blog-newsletter__input {
+    flex: 1;
+    padding: 14px 18px;
+    border: none;
+    outline: none;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #0f3d2e;
+    background: #ffffff;
+    min-width: 0; /* flex-fix для overflow */
+}
+
+.blog-newsletter__input::placeholder {
+    color: #aaa;
+}
+
+/* Кнопка подписки */
+.blog-newsletter__btn {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    color: #ffffff;
+    border: none;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.blog-newsletter__btn:hover {
+    opacity: 0.88;
+}
+
+/* Success-состояние после подписки */
+.blog-newsletter__success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 14px 28px;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    border-radius: 12px;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #2ecc71;
+}
+
+/* Иконка галочки */
+.blog-newsletter__success-icon {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ---- Адаптив 768px ---- */
+@media (max-width: 768px) {
+    .blog-newsletter {
+        padding: 60px 20px;
+    }
+
+    /* На мобильном форма вертикальная */
+    .blog-newsletter__form {
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: visible;
+        box-shadow: none;
+    }
+
+    .blog-newsletter__input {
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .blog-newsletter__btn {
+        border-radius: 12px;
+        width: 100%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
+}

@@ -1,0 +1,50 @@
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: 100vh;
+    padding: 100px;
+
+    background: linear-gradient(to bottom,
+    #012025 0%,
+    #1D543B 30%,
+    #2F7C4A 60%,
+    #57A35D 85%,
+    #8FCF87 100%
+    );
+
+    position: relative;
+    overflow: hidden;
+}
+
+.hero__intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.hero__title {
+    font-size: clamp(36px, 5.5vw, 104px);
+    margin-bottom: 15px;
+}
+
+.hero__description {
+    font-size: 30px;
+    font-family: Inter, sans-serif, Arial;
+    font-weight: 300;
+    line-height: 1.2;
+    color: rgb(201, 201, 201);
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+
+    margin-top: 50px;
+}
+
+/* .hero__button и .hero__button--active — в global.css */

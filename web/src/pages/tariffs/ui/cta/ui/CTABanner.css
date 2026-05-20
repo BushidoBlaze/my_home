@@ -1,0 +1,72 @@
+/* ============================================================
+   CTABanner.css — стили CTA-баннера страницы /tariffs
+   Зелёный градиентный фон, центрированный контент
+   ============================================================ */
+
+/* Внешняя обёртка — градиентный фон */
+.tariffs-cta {
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    padding: 80px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Ограничение ширины */
+.tariffs-cta__inner {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Заголовок — белый */
+.tariffs-cta__title.custom__title {
+    font-family: "SF Pro", sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Описание — полупрозрачный белый */
+.tariffs-cta__description.custom__description {
+    font-family: "Inter", sans-serif;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Кнопка — белый фон, зелёный текст */
+.tariffs-cta__btn.custom__button {
+    padding: 14px 40px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #1f7a5a;
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-top: 8px;
+}
+
+.tariffs-cta__btn.custom__button:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+}
+
+/* ---- Адаптив 768px ---- */
+@media (max-width: 768px) {
+    .tariffs-cta {
+        padding: 60px 20px;
+    }
+
+    .tariffs-cta__title.custom__title {
+        font-size: 26px;
+    }
+}

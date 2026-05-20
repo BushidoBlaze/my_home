@@ -1,0 +1,100 @@
+/* ============================================================
+   CTABanner.css — стили CTA-баннера страницы /management
+   Зелёный градиентный фон, две кнопки
+   ============================================================ */
+
+/* Внешняя секция с градиентным фоном */
+.management-cta {
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    padding: 80px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Ограничение ширины */
+.management-cta__inner {
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Заголовок — белый */
+.management-cta__title.custom__title {
+    font-family: "SF Pro", sans-serif;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Описание — полупрозрачный белый */
+.management-cta__description.custom__description {
+    font-family: "Inter", sans-serif;
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Группа кнопок */
+.management-cta__actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+/* Базовые стили кнопок */
+.management-cta__btn.custom__button {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    border: none;
+}
+
+.management-cta__btn.custom__button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Белая основная кнопка */
+.management-cta__btn--primary.custom__button {
+    background: #ffffff;
+    color: #1f7a5a;
+}
+
+/* Ghost кнопка — обводка белым */
+.management-cta__btn--ghost.custom__button {
+    background: transparent;
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.management-cta__btn--ghost.custom__button:hover {
+    border-color: #ffffff !important;
+}
+
+/* ---- Адаптив 768px ---- */
+@media (max-width: 768px) {
+    .management-cta {
+        padding: 60px 20px;
+    }
+
+    .management-cta__actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .management-cta__btn.custom__button {
+        width: 100%;
+    }
+}

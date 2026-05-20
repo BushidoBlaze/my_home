@@ -1,0 +1,127 @@
+/* ============================================================
+   HowItWorksSection.css — стили секции "Как начать" /residents
+   3 карточки с большими цифрами, стрелки между ними
+   ============================================================ */
+
+/* Внешняя секция */
+.residents-how {
+    padding: 80px 24px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+}
+
+/* Ряд с карточками и стрелками */
+.residents-how__steps {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: nowrap;
+}
+
+/* Обёртка одного шага — карточка + стрелка */
+.residents-how__step-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+/* Карточка шага */
+.residents-how__card {
+    flex: 1;
+    background: #f7faf8;
+    border-radius: 20px;
+    border: 1.5px solid #eef3f0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    padding: 36px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.residents-how__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 32px rgba(31, 122, 90, 0.1);
+}
+
+/* Большая стилизованная цифра */
+.residents-how__num {
+    font-family: "Raleway", sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    /* Градиентная заливка текста */
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Заголовок шага */
+.residents-how__card-title {
+    font-family: "SF Pro", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f3d2e;
+    margin: 0;
+}
+
+/* Описание шага */
+.residents-how__card-desc {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Стрелка между шагами */
+.residents-how__arrow {
+    font-size: 28px;
+    color: #2ecc71;
+    font-weight: 300;
+    flex-shrink: 0;
+    line-height: 1;
+    opacity: 0.6;
+}
+
+/* ---- Адаптив 768px — вертикальный стек ---- */
+@media (max-width: 768px) {
+    .residents-how {
+        padding: 60px 20px;
+        gap: 40px;
+    }
+
+    /* Переходим на вертикальный layout */
+    .residents-how__steps {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .residents-how__step-wrap {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Стрелка вниз на мобильном */
+    .residents-how__arrow {
+        transform: rotate(90deg);
+        font-size: 24px;
+    }
+
+    .residents-how__num {
+        font-size: 52px;
+    }
+}

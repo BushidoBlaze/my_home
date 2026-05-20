@@ -1,0 +1,89 @@
+/* ============================================================
+   FeaturesSection.css — секция возможностей страницы /management
+   Сетка 3 колонки, карточки с иконкой, BEM
+   ============================================================ */
+
+/* Внешняя секция */
+.management-features {
+    padding: 80px 24px;
+    background-color: #f7faf8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+/* Сетка карточек — 3 колонки */
+.management-features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Одна карточка */
+.management-features__card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1.5px solid #eef3f0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.management-features__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* Обёртка иконки — цветной фон задаётся инлайн-стилем */
+.management-features__icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Заголовок карточки */
+.management-features__card-title {
+    font-family: "SF Pro", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0f3d2e;
+    margin: 0;
+}
+
+/* Описание карточки */
+.management-features__card-desc {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ---- Адаптив 1024px — 2 колонки ---- */
+@media (max-width: 1024px) {
+    .management-features__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ---- Адаптив 768px — 1 колонка ---- */
+@media (max-width: 768px) {
+    .management-features {
+        padding: 60px 20px;
+        gap: 36px;
+    }
+
+    .management-features__grid {
+        grid-template-columns: 1fr;
+    }
+}

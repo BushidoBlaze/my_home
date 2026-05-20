@@ -1,0 +1,115 @@
+/* ── Обёртка — повторяет .hero-section ───────────────────── */
+.possibilities-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 100vh;
+    padding: 100px;
+
+    background: linear-gradient(to bottom,
+        #012025 0%,
+        #1D543B 30%,
+        #2F7C4A 60%,
+        #57A35D 85%,
+        #8FCF87 100%
+    );
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Контент — слева, как на главной ─────────────────────── */
+.possibilities-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+/* Заголовок */
+.possibilities-hero__title {
+    font-family: "SF Pro", Arial, Helvetica, sans-serif;
+    font-size: clamp(36px, 5.5vw, 104px);
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+}
+
+.possibilities-hero__title-accent {
+    color: #8FCF87;
+}
+
+/* Описание */
+.possibilities-hero__description {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: rgb(201, 201, 201);
+    margin: 0 0 50px;
+}
+
+/* Кнопки */
+.possibilities-hero__actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 60px;
+}
+
+/* ── Статистика — левее, горизонтально ───────────────────── */
+.possibilities-hero__stats {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.possibilities-hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.possibilities-hero__stat-value {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.possibilities-hero__stat-label {
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+.possibilities-hero__stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Адаптив ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .possibilities-hero {
+        padding: 100px 24px 80px;
+    }
+
+    .possibilities-hero__title {
+        font-size: 36px;
+    }
+
+    .possibilities-hero__description {
+        font-size: 20px;
+    }
+}

@@ -1,10 +1,12 @@
 import {ChevronsRight} from "lucide-react";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import "./NotFound.css";
 
 import heroImage from "@/shared/assets/images/notFound/background-image-not-found-page.jpg";
 
 export default function NotFound() {
+    const navigate = useNavigate();
+
     return (
         <div className="not-found-container">
 
@@ -23,10 +25,10 @@ export default function NotFound() {
                 <p className="not-found__description">
                     Страница была удалена или никогда не существовала
                 </p>
-                <Link to="/" className="not-found__button">
-                    <span>Вернуться на главную</span>
+                <button className="not-found__button" onClick={() => navigate(-1)}>
+                    <span>Вернуться назад</span>
                     <span className="not-found__button-arrow"><ChevronsRight strokeWidth={0.75}/></span>
-                </Link>
+                </button>
             </main>
         </div>
     );
