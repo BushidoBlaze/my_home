@@ -1,0 +1,498 @@
+.vp {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.vp__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.vp__title {
+    font-family: "SF Pro", sans-serif;
+    font-weight: 700;
+    font-size: 1.625rem;
+    color: #0f3d2e;
+    margin-bottom: 4px;
+}
+
+.vp__subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    color: #888;
+}
+
+.vp__pending-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    color: #fff;
+    border-radius: 12px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(31, 122, 90, 0.25);
+    white-space: nowrap;
+}
+
+/* ── Stats ──────────────────────────────────────── */
+.vp__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.vp__stat {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f4f2;
+}
+
+.vp__stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vp__stat-icon--active { background: #e8f5ee; color: #1f7a5a; }
+.vp__stat-icon--voted  { background: #dcfce7; color: #16a34a; }
+.vp__stat-icon--closed { background: #f1f5f9; color: #64748b; }
+
+.vp__stat-value {
+    display: block;
+    font-family: "SF Pro", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f3d2e;
+    line-height: 1;
+}
+
+.vp__stat-label {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* ── Tabs ───────────────────────────────────────── */
+.vp__tabs {
+    display: flex;
+    gap: 8px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 14px;
+    width: fit-content;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.vp__tab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.vp__tab--active {
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    color: #fff;
+}
+
+.vp__tab-badge {
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+}
+
+.vp__tab:not(.vp__tab--active) .vp__tab-badge {
+    background: #e8f5ee;
+    color: #1f7a5a;
+}
+
+/* ── Empty state ────────────────────────────────── */
+.vp__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 64px 24px;
+    text-align: center;
+}
+
+.vp__empty-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #e9f6ef, #f5fbf7);
+    border: 1px solid #dcebe3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1f7a5a;
+    box-shadow: 0 6px 20px rgba(31, 122, 90, 0.08);
+    margin-bottom: 6px;
+}
+
+.vp__empty-title {
+    font-family: "SF Pro", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f3d2e;
+    margin: 0;
+}
+
+.vp__empty-text {
+    font-family: "Inter", sans-serif;
+    font-size: 0.8125rem;
+    color: #888;
+    max-width: 360px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Poll list ──────────────────────────────────── */
+.vp__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ── Poll card ──────────────────────────────────── */
+.vp-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px 22px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    border: 1.5px solid #eef3f0;
+    transition: box-shadow 0.2s, transform 0.18s;
+}
+
+.vp-card:hover {
+    box-shadow: 0 6px 24px rgba(15, 61, 46, 0.08);
+    transform: translateY(-1px);
+}
+
+.vp-card--closed {
+    opacity: 0.85;
+    border-color: #e8e8e8;
+}
+
+/* Card header */
+.vp-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.vp-card__head-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.vp-card__category {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    background: rgba(31, 122, 90, 0.1);
+    color: #1f7a5a;
+    border: 1px solid rgba(31, 122, 90, 0.2);
+}
+
+.vp-card__closed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-family: "Inter", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.vp-card__voted-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #dcfce7;
+    color: #16a34a;
+    font-family: "Inter", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 600;
+}
+
+.vp-card__toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: #f4f6f5;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.vp-card__toggle:hover { background: #e8ede9; }
+
+/* Card title & desc */
+.vp-card__title {
+    font-family: "SF Pro", sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f3d2e;
+    margin-bottom: 8px;
+    line-height: 1.35;
+}
+
+.vp-card__desc {
+    font-family: "Inter", sans-serif;
+    font-size: 0.8125rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+/* ── Options ────────────────────────────────────── */
+.vp-card__options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* Choice option (before voting) */
+.vp-opt--choice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid #e8e8e8;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+    text-align: left;
+}
+
+.vp-opt--choice:hover {
+    border-color: #b8d8c8;
+    background: #f4fbf7;
+}
+
+.vp-opt--choice.vp-opt--selected {
+    border-color: #1f7a5a;
+    background: #edf7f2;
+}
+
+.vp-opt__radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    position: relative;
+}
+
+.vp-opt--selected .vp-opt__radio {
+    border-color: #1f7a5a;
+    background: #1f7a5a;
+}
+
+.vp-opt--selected .vp-opt__radio::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* Result option (after voting) */
+.vp-opt--result {
+    padding: 10px 0;
+}
+
+.vp-opt__label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.vp-opt__text {
+    font-family: "Inter", sans-serif;
+    font-size: 0.875rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+.vp-opt__winner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.vp-opt__my-tag {
+    display: inline-block;
+    padding: 1px 7px;
+    background: #e8f5ee;
+    color: #1f7a5a;
+    border-radius: 20px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.625rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.vp-opt__pct {
+    font-family: "SF Pro", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0f3d2e;
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: right;
+}
+
+.vp-opt__bar-wrap {
+    height: 6px;
+    background: #f0f4f2;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.vp-opt__bar {
+    height: 100%;
+    background: #94a3b8;
+    border-radius: 20px;
+    transition: width 0.6s ease;
+}
+
+.vp-opt__bar--mine {
+    background: linear-gradient(90deg, #1f7a5a, #2ecc71);
+}
+
+.vp-opt--winner .vp-opt__bar {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+.vp-opt__votes {
+    font-family: "Inter", sans-serif;
+    font-size: 0.6875rem;
+    color: #aaa;
+}
+
+/* Vote button */
+.vp-card__vote-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-bottom: 12px;
+}
+
+.vp-card__vote-btn:hover { opacity: 0.9; }
+.vp-card__vote-btn:disabled {
+    background: #e8e8e8;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+/* Footer */
+.vp-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid #f0f4f2;
+    margin-top: 4px;
+}
+
+.vp-card__footer-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.vp-card__days {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #e8f5ee;
+    color: #1f7a5a;
+    font-family: "Inter", sans-serif;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    margin-left: auto;
+}
+
+.vp-card__days--urgent {
+    background: #fff3cd;
+    color: #d97706;
+}

@@ -1,0 +1,398 @@
+/* ============================================================
+   Billing — Начисления и платежи
+   ============================================================ */
+
+.billing {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- Period switcher ---------- */
+.billing-period {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.billing-period__label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.billing-period__status {
+    margin-left: 8px;
+}
+
+.billing-period__deadline {
+    color: #64748b;
+    font-size: 12px;
+    margin-left: auto;
+}
+
+/* ---------- Big stats ---------- */
+.billing-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.billing-bigstat {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.billing-bigstat__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.billing-bigstat__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.billing-bigstat__value {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+}
+
+.billing-bigstat__sub {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ---------- Mid section ---------- */
+.billing-mid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.billing-charges {
+    padding: 20px;
+}
+
+.billing-charges__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.billing-charges__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.billing-charges__legend {
+    display: flex;
+    gap: 14px;
+}
+
+.billing-charges__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #334155;
+}
+
+.billing-charges__legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+/* ---------- Structure ---------- */
+.billing-structure {
+    padding: 20px;
+}
+
+.billing-structure__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+    margin-bottom: 14px;
+}
+
+.billing-structure__body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.billing-structure__legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.billing-structure__row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+}
+
+.billing-structure__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 99px;
+}
+
+.billing-structure__label {
+    flex: 1;
+    color: #334155;
+}
+
+.billing-structure__value {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* ---------- Houses table ---------- */
+.billing-houses {
+    padding: 0;
+    overflow: hidden;
+}
+
+.billing-houses__head {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-houses__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.billing-houses__actions {
+    display: flex;
+    gap: 6px;
+}
+
+.billing-houses__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.billing-houses__table th {
+    text-align: left;
+    font: 500 11px/1 "SF Pro Display", "SF Pro", "Inter", system-ui, sans-serif;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-houses__th--right {
+    text-align: right;
+}
+
+.billing-houses__table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #0f172a;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-houses__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.billing-houses__td--right {
+    text-align: right;
+}
+
+.billing-houses__addr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.billing-houses__bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.billing-houses__bar-fill {
+    flex: 1;
+    max-width: 160px;
+}
+
+.billing-houses__pct {
+    font-size: 12.5px;
+    font-weight: 600;
+    width: 50px;
+    text-align: right;
+}
+
+/* ---------- Bottom (debtors + payments) ---------- */
+.billing-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* ---------- Debtors ---------- */
+.billing-debtors {
+    padding: 0;
+    overflow: hidden;
+}
+
+.billing-debtors__head {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-debtors__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.billing-debtors__list {
+    display: flex;
+    flex-direction: column;
+}
+
+.billing-debtors__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-debtors__item:last-child {
+    border-bottom: none;
+}
+
+.billing-debtors__main {
+    flex: 1;
+}
+
+.billing-debtors__name {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: #0f172a;
+}
+
+.billing-debtors__addr {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.billing-debtors__amount {
+    text-align: right;
+}
+
+.billing-debtors__debt {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ef4444;
+}
+
+.billing-debtors__months {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* ---------- Payments ---------- */
+.billing-payments {
+    padding: 0;
+    overflow: hidden;
+}
+
+.billing-payments__head {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-payments__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.billing-payments__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.billing-payments__table tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.billing-payments__table tr:last-child {
+    border-bottom: none;
+}
+
+.billing-payments__time {
+    padding: 10px 20px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.billing-payments__payer {
+    padding: 10px 0;
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.billing-payments__addr {
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.billing-payments__sum-cell {
+    padding: 10px 16px;
+    text-align: right;
+}
+
+.billing-payments__sum {
+    font-weight: 700;
+    color: #047857;
+}
+
+.billing-payments__channel {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1280px) {
+    .billing-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .billing-mid,
+    .billing-bottom {
+        grid-template-columns: 1fr;
+    }
+}

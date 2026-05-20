@@ -1,0 +1,1 @@
+export {GroupSettingsModal as ChatSettingsModal} from "./GroupSettingsModal.tsx";

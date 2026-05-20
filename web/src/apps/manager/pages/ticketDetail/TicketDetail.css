@@ -1,0 +1,465 @@
+/* ============================================================
+   TicketDetail — детальная карточка заявки
+   ============================================================ */
+
+/* ---------- Header ---------- */
+.td-header {
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.td-header__title-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.td-header__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.td-header__title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.td-header__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.td-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.td-header__divider {
+    width: 1px;
+    height: 24px;
+    background: #f1f5f9;
+}
+
+/* ---------- Grid ---------- */
+.td-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    min-height: 0;
+}
+
+.td-main {
+    padding: 24px 28px 32px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- SLA banner ---------- */
+.td-sla {
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.td-sla__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: #ef4444;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.td-sla__text {
+    flex: 1;
+}
+
+.td-sla__title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #ef4444;
+}
+
+.td-sla__sub {
+    font-size: 12.5px;
+    color: #334155;
+    margin-top: 2px;
+}
+
+/* ---------- Section heads ---------- */
+.td-section__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+/* ---------- Description ---------- */
+.td-description {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #0f172a;
+}
+
+.td-photos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.td-photo {
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+}
+
+.td-photo__name {
+    font-size: 10px;
+    color: #64748b;
+    background: #ffffff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+}
+
+/* ---------- Timeline ---------- */
+.td-tl__heading {
+    margin-bottom: 12px;
+}
+
+.td-tl {
+    position: relative;
+    padding-left: 30px;
+}
+
+.td-tl__rail {
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #f1f5f9;
+}
+
+.td-tl__item {
+    position: relative;
+    padding-bottom: 18px;
+}
+
+.td-tl__icon {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+}
+
+.td-tl__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.td-tl__actor {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.td-tl__title {
+    color: #64748b;
+}
+
+.td-tl__time {
+    margin-left: auto;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.td-tl__body {
+    margin-top: 6px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.45;
+}
+
+/* ---------- Reply composer ---------- */
+.td-reply {
+    position: sticky;
+    bottom: 0;
+    margin-top: 8px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    padding: 12px;
+}
+
+.td-reply__tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.td-reply__tab--active {
+    background: #f1f5f9;
+}
+
+.td-reply__textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13.5px;
+    resize: vertical;
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+.td-reply__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.td-reply__tools {
+    display: flex;
+    gap: 6px;
+    color: #64748b;
+    align-items: center;
+}
+
+.td-reply__hint {
+    font-size: 11.5px;
+    margin-left: 4px;
+}
+
+/* ---------- Side panel ---------- */
+.td-side {
+    border-left: 1px solid #e2e8f0;
+    background: #ffffff;
+    padding: 20px 20px 32px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.td-side__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.td-props {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 8px;
+}
+
+.td-prop {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+    gap: 12px;
+}
+
+.td-prop__label {
+    width: 100px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.td-prop__value {
+    flex: 1;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.td-card {
+    margin-top: 8px;
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.td-card--row {
+    align-items: center;
+}
+
+.td-card__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.td-card__title {
+    font-weight: 600;
+    font-size: 13.5px;
+    color: #0f172a;
+}
+
+.td-card__sub {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.td-card__actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 4px;
+}
+
+.td-resident__meta {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.td-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 99px;
+    background: #0ea5e9;
+}
+
+.td-load {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.td-load__label {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.td-load__row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+/* ---------- Related ---------- */
+.td-related {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.td-related__item {
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.td-related__id {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.td-related__title {
+    flex: 1;
+    font-size: 12.5px;
+    color: #0f172a;
+}
+
+.td-related__date {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* ---------- SOP checklist ---------- */
+.td-sop {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.td-sop__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+}
+
+.td-sop__box {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid #cbd5e1;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.td-sop__box--done {
+    border-color: #10b981;
+    background: #10b981;
+}
+
+.td-sop__text {
+    color: #0f172a;
+}
+
+.td-sop__text--done {
+    color: #64748b;
+    text-decoration: line-through;
+}

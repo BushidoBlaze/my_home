@@ -1,0 +1,87 @@
+/* BLOCK */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 72px;
+    height: 100vh;
+
+    padding: 16px 0;
+    background: linear-gradient(180deg, #0f3d2e, #1f7a5a);
+}
+
+/* ELEMENTS */
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.sidebar__item {
+    display: flex;
+}
+
+.sidebar__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+
+    width: 44px;
+    height: 44px;
+
+    color: #cfe8dd;
+
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.sidebar__icon {
+    pointer-events: none;
+}
+
+/* STATES */
+.sidebar__link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar__link--active {
+    /*position: relative;*/
+    /*z-index: 1000;*/
+    color: #0f3d2e;
+    background-color: #2ecc71;
+}
+
+/* Tooltip */
+.sidebar__tooltip {
+    position: absolute;
+    z-index: 1000;
+    left: 60px;
+    white-space: nowrap;
+
+    font-size: 12px;
+    font-family: Raleway, sans-serif, Arial;
+    letter-spacing: 0.4px;
+
+    color: #ffffff;
+    background-color: #1f7a5a;
+
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.2s ease;
+
+    pointer-events: none;
+}
+
+/* показываем при hover */
+.sidebar__link:hover .sidebar__tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}

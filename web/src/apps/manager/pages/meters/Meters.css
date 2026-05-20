@@ -1,0 +1,380 @@
+/* ============================================================
+   Meters — Показания счётчиков
+   ============================================================ */
+
+.meters {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- Hero ---------- */
+.meters-hero {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+}
+
+.meters-hero__main {
+    min-width: 0;
+}
+
+.meters-hero__count-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+}
+
+.meters-hero__count {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+}
+
+.meters-hero__total {
+    font-size: 16px;
+    color: #64748b;
+}
+
+.meters-hero__note {
+    font-size: 13.5px;
+    color: #334155;
+    margin-top: 6px;
+}
+
+.meters-hero__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.meters-hero__type {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.meters-hero__type-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.meters-hero__type-label {
+    font-size: 12px;
+    color: #334155;
+    font-weight: 600;
+}
+
+.meters-hero__type-pct {
+    margin-left: auto;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.meters-hero__type-value {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 6px;
+    color: #0f172a;
+}
+
+.meters-hero__type-total {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* ---------- Filters ---------- */
+.meters-filters {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.meters-filters__tab--active {
+    background: #f1f5f9;
+}
+
+.meters-filters__spacer {
+    flex: 1;
+}
+
+.meters-filters__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    height: 32px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    width: 240px;
+}
+
+.meters-filters__search-placeholder {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ---------- Table ---------- */
+.meters-table-wrap {
+    padding: 0;
+    overflow: hidden;
+}
+
+.meters-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.meters-table thead tr {
+    background: #f8fafc;
+}
+
+.meters-table th {
+    text-align: left;
+    font: 500 11px/1 "SF Pro Display", "SF Pro", "Inter", system-ui, sans-serif;
+    color: #64748b;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.meters-table td {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #0f172a;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.meters-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.meters-table__addr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meters-table__addr-text {
+    font-weight: 500;
+}
+
+.meters-table__flag {
+    padding: 1px 6px;
+    font-size: 10px;
+}
+
+.meters-table__done {
+    font-weight: 600;
+}
+
+.meters-table__cell {
+    color: #334155;
+}
+
+.meters-table__bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meters-table__bar-fill {
+    flex: 1;
+    max-width: 160px;
+}
+
+.meters-table__pct {
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+/* ---------- Bottom row ---------- */
+.meters-bottom {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 20px;
+}
+
+/* ---------- Apartments ---------- */
+.meters-apts {
+    padding: 20px;
+}
+
+.meters-apts__head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.meters-apts__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.meters-apts__actions {
+    display: flex;
+    gap: 6px;
+}
+
+.meters-apts__legend {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.meters-apts__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.meters-apts__legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+.meters-apts__head {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+    font-size: 10px;
+    color: #64748b;
+}
+
+.meters-apts__head-spacer {
+    width: 28px;
+    flex-shrink: 0;
+}
+
+.meters-apts__head-cell {
+    flex: 1;
+    text-align: center;
+}
+
+.meters-apts__row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 4px;
+    align-items: center;
+}
+
+.meters-apts__row-label {
+    width: 28px;
+    font-size: 11px;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.meters-apts__cell {
+    flex: 1;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+.meters-apts__foot {
+    margin-top: 10px;
+    padding: 8px 0;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ---------- Recent submissions ---------- */
+.meters-recent {
+    padding: 0;
+    overflow: hidden;
+}
+
+.meters-recent__head {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.meters-recent__sub {
+    color: #64748b;
+    font-size: 12.5px;
+    margin-top: 2px;
+}
+
+.meters-recent__list {
+    display: flex;
+    flex-direction: column;
+}
+
+.meters-recent__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.meters-recent__item:last-child {
+    border-bottom: none;
+}
+
+.meters-recent__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.meters-recent__main {
+    flex: 1;
+    min-width: 0;
+}
+
+.meters-recent__meta {
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+.meters-recent__apt {
+    font-size: 13px;
+    font-weight: 500;
+    color: #0f172a;
+    margin-top: 2px;
+}
+
+.meters-recent__values {
+    text-align: right;
+}
+
+.meters-recent__val {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.meters-recent__delta {
+    font-size: 11.5px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1280px) {
+    .meters-bottom {
+        grid-template-columns: 1fr;
+    }
+}
