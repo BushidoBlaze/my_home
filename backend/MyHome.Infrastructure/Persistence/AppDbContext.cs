@@ -32,6 +32,7 @@ public class AppDbContext : DbContext
     public DbSet<PollVote> PollVotes => Set<PollVote>();
     public DbSet<Subscription> Subscriptions => Set<Subscription>();
     public DbSet<UserApartment> UserApartments => Set<UserApartment>();
+    public DbSet<ComplianceDeadline> ComplianceDeadlines => Set<ComplianceDeadline>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,6 +46,14 @@ public class AppDbContext : DbContext
             .HasOne(r => r.Resident)
             .WithMany()
             .HasForeignKey(r => r.ResidentId);
+
+        // Опциональная связь с исполнителем. SetNull — если исполнителя удалят,
+        // заявка не пропадёт, а просто станет «без исполнителя».
+        modelBuilder.Entity<ServiceRequest>()
+            .HasOne(r => r.Assignee)
+            .WithMany()
+            .HasForeignKey(r => r.AssigneeId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
