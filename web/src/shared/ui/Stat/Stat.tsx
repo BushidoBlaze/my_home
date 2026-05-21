@@ -12,6 +12,7 @@ interface StatProps {
     delta?: string;
     deltaDir?: DeltaDir;
     sub?: string;
+    onClick?: () => void;
 }
 
 const ACCENT_MAP: Record<StatAccent, { bg: string; fg: string }> = {
@@ -27,12 +28,31 @@ const DELTA_BG: Record<DeltaDir, string> = {
     down: "#fee2e2",
 };
 
-export function Stat({icon: Icon, accent = "emerald", label, value, delta, deltaDir = "up", sub}: StatProps): JSX.Element {
+export function Stat({icon: Icon, accent = "emerald", label, value, delta, deltaDir = "up", sub, onClick}: StatProps): JSX.Element {
     const a = ACCENT_MAP[accent];
     const DeltaIcon = deltaDir === "up" ? TrendingUp : TrendingDown;
 
     return (
-        <div className="card" style={{padding: 18, display: "flex", flexDirection: "column", gap: 14}}>
+        <div
+            className="card"
+            onClick={onClick}
+            style={{
+                padding: 18,
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                cursor: onClick ? "pointer" : undefined,
+                transition: "transform 0.12s, box-shadow 0.12s",
+            }}
+            onMouseEnter={onClick ? e => {
+                (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 6px 18px rgba(15, 23, 42, 0.06)";
+            } : undefined}
+            onMouseLeave={onClick ? e => {
+                (e.currentTarget as HTMLDivElement).style.transform = "";
+                (e.currentTarget as HTMLDivElement).style.boxShadow = "";
+            } : undefined}
+        >
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
                 <div
                     style={{

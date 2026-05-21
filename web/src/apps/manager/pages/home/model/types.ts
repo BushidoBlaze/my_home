@@ -59,3 +59,15 @@ export type ActiveVote = {
     votes: string;
     tone: string;
 };
+
+export type ComplianceStatus = "burning" | "soon" | "ok";
+
+export type ComplianceDeadline = {
+    id: string;
+    category: "lift" | "gas" | "fire" | "duct";
+    title: string;
+    addr: string;
+    dueLabel: string;
+    daysLeft: number;
+    status: ComplianceStatus;
+};

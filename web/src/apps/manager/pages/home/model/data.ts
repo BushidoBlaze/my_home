@@ -3,6 +3,7 @@ import {
     AlertTriangle,
     RussianRuble,
     Gauge,
+    UserX,
     Droplet,
     ArrowUpDown,
     Flame,
@@ -20,6 +21,7 @@ import type {
     TopBuilding,
     ActivityEvent,
     ActiveVote,
+    ComplianceDeadline,
 } from "./types.ts";
 
 export const HOME_STATS: HomeStat[] = [
@@ -32,6 +34,16 @@ export const HOME_STATS: HomeStat[] = [
         delta: "+12%",
         deltaDir: "up",
         sub: "за сегодня 24 новых",
+    },
+    {
+        id: "unassigned",
+        icon: UserX,
+        accent: "warning",
+        label: "Без исполнителя",
+        value: "17",
+        delta: "+5",
+        deltaDir: "up",
+        sub: "нужно распределить",
     },
     {
         id: "alerts",
@@ -212,13 +224,44 @@ export const ACTIVITY_EVENTS: ActivityEvent[] = [
             {text: " · 142 голоса · кворум 67%"},
         ],
     },
+];
+
+export const COMPLIANCE_DEADLINES: ComplianceDeadline[] = [
     {
-        time: "09:14",
-        icon: Gauge,
-        iconFg: "#7c3aed",
-        textParts: [
-            {text: "Передано 84 показания счётчиков · ИПУ электричество"},
-        ],
+        id: "lift-bereza-14",
+        category: "lift",
+        title: "Освидетельствование лифта №2",
+        addr: "Берёзовая, 14",
+        dueLabel: "через 3 дня",
+        daysLeft: 3,
+        status: "burning",
+    },
+    {
+        id: "gas-park-7",
+        category: "gas",
+        title: "Проверка ВДГО, подъезды 1–3",
+        addr: "Парковая, 7к1",
+        dueLabel: "через 9 дней",
+        daysLeft: 9,
+        status: "soon",
+    },
+    {
+        id: "fire-lesn-2",
+        category: "fire",
+        title: "Перезарядка огнетушителей",
+        addr: "Лесная, 2",
+        dueLabel: "через 14 дней",
+        daysLeft: 14,
+        status: "soon",
+    },
+    {
+        id: "duct-bereza-16",
+        category: "duct",
+        title: "Проверка дымоходов и вентканалов",
+        addr: "Берёзовая, 16",
+        dueLabel: "через 28 дней",
+        daysLeft: 28,
+        status: "ok",
     },
 ];
 
