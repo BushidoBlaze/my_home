@@ -88,8 +88,29 @@ public class PollsController : ControllerBase
         };
 
         _db.Polls.Add(poll);
+
+        // Рассылаем уведомление всем жильцам — чтобы голосование появилось у них в приложении.
+        // Если жилец привязан к конкретному дому, в будущем можно фильтровать по дому;
+        // пока поле house в Poll отсутствует, рассылаем всем активным жителям.
+        var residentIds = await _db.Users
+            .Where(u => u.Role == "Resident")
+            .Select(u => u.Id)
+            .ToListAsync();
+
+        foreach (var residentId in residentIds)
+        {
+            _db.Notifications.Add(new Notification
+            {
+                Id = Guid.NewGuid(),
+                UserId = residentId,
+                Title = "Новое голосование",
+                Message = $"«{poll.Title}» — голосование открыто до {poll.EndsAt:dd.MM.yyyy}",
+                Type = "Info",
+            });
+        }
+
         await _db.SaveChangesAsync();
-        return Ok(new { poll.Id });
+        return Ok(new { poll.Id, NotifiedResidents = residentIds.Count });
     }
 
     [HttpPost("{id:guid}/vote")]
