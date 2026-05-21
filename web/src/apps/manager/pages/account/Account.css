@@ -1,0 +1,484 @@
+/* ============================================================
+   Manager Account — личный кабинет менеджера УК
+   ============================================================ */
+
+.mgr-account {
+    padding: 28px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.mgr-account__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.mgr-account__title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+}
+
+.mgr-account__subtitle {
+    color: #64748b;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.mgr-account__toast {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #d1fae5;
+    color: #047857;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 500;
+}
+
+/* ---------- Card ---------- */
+.mgr-account__card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.mgr-account__section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0f172a;
+    font-size: 13.5px;
+    font-weight: 600;
+}
+
+/* ---------- Profile row ---------- */
+.mgr-account__profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mgr-account__avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.mgr-account__avatar,
+.mgr-account__avatar-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #d1fae5, #ede9fe);
+    color: #047857;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.mgr-account__avatar-btn {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #0f172a;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.12s;
+}
+
+.mgr-account__avatar-btn:hover {
+    transform: scale(1.06);
+}
+
+.mgr-account__avatar-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mgr-account__avatar-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: mgr-spin 0.7s linear infinite;
+}
+
+.mgr-account__profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.mgr-account__profile-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+}
+
+.mgr-account__profile-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    background: #ede9fe;
+    color: #7c3aed;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 500;
+}
+
+.mgr-account__profile-org {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+.mgr-account__edit-btn,
+.mgr-account__save-btn,
+.mgr-account__cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #0f172a;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.mgr-account__edit-btn:hover {
+    background: #f8fafc;
+}
+
+.mgr-account__save-btn {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+}
+
+.mgr-account__save-btn:hover {
+    background: #059669;
+}
+
+.mgr-account__save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mgr-account__cancel-btn {
+    padding: 8px 10px;
+}
+
+.mgr-account__edit-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ---------- Fields grid ---------- */
+.mgr-account__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 18px;
+}
+
+.mgr-account__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.mgr-account__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+}
+
+.mgr-account__value {
+    font-size: 14px;
+    color: #0f172a;
+    font-weight: 500;
+}
+
+.mgr-account__value--muted {
+    color: #64748b;
+    font-weight: 400;
+}
+
+.mgr-account__value--empty {
+    color: #94a3b8;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.mgr-account__role-tag {
+    display: inline-flex;
+    align-items: center;
+    background: #d1fae5;
+    color: #047857;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    width: fit-content;
+}
+
+.mgr-account__input {
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    font: inherit;
+    font-size: 13.5px;
+    color: #0f172a;
+    transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.mgr-account__input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+}
+
+.mgr-account__note {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ---------- Divider ---------- */
+.mgr-account__divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 4px 0;
+}
+
+/* ---------- Chips (закреплённые дома) ---------- */
+.mgr-account__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.mgr-account__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: #f1f5f9;
+    color: #334155;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* ---------- Toggle ---------- */
+.mgr-account__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.mgr-account__toggle input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mgr-account__toggle-track {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    transition: background 0.16s;
+    flex-shrink: 0;
+}
+
+.mgr-account__toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.16);
+    transition: transform 0.16s;
+}
+
+.mgr-account__toggle input:checked + .mgr-account__toggle-track {
+    background: #10b981;
+}
+
+.mgr-account__toggle input:checked + .mgr-account__toggle-track .mgr-account__toggle-knob {
+    transform: translateX(16px);
+}
+
+.mgr-account__toggle-label {
+    font-size: 12.5px;
+    color: #334155;
+}
+
+/* ---------- Password ---------- */
+.mgr-account__pw-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #0f172a;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.mgr-account__pw-toggle:hover {
+    background: #f1f5f9;
+}
+
+.mgr-account__pw-toggle-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mgr-account__pw-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.mgr-account__pw-error {
+    color: #ef4444;
+    font-size: 12.5px;
+    margin: 0;
+}
+
+.mgr-account__pw-success {
+    color: #047857;
+    font-size: 12.5px;
+    margin: 0;
+}
+
+.mgr-account__pw-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    background: #0f172a;
+    color: #ffffff;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.mgr-account__pw-submit:hover {
+    background: #1e293b;
+}
+
+.mgr-account__pw-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ---------- Logout ---------- */
+.mgr-account__logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #fee2e2;
+    background: #ffffff;
+    color: #ef4444;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    width: fit-content;
+    transition: background 0.12s;
+}
+
+.mgr-account__logout:hover {
+    background: #fee2e2;
+}
+
+/* ---------- Loading / error ---------- */
+.mgr-account__loading,
+.mgr-account__error {
+    padding: 60px 28px;
+    text-align: center;
+    color: #64748b;
+}
+
+.mgr-account__spinner {
+    margin: 0 auto;
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #10b981;
+    border-radius: 50%;
+    animation: mgr-spin 0.8s linear infinite;
+}
+
+@keyframes mgr-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+    .mgr-account__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mgr-account__profile {
+        flex-wrap: wrap;
+    }
+}

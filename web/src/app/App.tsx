@@ -47,6 +47,7 @@ import ManagerBilling from "@/apps/manager/pages/billing/Billing.tsx";
 import ManagerMeters from "@/apps/manager/pages/meters/Meters.tsx";
 import ManagerVoting from "@/apps/manager/pages/voting/Voting.tsx";
 import ManagerChat from "@/apps/manager/pages/chat/Chat.tsx";
+import ManagerAccount from "@/apps/manager/pages/account/Account.tsx";
 
 // 404
 import NotFound from "@/pages/notFound/NotFound.tsx";
@@ -134,6 +135,7 @@ function AppRoutes() {
                     <Route path="meter" element={<ManagerMeters/>}/>
                     <Route path="vote" element={<ManagerVoting/>}/>
                     <Route path="chat" element={<ManagerChat/>}/>
+                    <Route path="account" element={<ManagerAccount/>}/>
                 </Route>
 
                 <Route path="*" element={<NotFound/>}/>
