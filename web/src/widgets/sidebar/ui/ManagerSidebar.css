@@ -81,6 +81,97 @@
     flex: 1;
 }
 
+.msb__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #0f172a;
+    font-size: 13px;
+    font-family: inherit;
+    padding: 0;
+}
+
+.msb__search-input::placeholder {
+    color: #64748b;
+}
+
+.msb__empty {
+    padding: 16px 12px;
+    font-size: 12.5px;
+    color: #64748b;
+    text-align: center;
+}
+
+/* brand as button — убрать дефолтную обводку */
+.msb__brand--btn {
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+}
+
+.msb__brand--btn:hover {
+    background: #f8fafc;
+}
+
+/* user row as button */
+.msb__user--btn {
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    width: 100%;
+}
+
+/* dropdown menu над футером */
+.msb__footer {
+    position: relative;
+}
+
+.msb__menu {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: calc(100% + 4px);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    padding: 4px;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+}
+
+.msb__menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: none;
+    background: none;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    color: #334155;
+    cursor: pointer;
+    text-align: left;
+}
+
+.msb__menu-item:hover {
+    background: #f1f5f9;
+}
+
+.msb__menu-item--danger {
+    color: #ef4444;
+}
+
+.msb__menu-item--danger:hover {
+    background: #fee2e2;
+}
+
 /* ---------- Nav ---------- */
 .msb__nav {
     display: flex;
@@ -235,7 +326,8 @@
     padding: 0;
 }
 
-.msb--collapsed .msb__search-placeholder {
+.msb--collapsed .msb__search-placeholder,
+.msb--collapsed .msb__search-input {
     display: none;
 }
 
