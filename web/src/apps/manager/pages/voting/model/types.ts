@@ -21,7 +21,16 @@ export type Poll = {
     votes: PollVotes;
     endsIn: string;
     cover: PollCover;
-    selected?: boolean;
+    /** Описание для детальной панели. */
+    description?: string;
+    /** Кем создано. */
+    author?: string;
+    /** Когда создано (короткое читаемое представление). */
+    createdAt?: string;
+    /** Открыто — детализированная дата. */
+    openedAt?: string;
+    /** До какой даты идёт. */
+    endsAt?: string;
 };
 
 export type ArchivedPoll = {

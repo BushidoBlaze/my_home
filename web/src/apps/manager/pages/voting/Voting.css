@@ -15,6 +15,66 @@
     scrollbar-color: #cbd5e1 transparent;
 }
 
+/* ---------- Empty states ---------- */
+.vote-empty {
+    margin-top: 32px;
+    padding: 48px 24px;
+    text-align: center;
+    color: #64748b;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.vote-empty__title {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.vote-empty__sub {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.vote-detail__empty {
+    padding: 60px 24px;
+    text-align: center;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.vote-detail__empty-title {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.vote-detail__empty-sub {
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.4;
+    max-width: 280px;
+}
+
+/* hover для кликабельных карточек */
+.vote-card {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.vote-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
 .vote-list::-webkit-scrollbar {
     width: 8px;
     height: 8px;

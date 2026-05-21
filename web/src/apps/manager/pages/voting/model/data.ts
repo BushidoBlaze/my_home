@@ -1,4 +1,4 @@
-import type {Poll, ArchivedPoll, VoterEntry, PollResultRow} from "./types.ts";
+import type {Poll, ArchivedPoll, VoterEntry} from "./types.ts";
 
 export const POLLS: Poll[] = [
     {
@@ -13,7 +13,11 @@ export const POLLS: Poll[] = [
         votes: {for: 128, against: 9, abstain: 5, total: 212},
         endsIn: "3 дня",
         cover: "emerald",
-        selected: true,
+        description: "Предлагается установить шлагбаум на въезде во двор с управлением через мобильное приложение жильцов. Подрядчик — «ГРАД-Сервис». Стоимость 218 400 ₽, оплата из резервного фонда дома.",
+        author: "Ирина Петрова",
+        createdAt: "14 мая",
+        openedAt: "14 мая 18:00",
+        endsAt: "21 мая 23:59",
     },
     {
         id: "p2",
@@ -27,6 +31,11 @@ export const POLLS: Poll[] = [
         votes: {for: 64, against: 12, abstain: 5, total: 212},
         endsIn: "6 дней",
         cover: "warning",
+        description: "Замена входных дверей и доводчиков на двух подъездах. Три варианта подрядчика, бюджет 480 000 ₽ из текущего ремонта.",
+        author: "Михаил Кузнецов",
+        createdAt: "12 мая",
+        openedAt: "12 мая 10:00",
+        endsAt: "26 мая 23:59",
     },
     {
         id: "p3",
@@ -40,6 +49,11 @@ export const POLLS: Poll[] = [
         votes: {for: 24, against: 21, abstain: 2, total: 212},
         endsIn: "1 день",
         cover: "danger",
+        description: "Повышение тарифа на содержание жилья на 8% с 1 июля. Инфляция строительных материалов, ФОТ персонала. Подробная смета прилагается.",
+        author: "Ольга Демидова",
+        createdAt: "5 мая",
+        openedAt: "5 мая 12:00",
+        endsAt: "21 мая 23:59",
     },
 ];
 
@@ -47,29 +61,9 @@ export const ARCHIVED_POLLS: ArchivedPoll[] = [
     {title: "Кронирование тополей у входа", date: "4 мая", result: "Принято", tone: "emerald", q: 64},
     {title: "Бюджет ремонта подъезда №3", date: "28 апр", result: "Принято", tone: "emerald", q: 71},
     {title: "Велопарковка во дворе", date: "21 апр", result: "Не принято", tone: "danger", q: 38},
-];
-
-export const POLL_DETAIL = {
-    title: "Установка шлагбаума во дворе",
-    description: "Предлагается установить шлагбаум на въезде во двор с управлением через мобильное приложение жильцов. Подрядчик — «ГРАД-Сервис». Стоимость 218 400 ₽, оплата из резервного фонда дома.",
-    author: "Ирина Петрова",
-    createdAt: "14 мая",
-    quorumNow: 67,
-    quorumGoal: 50,
-    votedCount: 142,
-    totalCount: 212,
-    metaCards: [
-        {label: "ТИП", value: "Общее собрание"},
-        {label: "ДОМ", value: "Берёзовая, 14"},
-        {label: "ОТКРЫТО", value: "14 мая 18:00"},
-        {label: "ДО", value: "21 мая 23:59"},
-    ],
-};
-
-export const POLL_RESULTS: PollResultRow[] = [
-    {label: "За", n: 128, total: 142, color: "#10b981"},
-    {label: "Против", n: 9, total: 142, color: "#ef4444"},
-    {label: "Воздержались", n: 5, total: 142, color: "#f59e0b"},
+    {title: "Покраска цоколя", date: "10 апр", result: "Принято", tone: "emerald", q: 58},
+    {title: "Перенос мусорной площадки", date: "2 апр", result: "Не принято", tone: "danger", q: 41},
+    {title: "Доп. уборка мест общего пользования", date: "25 мар", result: "Принято", tone: "emerald", q: 67},
 ];
 
 export const NON_VOTERS: VoterEntry[] = [
