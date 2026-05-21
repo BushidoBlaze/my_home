@@ -1,0 +1,22 @@
+# Build outputs
+bin/
+obj/
+*.user
+*.suo
+
+# Visual Studio cache / local state
+.vs/
+*.userprefs
+
+# Test results
+TestResults/
+[Cc]overage*/
+
+# Rider
+.idea/
+
+# OS / editor
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
