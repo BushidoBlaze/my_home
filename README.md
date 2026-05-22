@@ -1,222 +1,304 @@
 # 🏠 Мой Дом / My Home
 
-RUS:
-**Мой Дом** — это web-платформа, единого цифрого пространства для ЖК.
+> Цифровая платформа управления жилым комплексом для УК и жителей.
+> A digital platform for residential complex management — for property management companies and residents.
 
-ENG:
-**My Home** is a web platform, a single digital space for residential complexes.
-
----
-
-## 🌐 О проекте / About
-
-RUS:
-
-**Мой Дом** — Объединяет жителей и управляющие компании в едином цифровом пространстве.
-Позволяет подавать заявки, голосовать по благоустройству, оплачивать ЖКХ, заказывать услуги и общаться с соседями.
-Обеспечивает прозрачность расходов и контроль выполнения заявок.
-
-ENG:
-
-**My Home** — Unites residents and management companies in a single digital space.
-Allows you to submit applications, vote on improvements, pay utility bills, order services, and communicate with
-neighbors. Ensures transparency of expenses and control over the fulfillment of applications.
+[![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)](https://vitejs.dev/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql)](https://www.postgresql.org/)
 
 ---
 
-## 🎯 Цель проекта / Project goal
+## 📖 О проекте
 
-RUS:
+**Мой Дом** объединяет в одной системе трёх участников:
 
-Создать **цифровую среду** для взаимодействия всех участников управления жилым комплексом:
+- 🏢 **Управляющая компания** — диспетчер, инженер, бухгалтер, директор
+- 👨‍👩‍👧 **Жильцы** — собственники и арендаторы квартир
+- 🔧 **Подрядчики** — внешние исполнители работ
 
-- Жильцов - которые хотят прозрачности операций и удобства взаимодействия с приложением;
-- Управляющих компаний - стремящихся к автоматизации процессов.
-
-ENG:
-
-Create a digital environment for interaction between all stakeholders involved in managing a residential complex:
-
-- Residents – who want transparency in operations and easy interaction with the app;
-- Management companies – striving to automate processes.
+Платформа закрывает основные операционные циклы УК (заявки, начисления, голосования, регуляторные сроки, чаты) и базовые сценарии жителя (подача заявок, оплата ЖКУ, передача показаний, голосования, маркетплейс услуг).
 
 ---
 
-## 📋 Основные возможности / Key features
+## ✨ Ключевые возможности
 
-RUS:
+### Для управляющей компании
 
-- 📱 **Веб-интерфейс** — для жильцов и управляющих компаний.
-- 🧾 **Подача заявок онлайн** — ремонт, уборка, обслуживание.
-- 📊 **Индикаторы выполнения заявок** — контроль этапов и сроков работ в реальном времени.
-- 💰 **Прозрачный учёт расходов** — визуализация трат и сборов в виде круговых диаграмм.
-- 🛒 **Встроенный маркетплейс услуг** — клининг, доставка, мелкий ремонт и другие сервисы.
-- 💬 **Голосование и опросы** — быстрые коллективные решения по благоустройству и улучшениям как по созвонам, так и
-  голосованием в чате.
+- 📊 **Дашборд** — 5 KPI-карточек (открытые заявки, без исполнителя, аварии, собираемость, показания) с переходом на детальные списки
+- 📋 **Приоритетная очередь заявок** — сортировка по приоритету (High / Med / Low), быстрое назначение исполнителя
+- 💰 **Сборы и долги** — собираемость текущего месяца, тренд за 9 месяцев, топ-должников
+- ⚠️ **Регуляторные сроки** — лифты, газ (ВДГО), пожарка, дымоходы с индикацией «горит / скоро / норма»
+- 🗳 **Голосования (ОСС)** — создание с рассылкой push, контроль кворума, формирование протоколов
+- 🏘 **Дома и квартиры** — реестр объектов, лицевых счетов, индивидуальные счётчики
+- 💬 **Чат и обращения** — единая входная точка для коммуникации с жильцами
+- 📈 **Аналитика и отчёты** — выгрузка для ГИС ЖКХ, ГЖИ
 
-ENG:
+### Для жителя
 
-- 📱 **Web Interface** — for residents and management companies.
-- 🧾 **Online Service Requests** — repairs, cleaning, maintenance.
-- 📊 **Request Progress Indicators** — real-time tracking of task stages and deadlines.
-- 💰 **Transparent Expense Tracking** — visualization of costs and collections using pie charts.
-- 🛒 **Built-in Service Marketplace** — cleaning, delivery, minor repairs, and other services.
-- 💬 **Voting and polls** — quick, collaborative decisions on improvements and improvements, both via phone calls and
-  chat voting.
-
----
-
-## 💡 Преимущества / Advantages
-
-RUS:
-
-- Прозрачность расходов;
-- Встроенный маркетплейс дополнительных услуг;
-  - Отслеживание заявок в реальном времени;
-- Единый портал для всех коммуникаций;
-- История всех операций по квартире;
-- Автоматическое формирование отчетности для УК;
-
-ENG:
-
-- Expense transparency;
-- Integrated marketplace for additional services;
-- Real-time application tracking;
-- Single portal for all communications;
-- History of all apartment transactions;
-- Automatic reporting for the management company;
+- 📱 **Подача заявок** — категория, фото, отслеживание статуса
+- 💳 **Оплата ЖКУ** — квитанции, история, СБП / СберPay (в планах)
+- 📊 **Передача показаний** — ИПУ электричество / вода / газ
+- 🗳 **Голосования** — участие в ОСС, контроль кворума
+- 💬 **Чаты** — с диспетчером УК, с соседями, в группах подъезда
+- 🛒 **Маркетплейс** — клининг, ремонт, доставка от проверенных подрядчиков
 
 ---
 
-## 👥 Целевая аудитория / Target audience
+## 🛠 Технологический стек
 
-RUS:
-
-- Управляющие компании (B2B).
-- Жильцы и арендаторы квартир (B2C).
-
-ENG:
-
-- Management companies (B2B).
-- Residents and renters (B2C).
-
----
-
-## 🚀 Бизнес-модель / Business model
-
-RUS:
-
-- **Подписка для управляющих компаний** (годовая / месячная).
-- **Комиссия с транзакций** во внутреннем маркетплейсе услуг.
-- **Платные дополнительные модули** и интеграции для УК.
-- **Размещение не навязчивой рекламы** сервисных партнеров.
-- **Реализация товаров и услуг** спонсоров и партнеров на маркетплейсе услуг.
-
-ENG:
-
-- **Subscription for management companies** (annual / monthly).
-- **Transaction fees** in the internal services marketplace.
-- **Paid additional modules** and integrations for the management company.
-- **Placement of non-intrusive advertising** for service partners.
-- **Sale of goods and services** from sponsors and partners on the service marketplace.
+| Слой | Технологии |
+|---|---|
+| **Frontend** | React 19, TypeScript 5, Vite 7, React Router, Sonner (toast), lucide-react |
+| **Backend** | .NET 10, ASP.NET Core, Entity Framework Core, FluentValidation, JWT-аутентификация |
+| **База данных** | PostgreSQL 16 |
+| **Realtime** | SignalR (чаты) |
+| **API** | REST с JSON, OpenAPI / Swagger в dev-режиме |
+| **Архитектура** | Чистая архитектура: Domain → Application → Infrastructure → Api |
 
 ---
 
-## ⚙️ Технологии / Technologies
-
-- **Backend:** C# / .NET 10 + (ASP.NET Core)
-- **Frontend:** React + TypeScript + Vite
-- **Database:** PostgreSQL
-- **Realtime:** SignalR
-- **Аналитика / Analytics:** Grafana
-- **API:** REST, SOAP, WebSocket
-
----
-
-## 🗂️ Структура проекта / Project structure
+## 🗂 Структура проекта
 
 ```
 my-home/
 ├── backend/                      # .NET 10 solution
-│   ├── MyHome.Api/               # ASP.NET Core entry point (controllers, hubs)
-│   ├── MyHome.Application/       # Use cases, services
-│   ├── MyHome.Domain/            # Entities, domain logic
-│   └── MyHome.Infrastructure/    # EF Core, persistence
-└── web/                          # React + Vite frontend
+│   ├── MyHome.Api/               # ASP.NET Core: контроллеры, hub-ы, Program.cs
+│   │   ├── Controllers/          # 14 контроллеров (Auth, Tickets, Polls, Dashboard, …)
+│   │   ├── Dtos/                 # Контракты ответов API
+│   │   ├── Hubs/                 # SignalR-хабы (ChatHub)
+│   │   └── Validation/           # FluentValidation-валидаторы
+│   ├── MyHome.Application/       # Use-cases, сервисы (тонкий слой)
+│   ├── MyHome.Domain/
+│   │   └── Entities/             # User, ServiceRequest, Poll, ComplianceDeadline, …
+│   └── MyHome.Infrastructure/
+│       ├── Persistence/          # AppDbContext, DbSeeder
+│       └── Migrations/           # EF Core миграции
+└── web/                          # React + Vite фронтенд
     └── src/
-        ├── app/                  # Root App component, routing
-        ├── api/                  # API clients (axios)
-        ├── apps/                 # Role-scoped dashboards
-        │   ├── manager/          # Manager-side pages
-        │   └── resident/         # Resident-side pages
-        ├── pages/                # Marketing pages (home, tariffs, blog, auth, …)
-        ├── layouts/              # MarketingLayout, etc.
+        ├── app/                  # Корневой компонент, маршрутизация
+        ├── api/                  # API-клиенты (axios-style через fetch)
+        ├── apps/
+        │   ├── manager/          # Кабинет УК
+        │   │   ├── layouts/
+        │   │   └── pages/        # home, tickets, vote, billing, buildings, meter,
+        │   │                     # chat, account, ticketDetail
+        │   └── resident/         # Кабинет жителя
+        │       └── pages/        # home, requests, expenses, chats, voting,
+        │                         # marketplace, news, account, settings, help
+        ├── pages/                # Маркетинговые страницы (home, tariffs, blog, …)
+        ├── layouts/              # MarketingLayout
         ├── widgets/              # Sidebar, TopBar, Header, TariffsSection
-        └── shared/               # UI primitives, hooks, constants, styles
+        └── shared/
+            ├── ui/               # Avatar, Donut, Spark, Progress, Stat, …
+            ├── hooks/            # useAuth, useScrollReveal, useHorizontalScroll
+            ├── constants/        # Палитра, эндпоинты
+            └── assets/styles/    # global.css, admin.css
 ```
 
 ---
 
-## 🚀 Запуск / Getting started
+## 🚀 Быстрый старт
 
-### Frontend
+### Требования
+
+- **Node.js** 20+
+- **.NET SDK** 10+
+- **PostgreSQL** 16+
+
+### 1. Frontend
 
 ```bash
 cd web
 npm install
-npm run dev
+npm run dev        # → http://localhost:5174
 ```
 
-Dev-сервер по умолчанию запускается на `http://localhost:5174`.
+Переменные окружения (`web/.env`):
 
-### Backend
+```
+VITE_API_URL=http://localhost:5211/api
+```
+
+### 2. Backend
 
 ```bash
 cd backend
 dotnet restore
-dotnet run --project MyHome.Api
+dotnet run --project MyHome.Api    # → http://localhost:5211
+```
+
+При первом запуске:
+
+- Автоматически применяются миграции (`db.Database.MigrateAsync()`)
+- `DbSeeder` заполняет демо-данные (регуляторные сроки и т.п.)
+- Swagger UI доступен на `http://localhost:5211/swagger`
+
+Строка подключения настраивается в `backend/MyHome.Api/appsettings.json`:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Database=myhome;Username=postgres;Password=postgres"
+  },
+  "Jwt": {
+    "Key": "super-secret-key-change-in-prod-min-32-chars"
+  }
+}
+```
+
+### 3. Без бэкенда (дизайн-режим)
+
+Фронт корректно работает без поднятого бэкенда — каждый блок дашборда показывает карточку «Не удалось загрузить данные» с кнопкой «Повторить». Это полезно при работе только с UI.
+
+---
+
+## 🗃 Модель данных (основные сущности)
+
+| Сущность | Назначение |
+|---|---|
+| `User` | Жильцы и сотрудники УК (роль определяется полем `Role`) |
+| `Apartment` | Квартиры с привязкой к жильцу |
+| `ServiceRequest` | Заявки. Поля: `Status`, `Category`, `Priority`, `AssigneeId` |
+| `UtilityBill` | Начисления ЖКУ |
+| `MeterReading` | Показания счётчиков |
+| `Poll` + `PollOption` + `PollVote` | Голосования (ОСС, опросы) |
+| `Chat` + `ChatMessage` + `ChatMember` | Чаты с реакциями и реплаями (через SignalR) |
+| `ComplianceDeadline` | Регуляторные сроки (лифт, газ, пожарка, дымоходы) |
+| `Notification` | Уведомления внутри приложения |
+| `Service` + `ServiceOrder` + `ServiceReview` | Маркетплейс услуг |
+| `Subscription` | Подписки УК (Basic / Premium) |
+| `NewsPost` + `NewsComment` | Объявления УК |
+| `SupportTicket` | Обращения в поддержку платформы |
+
+---
+
+## 🔐 Аутентификация
+
+- **JWT Bearer** для REST-вызовов (заголовок `Authorization: Bearer <token>`)
+- **Query-token** для SignalR (`?access_token=...`) — браузер не позволяет задать заголовок при WebSocket-handshake
+- Роли в claim: `Manager` (УК) и `Resident` (житель)
+- Защита маршрутов на фронте: `<ManagerRoute>` и `<PrivateRoute>` в `web/src/app/App.tsx`
+
+---
+
+## 📡 API endpoint-ы (выборка)
+
+Все эндпоинты под префиксом `/api`. Полный список — в Swagger.
+
+### Manager dashboard
+
+```
+GET  /api/manager/dashboard/stats
+GET  /api/manager/dashboard/priority-tickets?limit=6
+GET  /api/manager/dashboard/collections
+GET  /api/manager/dashboard/compliance?limit=5
+GET  /api/manager/dashboard/activity?limit=6
+GET  /api/manager/dashboard/active-votes?limit=5
+```
+
+### Голосования
+
+```
+GET    /api/polls                       # все опросы текущего пользователя
+POST   /api/polls                       # создать (только Manager) → рассылка push
+POST   /api/polls/{id}/vote             # проголосовать
+PATCH  /api/polls/{id}/close            # закрыть (Manager)
+DELETE /api/polls/{id}                  # удалить (Manager)
+```
+
+### Заявки
+
+```
+GET    /api/requests/my                 # мои заявки (житель)
+GET    /api/requests/all                # все заявки (Manager)
+POST   /api/requests
+PATCH  /api/requests/{id}/status        # Manager
+PUT    /api/requests/{id}               # автор
+DELETE /api/requests/{id}               # автор
+```
+
+### Пользователь
+
+```
+GET  /api/users/me
+PUT  /api/users/me
+POST /api/users/avatar
+PUT  /api/users/password
+```
+
+### Чаты (SignalR)
+
+```
+WS /hubs/chat?access_token=<jwt>
 ```
 
 ---
 
-## 🧩 Интеграции / Integrations
+## 🧪 Что протестировано
 
-RUS:
-
-- 1С / ERP-системы (обдумывается)
-
-ENG:
-
-- 1C / ERP systems (thinking about it)
+- ✅ Сборка backend `dotnet build` — 0 ошибок, 0 предупреждений
+- ✅ Все миграции применяются: `InitialCreate` → … → `AddServiceRequestPriorityAndAssignee`
+- ✅ `DbSeeder` идемпотентен (повторный запуск ничего не дублирует)
+- ✅ Graceful degradation: при недоступном бэке UI показывает явные ошибки загрузки и кнопку «Повторить»
+- ✅ Маршруты УК (8 страниц) — все интерактивные элементы работают и навигируют
+- ✅ Создание голосования → POST `/api/polls` → рассылка `Notification` всем жильцам
+- ✅ TopBar поиск разворачивается влево с анимацией, popover уведомлений с outside-click
+- ✅ Sidebar поиск фильтрует пункты меню, профиль открывает Profile / Logout
 
 ---
 
-## 🆕 Будущие фичи / Future features
+## 🎯 Бизнес-модель
 
-RUS:
-- **Мобильное приложение** для Android и iOS
-- **Интеграция с голосовым помощником “Алиса”** — управление и навигация голосом.
-- **Облачная архитектура** — безопасность, надёжность и интеграция с внешними системами.
--
-- Платёжные шлюзы **СберPay**
-- Голосовой помощник **Алиса**
-- Сервисы аналитики и IoT-модули
-- Интеграция всех сервисов ЖК в одну платформу
--
-- **Caching/Fast Data:** Redis
-- **Cloud Infrastructure:** Yandex Cloud
-- **AI & Voice Integration:** Яндекс Алиса SDK, ML-модуль для обработки обращений
+| Источник дохода | Модель |
+|---|---|
+| Подписка УК | 12 000 ₽/мес за дом (gradient для крупных УК) |
+| Комиссия маркетплейса | 5–7% с каждой сделки |
+| Платные модули | 1С-интеграция, расширенная аналитика, white-label |
+| Реклама партнёров | Ненавязчивая, релевантная (сервисные компании) |
+| Для жителей | Полностью бесплатно |
 
-ENG:
-- **Mobile application** for Android and iOS
-- **Integration with Yandex Alice Voice Assistant** — voice-controlled management and navigation.
-- **Cloud Architecture** — security, reliability, and integration with external systems.
--
-- **SberPay** payment gateways
-- **Yandex Alice** voice assistant
-- Analytics services and IoT modules
-- Integration of all housing and utility services into a single platform
--
-- **Caching/Fast Data:** Redis
-- **Cloud Infrastructure:** Yandex Cloud
-- **AI & Voice Integration:** Yandex Alice SDK, ML module for handling inquiries
+---
+
+## 🗺 Roadmap
+
+### MVP (текущий статус)
+
+- [x] Маркетинговые страницы (home, tariffs, blog, residents, management)
+- [x] Регистрация / вход / JWT
+- [x] Кабинет жителя: заявки, оплата, чаты, голосования, маркетплейс
+- [x] Кабинет УК: дашборд, заявки, голосования, аккаунт
+- [x] Регуляторные сроки в БД и UI
+- [x] Чаты в реальном времени (SignalR)
+
+### Next
+
+- [ ] Push-уведомления через FCM / APNs
+- [ ] Мобильное приложение (React Native / PWA)
+- [ ] Интеграция с 1С (выгрузка начислений и оплат)
+- [ ] Платёжные шлюзы (СберPay, СБП)
+- [ ] Голосовой помощник «Алиса»
+- [ ] IoT-модули (умные счётчики, шлагбаум по QR)
+- [ ] Сертификация в реестре российского ПО
+
+### Long-term
+
+- Облачное развёртывание в Yandex Cloud
+- Аналитика и ML для прогноза собираемости
+- Расширение в регионы
+
+---
+
+## 👤 Автор
+
+**Атласов Р.Р.** — студент СИ-46
+
+Дипломный проект: «Цифровая платформа управления жилым комплексом»
+
+---
+
+## 📄 Лицензия
+
+Все права защищены. Платформа находится в стадии разработки.
