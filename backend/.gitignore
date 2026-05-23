@@ -9,12 +9,17 @@ appsettings.Development.json
 appsettings.Local.json
 appsettings.*.Local.json
 
-# Пользовательские аплоады — не должны попадать в репозиторий
-MyHome.Api/wwwroot/avatars/
-MyHome.Api/wwwroot/chat-files/
-MyHome.Api/wwwroot/chat-avatars/
-MyHome.Api/wwwroot/news-files/
-MyHome.Api/wwwroot/marketplace/
+# Пользовательские аплоады — папки оставляем (через .gitkeep), но содержимое игнорим
+MyHome.Api/wwwroot/avatars/*
+MyHome.Api/wwwroot/chat-files/*
+MyHome.Api/wwwroot/chat-avatars/*
+MyHome.Api/wwwroot/news-files/*
+MyHome.Api/wwwroot/marketplace/*
+!MyHome.Api/wwwroot/avatars/.gitkeep
+!MyHome.Api/wwwroot/chat-files/.gitkeep
+!MyHome.Api/wwwroot/chat-avatars/.gitkeep
+!MyHome.Api/wwwroot/news-files/.gitkeep
+!MyHome.Api/wwwroot/marketplace/.gitkeep
 
 # Visual Studio cache / local state
 .vs/
