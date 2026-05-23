@@ -139,16 +139,14 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 Локальные секреты (строка подключения и JWT-ключ) **не хранятся в репозитории**.
 Их нужно задать одним из способов:
 
-1. Локальный файл `backend/MyHome.Api/appsettings.Development.json` (в `.gitignore`),
-   либо
-2. Переменные окружения:
+1. Локальный файл `appsettings.Development.json` (в `.gitignore`), либо
+2. Переменные окружения (`ConnectionStrings__DefaultConnection`, `Jwt__Key`), либо
+3. `dotnet user-secrets`.
 
-```bash
-export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=myhome_db;Username=postgres;Password=<your-password>"
-export Jwt__Key="$(openssl rand -base64 64)"   # минимум 32 байта
-```
+`Jwt__Key` должен быть длиной минимум 32 байта — приложение падает на старте,
+если ключ короче. Сгенерировать сильный ключ: `openssl rand -base64 64`.
 
-Приложение упадёт на старте, если `Jwt__Key` короче 32 байт — это намеренно.
+Конкретные параметры подключения, порты, имя БД и т.п. — спрашивать у владельца проекта.
 
 ### 3. Без бэкенда (дизайн-режим)
 
