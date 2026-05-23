@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyHome.Api.Security;
 using MyHome.Domain.Entities;
 using MyHome.Infrastructure.Persistence;
 using System.Security.Claims;
@@ -24,7 +25,7 @@ public class MarketplaceController : ControllerBase
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    // GET /api/marketplace/services ? список услуг с фильтрацией
+    // GET /api/marketplace/services ? пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpGet("services")]
     public async Task<IActionResult> GetServices(
         [FromQuery] string? category = null,
@@ -75,7 +76,7 @@ public class MarketplaceController : ControllerBase
         return Ok(result);
     }
 
-    // GET /api/marketplace/services/{id} ? детали услуги
+    // GET /api/marketplace/services/{id} ? пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpGet("services/{id}")]
     public async Task<IActionResult> GetService(Guid id)
     {
@@ -112,7 +113,7 @@ public class MarketplaceController : ControllerBase
         });
     }
 
-    // POST /api/marketplace/services ? создать услугу (менеджер)
+    // POST /api/marketplace/services ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
     [HttpPost("services")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> CreateService([FromBody] CreateServiceDto dto)
@@ -138,7 +139,7 @@ public class MarketplaceController : ControllerBase
         return Ok(service);
     }
 
-    // POST /api/marketplace/services/{id}/image ? загрузить фото услуги
+    // POST /api/marketplace/services/{id}/image ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpPost("services/{id}/image")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
@@ -147,10 +148,18 @@ public class MarketplaceController : ControllerBase
         if (service == null) return NotFound();
         if (service.ProviderId != CurrentUserId) return Forbid();
 
+        var (ok, safeExt, error) = UploadSecurity.Validate(file);
+        if (!ok) return BadRequest(error);
+
+        // РљР°СЂС‚РёРЅРєРё СЃРµСЂРІРёСЃР° вЂ” С‚РѕР»СЊРєРѕ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ.
+        var allowedImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+        if (string.IsNullOrEmpty(safeExt) || !allowedImage.Contains(safeExt))
+            return BadRequest("Р”РѕРїСѓСЃС‚РёРјС‹Рµ С„РѕСЂРјР°С‚С‹: jpg, jpeg, png, webp");
+
         var folder = Path.Combine(_env.WebRootPath ?? "wwwroot", "marketplace");
         Directory.CreateDirectory(folder);
 
-        var ext = Path.GetExtension(file.FileName);
+        var ext = safeExt;
         var fileName = $"{Guid.NewGuid()}{ext}";
         var path = Path.Combine(folder, fileName);
 
@@ -163,13 +172,13 @@ public class MarketplaceController : ControllerBase
         return Ok(new { url = service.ImageUrl });
     }
 
-    // POST /api/marketplace/orders ? создать заказ
+    // POST /api/marketplace/orders ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     [HttpPost("orders")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
     {
         var service = await _db.Services.FindAsync(dto.ServiceId);
-        if (service == null) return NotFound("Услуга не найдена");
-        if (!service.IsActive) return BadRequest("Услуга недоступна");
+        if (service == null) return NotFound("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+        if (!service.IsActive) return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
         var order = new ServiceOrder
         {
@@ -186,7 +195,7 @@ public class MarketplaceController : ControllerBase
         return Ok(new { order.Id, order.Status, order.ScheduledAt, order.CreatedAt });
     }
 
-    // GET /api/marketplace/orders ? мои заказы
+    // GET /api/marketplace/orders ? пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpGet("orders")]
     public async Task<IActionResult> GetMyOrders()
     {
@@ -218,14 +227,14 @@ public class MarketplaceController : ControllerBase
         return Ok(orders);
     }
 
-    // PATCH /api/marketplace/orders/{id}/cancel ? отменить заказ
+    // PATCH /api/marketplace/orders/{id}/cancel ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     [HttpPatch("orders/{id}/cancel")]
     public async Task<IActionResult> CancelOrder(Guid id)
     {
         var order = await _db.ServiceOrders.FindAsync(id);
         if (order == null) return NotFound();
         if (order.ResidentId != CurrentUserId) return Forbid();
-        if (order.Status == "Done") return BadRequest("Нельзя отменить выполненный заказ");
+        if (order.Status == "Done") return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ");
 
         order.Status = "Cancelled";
         order.UpdatedAt = DateTime.UtcNow;
@@ -234,26 +243,26 @@ public class MarketplaceController : ControllerBase
         return Ok(new { order.Id, order.Status });
     }
 
-    // POST /api/marketplace/services/{id}/reviews ? оставить отзыв
+    // POST /api/marketplace/services/{id}/reviews ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     [HttpPost("services/{id}/reviews")]
     public async Task<IActionResult> AddReview(Guid id, [FromBody] CreateReviewDto dto)
     {
-        // Проверяем что у пользователя есть выполненный заказ
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         var hasOrder = await _db.ServiceOrders.AnyAsync(o =>
             o.ServiceId == id &&
             o.ResidentId == CurrentUserId &&
             o.Status == "Done");
 
-        if (!hasOrder) return BadRequest("Отзыв можно оставить только после выполнения заказа");
+        if (!hasOrder) return BadRequest("пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
-        // Проверяем что отзыв ещё не оставлен
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var exists = await _db.ServiceReviews.AnyAsync(r =>
             r.ServiceId == id && r.ResidentId == CurrentUserId);
 
-        if (exists) return BadRequest("Вы уже оставили отзыв на эту услугу");
+        if (exists) return BadRequest("пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
         if (dto.Rating < 1 || dto.Rating > 5)
-            return BadRequest("Оценка должна быть от 1 до 5");
+            return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ 1 пїЅпїЅ 5");
 
         var review = new ServiceReview
         {

@@ -136,18 +136,19 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 - `DbSeeder` заполняет демо-данные (регуляторные сроки и т.п.)
 - Swagger UI доступен на `http://localhost:5211/swagger`
 
-Строка подключения настраивается в `backend/MyHome.Api/appsettings.json`:
+Локальные секреты (строка подключения и JWT-ключ) **не хранятся в репозитории**.
+Их нужно задать одним из способов:
 
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Database=myhome;Username=postgres;Password=postgres"
-  },
-  "Jwt": {
-    "Key": "super-secret-key-change-in-prod-min-32-chars"
-  }
-}
+1. Локальный файл `backend/MyHome.Api/appsettings.Development.json` (в `.gitignore`),
+   либо
+2. Переменные окружения:
+
+```bash
+export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=myhome_db;Username=postgres;Password=<your-password>"
+export Jwt__Key="$(openssl rand -base64 64)"   # минимум 32 байта
 ```
+
+Приложение упадёт на старте, если `Jwt__Key` короче 32 байт — это намеренно.
 
 ### 3. Без бэкенда (дизайн-режим)
 
@@ -184,56 +185,12 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 
 ---
 
-## 📡 API endpoint-ы (выборка)
+## 📡 API
 
-Все эндпоинты под префиксом `/api`. Полный список — в Swagger.
+Все эндпоинты под префиксом `/api`. Полный список доступен в **Swagger UI**
+(только в Development-режиме): `http://localhost:5211/swagger`.
 
-### Manager dashboard
-
-```
-GET  /api/manager/dashboard/stats
-GET  /api/manager/dashboard/priority-tickets?limit=6
-GET  /api/manager/dashboard/collections
-GET  /api/manager/dashboard/compliance?limit=5
-GET  /api/manager/dashboard/activity?limit=6
-GET  /api/manager/dashboard/active-votes?limit=5
-```
-
-### Голосования
-
-```
-GET    /api/polls                       # все опросы текущего пользователя
-POST   /api/polls                       # создать (только Manager) → рассылка push
-POST   /api/polls/{id}/vote             # проголосовать
-PATCH  /api/polls/{id}/close            # закрыть (Manager)
-DELETE /api/polls/{id}                  # удалить (Manager)
-```
-
-### Заявки
-
-```
-GET    /api/requests/my                 # мои заявки (житель)
-GET    /api/requests/all                # все заявки (Manager)
-POST   /api/requests
-PATCH  /api/requests/{id}/status        # Manager
-PUT    /api/requests/{id}               # автор
-DELETE /api/requests/{id}               # автор
-```
-
-### Пользователь
-
-```
-GET  /api/users/me
-PUT  /api/users/me
-POST /api/users/avatar
-PUT  /api/users/password
-```
-
-### Чаты (SignalR)
-
-```
-WS /hubs/chat?access_token=<jwt>
-```
+Реалтайм-чаты — через SignalR-хаб `/hubs/chat` (авторизация JWT через query-параметр `access_token`).
 
 ---
 

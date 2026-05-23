@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MyHome.Api.Hubs;
+using MyHome.Api.Security;
 using MyHome.Domain.Entities;
 using MyHome.Infrastructure.Persistence;
 using System.Collections.Concurrent;
@@ -239,7 +240,8 @@ public class ChatsController : ControllerBase
             return BadRequest("Email обязателен");
 
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
-        if (user == null) return NotFound("Пользователь не найден");
+        // Не раскрываем существование e-mail в системе через разные ответы.
+        if (user == null) return Ok(new { ok = true, exists = true });
 
         var exists = await _db.ChatMembers.AnyAsync(m => m.ChatId == id && m.UserId == user.Id);
         if (exists) return Ok(new { ok = true, exists = true });
@@ -653,13 +655,15 @@ public class ChatsController : ControllerBase
     public async Task<IActionResult> SearchUsers([FromQuery] string? query = null)
     {
         var q = (query ?? string.Empty).Trim().ToLower();
+
+        // Анти-enumeration: без минимум 2 символов не отдаём список — иначе можно
+        // последовательным перебором "a","b","c",... вытянуть всю базу.
+        if (q.Length < 2) return Ok(Array.Empty<object>());
+
         var usersQuery = _db.Users.Where(u => u.Id != CurrentUserId);
-        if (!string.IsNullOrWhiteSpace(q))
-        {
-            usersQuery = usersQuery.Where(u =>
-                u.FullName.ToLower().Contains(q) ||
-                u.Email.ToLower().Contains(q));
-        }
+        usersQuery = usersQuery.Where(u =>
+            u.FullName.ToLower().Contains(q) ||
+            u.Email.ToLower().Contains(q));
 
         var users = await usersQuery
             .OrderBy(u => u.FullName)
@@ -683,13 +687,14 @@ public class ChatsController : ControllerBase
         if (chat == null) return NotFound("Чат не найден");
         if (!await IsMemberAsync(id)) return Forbid();
 
-        if (file == null || file.Length == 0)
-            return BadRequest("Файл не выбран");
+        var (ok, safeExt, error) = UploadSecurity.Validate(file);
+        if (!ok) return BadRequest(error);
 
         var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "chat-files");
         Directory.CreateDirectory(uploadsFolder);
 
-        var ext = Path.GetExtension(file.FileName);
+        // Имя файла полностью генерим сами — никакого user-controlled пути / расширения.
+        var ext = safeExt ?? string.Empty;
         var fileName = $"{Guid.NewGuid()}{ext}";
         var filePath = Path.Combine(uploadsFolder, fileName);
 
@@ -698,7 +703,7 @@ public class ChatsController : ControllerBase
             await file.CopyToAsync(stream);
         }
 
-        var normalizedExt = ext.ToLowerInvariant();
+        var normalizedExt = ext;
         var imageExts = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
         var videoExts = new[] { ".mp4", ".webm", ".mov", ".mkv" };
         var audioExts = new[] { ".mp3", ".wav", ".ogg", ".m4a", ".aac", ".webm" };
@@ -725,12 +730,19 @@ public class ChatsController : ControllerBase
         if (chat == null) return NotFound();
         if (chat.Type == "Direct") return BadRequest("Для личного чата аватар недоступен");
         if (!await CanManageAsync(id)) return Forbid();
-        if (file == null || file.Length == 0) return BadRequest("Файл не выбран");
+
+        var (ok, safeExt, error) = UploadSecurity.Validate(file);
+        if (!ok) return BadRequest(error);
+
+        // Аватар чата — только картинки.
+        var allowedImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+        if (string.IsNullOrEmpty(safeExt) || !allowedImage.Contains(safeExt))
+            return BadRequest("Допустимые форматы: jpg, jpeg, png, webp");
 
         var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "chat-avatars");
         Directory.CreateDirectory(uploadsFolder);
 
-        var ext = Path.GetExtension(file.FileName);
+        var ext = safeExt;
         var fileName = $"{Guid.NewGuid()}{ext}";
         var filePath = Path.Combine(uploadsFolder, fileName);
 

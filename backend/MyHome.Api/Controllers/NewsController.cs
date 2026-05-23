@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyHome.Api.Security;
 using MyHome.Domain.Entities;
 using MyHome.Infrastructure.Persistence;
 using System.Security.Claims;
@@ -214,10 +215,10 @@ public class NewsController : ControllerBase
         var content = dto.Content?.Trim();
 
         if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
-            return BadRequest("Заголовок и текст обязательны");
+            return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
         var author = await _db.Users.FindAsync(CurrentUserId);
-        if (author == null) return NotFound("Пользователь не найден");
+        if (author == null) return NotFound("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
         var post = new NewsPost
         {
@@ -235,6 +236,28 @@ public class NewsController : ControllerBase
         };
 
         _db.NewsPosts.Add(post);
+
+        // РЈРІРµРґРѕРјР»СЏРµРј РІСЃРµС… Р¶РёР»СЊС†РѕРІ Рѕ РЅРѕРІРѕР№ РЅРѕРІРѕСЃС‚Рё РѕС‚ РЈРљ (РєР°Рє РїСЂРё СЃРѕР·РґР°РЅРёРё РѕРїСЂРѕСЃР°).
+        if (post.SourceType == "ManagementCompany")
+        {
+            var residentIds = await _db.Users
+                .Where(u => u.Role == "Resident")
+                .Select(u => u.Id)
+                .ToListAsync();
+
+            foreach (var rid in residentIds)
+            {
+                _db.Notifications.Add(new Notification
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = rid,
+                    Title = post.IsPinned ? "Р’Р°Р¶РЅРѕРµ РѕР±СЉСЏРІР»РµРЅРёРµ" : "РќРѕРІРѕРµ РѕР±СЉСЏРІР»РµРЅРёРµ",
+                    Message = post.Title,
+                    Type = post.Importance == "High" ? "Warning" : "Info",
+                });
+            }
+        }
+
         await _db.SaveChangesAsync();
 
         return Ok(new { id = post.Id });
@@ -297,8 +320,8 @@ public class NewsController : ControllerBase
         if (!await IsAuthorOrAdminAsync(id))
             return Forbid();
 
-        if (file == null || file.Length == 0)
-            return BadRequest("Файл не выбран");
+        var (ok, safeExt, error) = UploadSecurity.Validate(file);
+        if (!ok) return BadRequest(error);
 
         var postExists = await _db.NewsPosts.AnyAsync(x => x.Id == id);
         if (!postExists) return NotFound();
@@ -306,7 +329,7 @@ public class NewsController : ControllerBase
         var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "news-files");
         Directory.CreateDirectory(uploadsFolder);
 
-        var ext = Path.GetExtension(file.FileName);
+        var ext = safeExt ?? string.Empty;
         var storedName = $"{Guid.NewGuid()}{ext}";
         var filePath = Path.Combine(uploadsFolder, storedName);
 
@@ -315,11 +338,16 @@ public class NewsController : ControllerBase
             await file.CopyToAsync(stream);
         }
 
+        // FileName РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЋ вЂ” РїСЂРёРІРѕРґРёРј Рє Р±РµР·РѕРїР°СЃРЅРѕРјСѓ РІРёРґСѓ,
+        // РѕС‚СЂРµР·Р°СЏ РїСѓС‚СЊ Рё РѕР±СЂРµР·Р°СЏ РґР»РёРЅСѓ.
+        var displayName = Path.GetFileName(file.FileName ?? string.Empty);
+        if (displayName.Length > 120) displayName = displayName[..120];
+
         var attachment = new NewsAttachment
         {
             Id = Guid.NewGuid(),
             NewsPostId = id,
-            FileName = file.FileName,
+            FileName = displayName,
             FileUrl = $"/news-files/{storedName}",
             MimeType = file.ContentType,
             UploadedAt = DateTime.UtcNow
@@ -345,7 +373,7 @@ public class NewsController : ControllerBase
 
         var content = dto.Content?.Trim();
         if (string.IsNullOrWhiteSpace(content))
-            return BadRequest("Комментарий пустой");
+            return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
         var user = await _db.Users.FindAsync(CurrentUserId);
         if (user == null) return NotFound();
@@ -377,7 +405,7 @@ public class NewsController : ControllerBase
 
         var content = dto.Content?.Trim();
         if (string.IsNullOrWhiteSpace(content))
-            return BadRequest("Комментарий пустой");
+            return BadRequest("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ");
 
         comment.Content = content;
         comment.IsEdited = true;

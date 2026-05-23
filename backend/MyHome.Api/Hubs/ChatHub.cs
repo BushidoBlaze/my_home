@@ -10,6 +10,10 @@ namespace MyHome.Api.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
+    private const int MaxMessageLength = 4000;
+    private const int MaxFileNameLength = 256;
+    private const int MaxEmojiLength = 16;
+
     private readonly AppDbContext _db;
 
     // Словарь онлайн пользователей: userId → список connectionId
@@ -141,6 +145,18 @@ public class ChatHub : Hub
         if (string.IsNullOrWhiteSpace(text) && string.IsNullOrWhiteSpace(fileUrl))
             throw new HubException("Пустое сообщение");
 
+        // Защита от DoS/spam: лимиты длины.
+        if (text != null && text.Length > MaxMessageLength)
+            throw new HubException("Сообщение слишком длинное");
+        if (fileName != null && fileName.Length > MaxFileNameLength)
+            throw new HubException("Слишком длинное имя файла");
+        if (fileUrl != null && fileUrl.Length > 1024)
+            throw new HubException("Некорректная ссылка на файл");
+
+        // fileUrl должен указывать на нашу же статику, а не куда попало.
+        if (!string.IsNullOrEmpty(fileUrl) && !fileUrl.StartsWith("/", StringComparison.Ordinal))
+            throw new HubException("Некорректная ссылка на файл");
+
         if (!await IsMemberAsync(chatGuid))
             throw new HubException("Вы не участник этого чата");
 
@@ -205,6 +221,7 @@ public class ChatHub : Hub
     public async Task AddReaction(string messageId, string emoji)
     {
         if (!Guid.TryParse(messageId, out var msgId)) return;
+        if (string.IsNullOrEmpty(emoji) || emoji.Length > MaxEmojiLength) return;
 
         var msg = await _db.ChatMessages
             .Include(m => m.Chat)
@@ -255,6 +272,8 @@ public class ChatHub : Hub
         if (userId == null || msg.SenderId != userId.Value) return;
         if (string.IsNullOrWhiteSpace(text))
             throw new HubException("Текст сообщения не может быть пустым");
+        if (text.Length > MaxMessageLength)
+            throw new HubException("Сообщение слишком длинное");
 
         msg.Text = text.Trim();
         await _db.SaveChangesAsync();

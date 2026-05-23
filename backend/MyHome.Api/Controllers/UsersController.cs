@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyHome.Api.Security;
 using MyHome.Infrastructure.Persistence;
 using System.Security.Claims;
 
@@ -7,7 +8,7 @@ namespace MyHome.Api.Controllers;
 
 [ApiController]
 [Route("api/users")]
-[Authorize] // ? обязательно, иначе CurrentUserId падает
+[Authorize] // ? пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ CurrentUserId пїЅпїЅпїЅпїЅпїЅпїЅ
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _db;
@@ -54,7 +55,7 @@ public class UsersController : ControllerBase
         });
     }
 
-    // PUT /api/users/me — обновить личные данные
+    // PUT /api/users/me пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpPut("me")]
     public async Task<IActionResult> UpdateMe([FromBody] UpdateMeDto dto)
     {
@@ -103,23 +104,24 @@ public class UsersController : ControllerBase
         });
     }
 
-    // POST /api/users/avatar — загрузить аватар
+    // POST /api/users/avatar пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpPost("avatar")]
     public async Task<IActionResult> UploadAvatar(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-            return BadRequest("Файл не выбран");
+        var (ok, safeExt, error) = UploadSecurity.Validate(file);
+        if (!ok) return BadRequest(error);
 
+        // РђРІР°С‚Р°СЂ вЂ” СЃС‚СЂРѕРіРѕ whitelist РєР°СЂС‚РёРЅРѕРє.
         var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
-        var ext = Path.GetExtension(file.FileName).ToLower();
-        if (!allowed.Contains(ext))
-            return BadRequest("Допустимые форматы: jpg, jpeg, png, webp");
+        if (string.IsNullOrEmpty(safeExt) || !allowed.Contains(safeExt))
+            return BadRequest("Р”РѕРїСѓСЃС‚РёРјС‹Рµ С„РѕСЂРјР°С‚С‹: jpg, jpeg, png, webp");
+        var ext = safeExt;
 
-        // Создаём папку wwwroot/avatars если не существует
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ wwwroot/avatars пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "avatars");
         Directory.CreateDirectory(uploadsFolder);
 
-        // Имя файла = ID пользователя чтобы перезаписывать старый аватар
+        // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ = ID пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         var fileName = $"{CurrentUserId}{ext}";
         var filePath = Path.Combine(uploadsFolder, fileName);
 
@@ -139,7 +141,7 @@ public class UsersController : ControllerBase
         return Ok(new { url = avatarUrl });
     }
 
-    // PUT /api/users/password — сменить пароль
+    // PUT /api/users/password пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     [HttpPut("password")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
@@ -147,13 +149,13 @@ public class UsersController : ControllerBase
         if (user == null) return NotFound();
 
         if (!BCrypt.Net.BCrypt.Verify(dto.OldPassword, user.Password))
-            return BadRequest(new { message = "Неверный текущий пароль" });
+            return BadRequest(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ" });
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
         await _db.SaveChangesAsync();
 
-        // Возвращаем JSON а не строку
-        return Ok(new { message = "Пароль успешно изменён" });
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ JSON пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        return Ok(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" });
     }
 }
 
