@@ -35,6 +35,8 @@
 - 🏘 **Дома и квартиры** — реестр объектов, лицевых счетов, индивидуальные счётчики
 - 💬 **Чат и обращения** — единая входная точка для коммуникации с жильцами
 - 📈 **Аналитика и отчёты** — выгрузка для ГИС ЖКХ, ГЖИ
+- 🏢 **Мультиарендность** — каждая УК видит только свои дома, заявки и данные (скоуп по организации)
+- 👤 **Профиль** — редактирование данных, смена email и пароля
 
 ### Для жителя
 
@@ -44,6 +46,7 @@
 - 🗳 **Голосования** — участие в ОСС, контроль кворума
 - 💬 **Чаты** — с диспетчером УК, с соседями, в группах подъезда
 - 🛒 **Маркетплейс** — клининг, ремонт, доставка от проверенных подрядчиков
+- 👤 **Профиль** — данные квартиры, аватар, смена email и пароля
 
 ---
 
@@ -66,13 +69,15 @@
 my-home/
 ├── backend/                      # .NET 10 solution
 │   ├── MyHome.Api/               # ASP.NET Core: контроллеры, hub-ы, Program.cs
-│   │   ├── Controllers/          # 14 контроллеров (Auth, Tickets, Polls, Dashboard, …)
+│   │   ├── Controllers/          # Auth, Users, ServiceRequests, Polls, Marketplace,
+│   │   │                         # ManagerDashboard/Buildings/Billing/Meter, …
 │   │   ├── Dtos/                 # Контракты ответов API
 │   │   ├── Hubs/                 # SignalR-хабы (ChatHub)
+│   │   ├── Security/             # ManagerScope, защитные заголовки, проверка загрузок
 │   │   └── Validation/           # FluentValidation-валидаторы
-│   ├── MyHome.Application/       # Use-cases, сервисы (тонкий слой)
+│   ├── MyHome.Application/       # Прикладной слой (тонкий)
 │   ├── MyHome.Domain/
-│   │   └── Entities/             # User, ServiceRequest, Poll, ComplianceDeadline, …
+│   │   └── Entities/             # Organization, User, Building, ServiceRequest, …
 │   └── MyHome.Infrastructure/
 │       ├── Persistence/          # AppDbContext, DbSeeder
 │       └── Migrations/           # EF Core миграции
@@ -83,8 +88,8 @@ my-home/
         ├── apps/
         │   ├── manager/          # Кабинет УК
         │   │   ├── layouts/
-        │   │   └── pages/        # home, tickets, vote, billing, buildings, meter,
-        │   │                     # chat, account, ticketDetail
+        │   │   └── pages/        # home, tickets, ticketDetail, vote, billing,
+        │   │                     # buildings, meter, news, account
         │   └── resident/         # Кабинет жителя
         │       └── pages/        # home, requests, expenses, chats, voting,
         │                         # marketplace, news, account, settings, help
@@ -148,7 +153,16 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 
 Конкретные параметры подключения, порты, имя БД и т.п. — спрашивать у владельца проекта.
 
-### 3. Без бэкенда (дизайн-режим)
+### 3. Демо-доступ
+
+При первом запуске на пустой базе `DbSeeder` создаёт демо-УК с данными. Пароль у всех — `Demo12345`:
+
+| Роль | Логин |
+|---|---|
+| Управляющий | `manager@demo.ru` |
+| Житель | `ivanov@demo.ru`, `petrova@demo.ru`, `sidorov@demo.ru` |
+
+### 4. Без бэкенда (дизайн-режим)
 
 Фронт корректно работает без поднятого бэкенда — каждый блок дашборда показывает карточку «Не удалось загрузить данные» с кнопкой «Повторить». Это полезно при работе только с UI.
 
@@ -158,18 +172,22 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 
 | Сущность | Назначение |
 |---|---|
-| `User` | Жильцы и сотрудники УК (роль определяется полем `Role`) |
+| `Organization` | Управляющая компания (арендатор системы); данные скоупятся по ней |
+| `User` | Жильцы и сотрудники УК (роль — поле `Role`, принадлежность — `OrganizationId`) |
+| `Building` | Дома в реестре УК; жильцы привязаны по совпадению адреса |
 | `Apartment` | Квартиры с привязкой к жильцу |
 | `ServiceRequest` | Заявки. Поля: `Status`, `Category`, `Priority`, `AssigneeId` |
 | `UtilityBill` | Начисления ЖКУ |
 | `MeterReading` | Показания счётчиков |
+| `AutoPaymentSetting` | Настройки автоплатежа жителя |
 | `Poll` + `PollOption` + `PollVote` | Голосования (ОСС, опросы) |
-| `Chat` + `ChatMessage` + `ChatMember` | Чаты с реакциями и реплаями (через SignalR) |
+| `Chat` + `ChatMessage` + `ChatMember` + `MessageReaction` | Чаты с реакциями и реплаями (через SignalR) |
 | `ComplianceDeadline` | Регуляторные сроки (лифт, газ, пожарка, дымоходы) |
 | `Notification` | Уведомления внутри приложения |
 | `Service` + `ServiceOrder` + `ServiceReview` | Маркетплейс услуг |
-| `Subscription` | Подписки УК (Basic / Premium) |
-| `NewsPost` + `NewsComment` | Объявления УК |
+| `NewsPost` + `NewsAttachment` + `NewsComment` | Объявления УК |
+| `UserSettings` + `DeviceSession` | Настройки и активные сессии пользователя |
+| `Expense` | Внутренние расходы УК |
 | `SupportTicket` | Обращения в поддержку платформы |
 
 ---
@@ -195,7 +213,10 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 ## 🧪 Что протестировано
 
 - ✅ Сборка backend `dotnet build` — 0 ошибок, 0 предупреждений
-- ✅ Все миграции применяются: `InitialCreate` → … → `AddServiceRequestPriorityAndAssignee`
+- ✅ Фронтенд `tsc --noEmit` и `vite build` проходят без ошибок
+- ✅ Все миграции применяются: `InitialCreate` → … → `AddOrganizations` → `FixOrphansAndShadowFk`
+- ✅ Смена email и пароля (с подтверждением текущим паролем) в профиле обеих ролей
+- ✅ Мультиарендность: данные менеджера скоупятся по его организации
 - ✅ `DbSeeder` идемпотентен (повторный запуск ничего не дублирует)
 - ✅ Graceful degradation: при недоступном бэке UI показывает явные ошибки загрузки и кнопку «Повторить»
 - ✅ Маршруты УК (8 страниц) — все интерактивные элементы работают и навигируют
@@ -224,7 +245,9 @@ dotnet run --project MyHome.Api    # → http://localhost:5211
 - [x] Маркетинговые страницы (home, tariffs, blog, residents, management)
 - [x] Регистрация / вход / JWT
 - [x] Кабинет жителя: заявки, оплата, чаты, голосования, маркетплейс
-- [x] Кабинет УК: дашборд, заявки, голосования, аккаунт
+- [x] Кабинет УК: дашборд, заявки, голосования, реестр домов, биллинг, показания, аккаунт
+- [x] Мультиарендность (организации УК, скоуп данных)
+- [x] Смена email и пароля в профиле
 - [x] Регуляторные сроки в БД и UI
 - [x] Чаты в реальном времени (SignalR)
 
