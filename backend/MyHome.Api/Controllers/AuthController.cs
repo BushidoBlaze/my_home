@@ -24,23 +24,20 @@ public class AuthController : ControllerBase
         _config = config;
     }
 
-    // Роли, которые житель может назначить себе сам через self-register.
-    // Все остальные роли (Manager, Admin, Chairman, HOA) выдаются только
-    // существующим админом — иначе тривиальная эскалация привилегий.
+    // через self-register можно стать только жильцом.
+    // Manager/Admin и т.п. раздаёт только админ, иначе любой поднимет себе права.
     private const string DefaultSelfRegisterRole = "Resident";
 
-    // POST /api/auth/register
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        // Унифицированный ответ — чтобы не давать user enumeration по существующему email.
+        // одинаковый ответ, чтобы нельзя было подобрать существующий email
         const string GenericError = "Не удалось зарегистрироваться. Проверьте введённые данные.";
 
         if (await _db.Users.AnyAsync(u => u.Email == dto.Email))
             return BadRequest(GenericError);
 
-        // ВАЖНО: роль приходит от клиента и НИКОГДА не принимается на доверии.
-        // Self-register всегда создаёт Resident. Manager-аккаунт назначается отдельной admin-only ручкой.
+        // роль с клиента игнорируем — всегда Resident
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -63,6 +60,45 @@ public class AuthController : ControllerBase
             user.Role,
             user.Phone
         });
+    }
+
+    // регистрация УК: заводим новую организацию и её менеджера.
+    // менеджер стартует в пустой УК и видит только её данные (скоуп по OrganizationId),
+    // так что эскалации прав тут нет.
+    [HttpPost("register-manager")]
+    public async Task<IActionResult> RegisterManager([FromBody] RegisterManagerDto dto)
+    {
+        const string GenericError = "Не удалось зарегистрироваться. Проверьте введённые данные.";
+
+        if (string.IsNullOrWhiteSpace(dto.CompanyName) || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
+            return BadRequest(GenericError);
+
+        if (await _db.Users.AnyAsync(u => u.Email == dto.Email))
+            return BadRequest(GenericError);
+
+        var org = new Organization
+        {
+            Id = Guid.NewGuid(),
+            Name = dto.CompanyName.Trim(),
+            Subtitle = "Мой Дом",
+        };
+        _db.Organizations.Add(org);
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Email = dto.Email,
+            FullName = string.IsNullOrWhiteSpace(dto.ContactName) ? dto.CompanyName.Trim() : dto.ContactName.Trim(),
+            Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = "Manager",
+            Phone = dto.Phone,
+            OrganizationId = org.Id,
+            CreatedAt = DateTime.UtcNow
+        };
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
+
+        return Ok(new { user.Id, user.Email, user.FullName, user.Role });
     }
 
     [HttpPost("login")]
@@ -95,8 +131,8 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.Role, user.Role)
         };
 
-        // Сократили срок жизни access-токена: 1 день вместо 7. Без полноценного refresh
-        // это компромисс между UX и blast-radius при утечке токена из localStorage.
+        // 1 день жизни токена. Полноценного refresh нет, так что это компромисс
+        // между удобством и риском при утечке токена из localStorage.
         var token = new JwtSecurityToken(
             claims: claims,
             notBefore: DateTime.UtcNow,
@@ -107,16 +143,23 @@ public class AuthController : ControllerBase
     }
 }
 
-// ���������� DTO � �������� Phone
 public record RegisterDto(
     string Email,
     string Password,
     string FullName,
     string? Role,
-    string? Phone  // ������� ��� ��
+    string? Phone
 );
 
 public record LoginDto(
     string Email,
     string Password
+);
+
+public record RegisterManagerDto(
+    string CompanyName,
+    string Email,
+    string Password,
+    string? ContactName,
+    string? Phone
 );

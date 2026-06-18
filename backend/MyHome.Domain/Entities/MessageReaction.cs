@@ -8,6 +8,6 @@ public class MessageReaction
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
 
-    // Эмодзи реакции
+    // СЃР°Рј СЌРјРѕРґР·Рё
     public string Emoji { get; set; } = null!;
 }

@@ -13,11 +13,10 @@ public class Service
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Провайдер услуги
+    // РёСЃРїРѕР»РЅРёС‚РµР»СЊ СѓСЃР»СѓРіРё
     public Guid ProviderId { get; set; }
     public User Provider { get; set; } = null!;
 
-    // Навигационные свойства
     public ICollection<ServiceOrder> Orders { get; set; } = [];
     public ICollection<ServiceReview> Reviews { get; set; } = [];
 }

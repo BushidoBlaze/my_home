@@ -25,7 +25,7 @@ public class MarketplaceController : ControllerBase
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    // GET /api/marketplace/services ? ������ ����� � �����������
+    // GET /api/marketplace/services — каталог с фильтрами
     [HttpGet("services")]
     public async Task<IActionResult> GetServices(
         [FromQuery] string? category = null,
@@ -76,7 +76,7 @@ public class MarketplaceController : ControllerBase
         return Ok(result);
     }
 
-    // GET /api/marketplace/services/{id} ? ������ ������
+    // GET /api/marketplace/services/{id} — карточка услуги
     [HttpGet("services/{id}")]
     public async Task<IActionResult> GetService(Guid id)
     {
@@ -113,7 +113,7 @@ public class MarketplaceController : ControllerBase
         });
     }
 
-    // POST /api/marketplace/services ? ������� ������ (��������)
+    // POST /api/marketplace/services — создать услугу (менеджер)
     [HttpPost("services")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> CreateService([FromBody] CreateServiceDto dto)
@@ -139,7 +139,7 @@ public class MarketplaceController : ControllerBase
         return Ok(service);
     }
 
-    // POST /api/marketplace/services/{id}/image ? ��������� ���� ������
+    // POST /api/marketplace/services/{id}/image — картинка услуги
     [HttpPost("services/{id}/image")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
@@ -151,7 +151,7 @@ public class MarketplaceController : ControllerBase
         var (ok, safeExt, error) = UploadSecurity.Validate(file);
         if (!ok) return BadRequest(error);
 
-        // Картинки сервиса — только изображения.
+        // только картинки
         var allowedImage = new[] { ".jpg", ".jpeg", ".png", ".webp" };
         if (string.IsNullOrEmpty(safeExt) || !allowedImage.Contains(safeExt))
             return BadRequest("Допустимые форматы: jpg, jpeg, png, webp");
@@ -172,13 +172,13 @@ public class MarketplaceController : ControllerBase
         return Ok(new { url = service.ImageUrl });
     }
 
-    // POST /api/marketplace/orders ? ������� �����
+    // POST /api/marketplace/orders — оформить заказ
     [HttpPost("orders")]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
     {
         var service = await _db.Services.FindAsync(dto.ServiceId);
-        if (service == null) return NotFound("������ �� �������");
-        if (!service.IsActive) return BadRequest("������ ����������");
+        if (service == null) return NotFound("Услуга не найдена");
+        if (!service.IsActive) return BadRequest("Услуга недоступна");
 
         var order = new ServiceOrder
         {
@@ -195,7 +195,7 @@ public class MarketplaceController : ControllerBase
         return Ok(new { order.Id, order.Status, order.ScheduledAt, order.CreatedAt });
     }
 
-    // GET /api/marketplace/orders ? ��� ������
+    // GET /api/marketplace/orders — мои заказы
     [HttpGet("orders")]
     public async Task<IActionResult> GetMyOrders()
     {
@@ -227,14 +227,14 @@ public class MarketplaceController : ControllerBase
         return Ok(orders);
     }
 
-    // PATCH /api/marketplace/orders/{id}/cancel ? �������� �����
+    // PATCH /api/marketplace/orders/{id}/cancel — отменить заказ
     [HttpPatch("orders/{id}/cancel")]
     public async Task<IActionResult> CancelOrder(Guid id)
     {
         var order = await _db.ServiceOrders.FindAsync(id);
         if (order == null) return NotFound();
         if (order.ResidentId != CurrentUserId) return Forbid();
-        if (order.Status == "Done") return BadRequest("������ �������� ����������� �����");
+        if (order.Status == "Done") return BadRequest("Нельзя отменить завершённый заказ");
 
         order.Status = "Cancelled";
         order.UpdatedAt = DateTime.UtcNow;
@@ -243,26 +243,25 @@ public class MarketplaceController : ControllerBase
         return Ok(new { order.Id, order.Status });
     }
 
-    // POST /api/marketplace/services/{id}/reviews ? �������� �����
+    // POST /api/marketplace/services/{id}/reviews — оставить отзыв
     [HttpPost("services/{id}/reviews")]
     public async Task<IActionResult> AddReview(Guid id, [FromBody] CreateReviewDto dto)
     {
-        // ��������� ��� � ������������ ���� ����������� �����
+        // отзыв только если был выполненный заказ
         var hasOrder = await _db.ServiceOrders.AnyAsync(o =>
             o.ServiceId == id &&
             o.ResidentId == CurrentUserId &&
             o.Status == "Done");
 
-        if (!hasOrder) return BadRequest("����� ����� �������� ������ ����� ���������� ������");
+        if (!hasOrder) return BadRequest("Отзыв можно оставить только после выполнения заказа");
 
-        // ��������� ��� ����� ��� �� ��������
         var exists = await _db.ServiceReviews.AnyAsync(r =>
             r.ServiceId == id && r.ResidentId == CurrentUserId);
 
-        if (exists) return BadRequest("�� ��� �������� ����� �� ��� ������");
+        if (exists) return BadRequest("Вы уже оставили отзыв на эту услугу");
 
         if (dto.Rating < 1 || dto.Rating > 5)
-            return BadRequest("������ ������ ���� �� 1 �� 5");
+            return BadRequest("Оценка должна быть от 1 до 5");
 
         var review = new ServiceReview
         {

@@ -24,7 +24,7 @@ public class ServicesController : ControllerBase
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    // ��� ������
+    // мои услуги
     [HttpGet("my")]
     public async Task<IActionResult> GetMy()
     {
@@ -49,7 +49,6 @@ public class ServicesController : ControllerBase
         return Ok(services);
     }
 
-    // ������� ������
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateServiceDto dto)
     {
@@ -75,7 +74,31 @@ public class ServicesController : ControllerBase
         return Ok(service);
     }
 
-    // �������� ����
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var service = await _db.Services.FirstOrDefaultAsync(s => s.Id == id);
+        if (service == null) return NotFound();
+
+        // удалять может только владелец услуги
+        if (service.ProviderId != CurrentUserId) return Forbid();
+
+        // подчистим картинку, чтобы не копить мусор в wwwroot
+        if (!string.IsNullOrWhiteSpace(service.ImageUrl))
+        {
+            var relative = service.ImageUrl.TrimStart('/');
+            var fullPath = Path.Combine(_env.WebRootPath ?? "wwwroot", relative.Replace('/', Path.DirectorySeparatorChar));
+            try { if (System.IO.File.Exists(fullPath)) System.IO.File.Delete(fullPath); }
+            catch { /* не смогли удалить файл - не критично */ }
+        }
+
+        // заказы и отзывы уйдут каскадом
+        _db.Services.Remove(service);
+        await _db.SaveChangesAsync();
+
+        return NoContent();
+    }
+
     [HttpPost("image")]
     public async Task<IActionResult> UploadImage(IFormFile file)
     {

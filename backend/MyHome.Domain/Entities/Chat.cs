@@ -4,27 +4,23 @@ public class Chat
 {
     public Guid Id { get; set; }
 
-    // Тип чата: House, Entrance, Direct, Request
+    // House, Entrance, Direct, Request
     public string Type { get; set; } = null!;
 
-    // Название чата
     public string? Name { get; set; }
-
-    // Описание группы
     public string? Description { get; set; }
 
-    // Код приглашения
+    // РєРѕРґ РґР»СЏ РІС…РѕРґР° РІ РіСЂСѓРїРїСѓ РїРѕ СЃСЃС‹Р»РєРµ
     public string? InviteCode { get; set; }
 
-    // Аватар группы/чата
     public string? AvatarUrl { get; set; }
 
-    // Для чатов по заявкам
+    // РµСЃР»Рё С‡Р°С‚ РїСЂРёРІСЏР·Р°РЅ Рє Р·Р°СЏРІРєРµ
     public Guid? ServiceRequestId { get; set; }
+    public ServiceRequest? ServiceRequest { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Навигационные свойства
     public ICollection<ChatMessage> Messages { get; set; } = [];
     public ICollection<ChatMember> Members { get; set; } = [];
 }

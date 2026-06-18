@@ -8,7 +8,7 @@ public class ServiceOrder
     public Guid ResidentId { get; set; }
     public User Resident { get; set; } = null!;
 
-    // Статус: Pending, Confirmed, InProgress, Done, Cancelled
+    // Pending, Confirmed, InProgress, Done, Cancelled
     public string Status { get; set; } = "Pending";
     public string? Comment { get; set; }
     public DateTime ScheduledAt { get; set; }

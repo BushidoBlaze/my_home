@@ -12,26 +12,23 @@ public class ChatMessage
 
     public string Text { get; set; } = "";
 
-    // Тип: text, image, file, geo, voice
+    // text, image, file, geo, voice
     public string Type { get; set; } = "text";
 
-    // URL файла/фото/голосового (если есть)
     public string? FileUrl { get; set; }
     public string? FileName { get; set; }
 
-    // Геолокация
+    // РєРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ РіРµРѕ-СЃРѕРѕР±С‰РµРЅРёР№
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
 
-    // Ответ на сообщение
+    // РѕС‚РІРµС‚ РЅР° РґСЂСѓРіРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ
     public Guid? ReplyToId { get; set; }
     public ChatMessage? ReplyTo { get; set; }
 
-    // Закреплено
     public bool IsPinned { get; set; } = false;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Реакции
     public ICollection<MessageReaction> Reactions { get; set; } = [];
 }

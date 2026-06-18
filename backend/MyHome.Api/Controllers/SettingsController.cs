@@ -124,12 +124,12 @@ public class SettingsController : ControllerBase
             new
             {
                 id = "current-session",
-                deviceName = $"{os} · {browser}",
+                deviceName = $"{os} В· {browser}",
                 deviceType,
                 os,
                 browser,
                 ip,
-                location = "Текущая сеть",
+                location = "РўРµРєСѓС‰РёР№ СЃРµР°РЅСЃ",
                 lastActive = DateTime.UtcNow,
                 isCurrent = true
             }
@@ -177,7 +177,7 @@ public class SettingsController : ControllerBase
     public async Task<IActionResult> Enable2Fa()
     {
         var user = await _db.Users.FindAsync(CurrentUserId);
-        if (user == null) return NotFound("Пользователь не найден.");
+        if (user == null) return NotFound("РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ.");
 
         var settings = await GetOrCreateSettingsAsync(CurrentUserId);
         var secretBytes = KeyGeneration.GenerateRandomKey(20);
@@ -206,13 +206,13 @@ public class SettingsController : ControllerBase
 
         var code = new string((req.Code ?? string.Empty).Where(char.IsDigit).ToArray());
         if (code.Length != 6)
-            return BadRequest("Укажите 6-значный код из приложения-аутентификатора.");
+            return BadRequest("Р’РІРµРґРёС‚Рµ 6-Р·РЅР°С‡РЅС‹Р№ РєРѕРґ РёР· РїСЂРёР»РѕР¶РµРЅРёСЏ-Р°СѓС‚РµРЅС‚РёС„РёРєР°С‚РѕСЂР°.");
 
         var secretBytes = Base32Encoding.ToBytes(settings.TwoFactorSecret);
         var totp = new Totp(secretBytes);
         var valid = totp.VerifyTotp(code, out _, new VerificationWindow(previous: 1, future: 1));
         if (!valid)
-            return BadRequest("Неверный код 2FA.");
+            return BadRequest("РќРµРІРµСЂРЅС‹Р№ РєРѕРґ 2FA.");
 
         settings.TwoFactorEnabled = false;
         settings.TwoFactorSecret = null;
@@ -251,7 +251,7 @@ public class SettingsController : ControllerBase
         var user = await _db.Users.FindAsync(CurrentUserId);
         if (user == null) return NotFound();
         if (!BCrypt.Net.BCrypt.Verify(req.Password, user.Password))
-            return BadRequest(new { message = "Неверный пароль" });
+            return BadRequest(new { message = "РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ" });
 
         var settings = await _db.UserSettings.FirstOrDefaultAsync(x => x.UserId == user.Id);
         if (settings != null) _db.UserSettings.Remove(settings);
