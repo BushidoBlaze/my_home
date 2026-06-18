@@ -1,0 +1,79 @@
+/* Resident shared TopBar — общий хедер для всех страниц кабинета жителя */
+
+.r-topbar {
+    /* position: relative нужен, чтобы абсолютно позиционированный NotificationsPopover
+       был привязан к топбару, а не к окну. */
+    position: relative;
+    padding: 20px 32px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f5f7f5;
+    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.r-topbar__title-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.r-topbar__title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #047857;
+    letter-spacing: -0.02em;
+}
+
+.r-topbar__subtitle {
+    margin-top: 4px;
+    font-size: 13.5px;
+    color: #64748b;
+}
+
+.r-topbar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.r-topbar__bell {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    color: #334155;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.r-topbar__bell:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* Бейдж со счётчиком непрочитанных. Закругление 99px заставляет вписать одно/двузначное число
+   в круг/таблетку без явного расчёта ширины. Белая обводка отделяет его от иконки. */
+.r-topbar__bell-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 99px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #f5f7f5;
+    box-sizing: content-box;
+}

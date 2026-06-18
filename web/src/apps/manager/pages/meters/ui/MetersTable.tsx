@@ -2,15 +2,21 @@ import type {JSX} from "react";
 import {ChevronRight} from "lucide-react";
 import {BuildingSwatch} from "@/shared/ui/BuildingSwatch/BuildingSwatch.tsx";
 import {Progress} from "@/shared/ui/Progress/Progress.tsx";
-import {METERS_HOUSES} from "../model/data.ts";
+import type {MeterHouseRow} from "@/api/managerMeter.api.ts";
 
-function flagChipClass(flag: string): string {
+function flagChipClass(flag?: string | null): string {
     if (flag === "риск") return "chip--danger";
     if (flag === "медленно") return "chip--warning";
     return "";
 }
 
-export default function MetersTable(): JSX.Element {
+interface Props {
+    houses: MeterHouseRow[];
+    selectedId: string | null;
+    onSelect: (house: MeterHouseRow) => void;
+}
+
+export default function MetersTable({houses, selectedId, onSelect}: Props): JSX.Element {
     return (
         <div className="card meters-table-wrap">
             <table className="meters-table">
@@ -19,15 +25,23 @@ export default function MetersTable(): JSX.Element {
                         <th>Дом</th>
                         <th>Квартир</th>
                         <th>Передано</th>
-                        <th>ХВС / ГВС</th>
+                        <th>ХВС</th>
+                        <th>ГВС</th>
                         <th>Эл-во</th>
                         <th>Прогресс</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {METERS_HOUSES.map((h, i) => (
-                        <tr key={i}>
+                    {houses.map(h => (
+                        <tr
+                            key={h.id}
+                            onClick={() => onSelect(h)}
+                            style={{
+                                cursor: "pointer",
+                                background: h.id === selectedId ? "#f8fafc" : undefined
+                            }}
+                        >
                             <td>
                                 <div className="meters-table__addr">
                                     <BuildingSwatch size={26} color={h.tone}/>
@@ -39,10 +53,11 @@ export default function MetersTable(): JSX.Element {
                                     )}
                                 </div>
                             </td>
-                            <td className="tnum">{h.apts}</td>
+                            <td className="tnum">{h.apartments}</td>
                             <td>
                                 <span className="tnum meters-table__done">{h.done}</span>
                             </td>
+                            <td className="tnum meters-table__cell">{h.cold}</td>
                             <td className="tnum meters-table__cell">{h.hot}</td>
                             <td className="tnum meters-table__cell">{h.el}</td>
                             <td>

@@ -11,19 +11,23 @@ export const FOOTER_NAV_LINKS: FooterNavItemProps[] = [
     },
     {
         label: "Возможности",
-        to: "/features"
+        to: "/possibilities"
     },
     {
         label: "Тарифы",
-        to: "/pricing"
+        to: "/tariffs"
     },
     {
-        label: "Маркетплейс",
-        to: "/marketplace"
+        label: "Для УК",
+        to: "/management"
     },
     {
-        label: "О проекте",
-        to: "/about"
+        label: "Для жителей",
+        to: "/residents"
+    },
+    {
+        label: "Блог",
+        to: "/blog"
     }
 ];
 

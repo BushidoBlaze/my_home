@@ -5,8 +5,11 @@ import PossibilitiesCards from "@/pages/possibilities/ui/possibilitiesCards/ui/P
 import Audience from "@/pages/possibilities/ui/audience/ui/Audience.tsx";
 import Reviews from "@/pages/possibilities/ui/reviews/Reviews.tsx";
 import Stats from "@/pages/possibilities/ui/stats/ui/Stats.tsx";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
 
 export default function Possibilities() {
+    useDocumentTitle('Возможности платформы');
+
     return (
         <>
             {/*Главная секция*/}

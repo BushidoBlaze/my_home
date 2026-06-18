@@ -1,13 +1,30 @@
-import {type ServiceRequest} from "@/api/requests.api.ts";
-import {type NotificationItem} from "@/api/notifications.api.ts";
-
+import type {ComponentType, SVGProps} from "react";
+import type {ServiceRequest} from "@/api/requests.api.ts";
 
 export type ResidentRequest = ServiceRequest;
-export type ResidentNotification = NotificationItem;
 
-export type QuickService = {
-    id: string;
+// Цветовая тональность смарт-карточек на главной.
+export type SmartActionTone = "emerald" | "info" | "warning" | "violet";
+
+// Lucide-style иконка: принимает size + стандартные svg-пропсы.
+export type IconComponent = ComponentType<SVGProps<SVGSVGElement> & { size?: number }>;
+
+export type TicketStep = {
+    key: "New" | "Assigned" | "InProgress" | "Review" | "Done";
     label: string;
-    to: string;
-    icon: "wrench" | "chat" | "wallet" | "marketplace";
+};
+
+export type WeekEvent = {
+    icon: IconComponent;
+    bg: string;
+    fg: string;
+    title: string;
+    time: string;
+};
+
+export type WeekDay = {
+    label: string;
+    date: number;
+    current?: boolean;
+    events: WeekEvent[];
 };

@@ -4,21 +4,14 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace MyHome.Api.Security;
 
-/// <summary>
-/// Централизованные настройки безопасности для пользовательских загрузок.
-/// </summary>
+// Всё про безопасность пользовательских загрузок в одном месте.
 public static class UploadSecurity
 {
-    /// <summary>
-    /// Максимальный размер одного загружаемого файла (25 MB).
-    /// </summary>
+    // максимум на один файл - 25 МБ
     public const long MaxFileSizeBytes = 25 * 1024 * 1024;
 
-    /// <summary>
-    /// Расширения, которые НИКОГДА не должны попадать в публичную статику,
-    /// потому что могут исполниться в браузере жертвы (stored XSS / drive-by)
-    /// или на сервере (если кто-то поставит обработчик).
-    /// </summary>
+    // расширения, которым нельзя попадать в публичную статику: могут исполниться
+    // в браузере (stored XSS) или на сервере
     private static readonly HashSet<string> DangerousExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
         ".html", ".htm", ".xhtml", ".shtml",
@@ -37,10 +30,8 @@ public static class UploadSecurity
         ".jar", ".msi", ".msp"
     };
 
-    /// <summary>
-    /// Валидирует загружаемый файл. Возвращает безопасное серверное расширение
-    /// (с точкой, в нижнем регистре) или null + ошибку.
-    /// </summary>
+    // Проверяет файл, возвращает безопасное расширение (с точкой, в нижнем регистре)
+    // или null + текст ошибки.
     public static (bool ok, string? safeExt, string? error) Validate(IFormFile? file)
     {
         if (file == null || file.Length == 0)
@@ -49,10 +40,10 @@ public static class UploadSecurity
         if (file.Length > MaxFileSizeBytes)
             return (false, null, $"Файл слишком большой (макс. {MaxFileSizeBytes / (1024 * 1024)} MB)");
 
-        // Безопасно достаём расширение даже если FileName кривое.
+        // достаём расширение аккуратно, даже если имя файла кривое
         var ext = (Path.GetExtension(file.FileName) ?? string.Empty).Trim().ToLowerInvariant();
 
-        // Допускаем только однокомпонентное расширение из [a-z0-9] длиной 1..8.
+        // только одно расширение из [a-z0-9], длиной 1..8
         if (string.IsNullOrEmpty(ext) || ext.Length > 8 || !System.Text.RegularExpressions.Regex.IsMatch(ext, "^\\.[a-z0-9]+$"))
             ext = string.Empty;
 
@@ -62,14 +53,11 @@ public static class UploadSecurity
         return (true, ext, null);
     }
 
-    /// <summary>
-    /// StaticFileOptions для пользовательского контента: принудительный download,
-    /// nosniff, CSP-sandbox. Запускает любой HTML/SVG как скачивание, а не как страницу.
-    /// </summary>
+    // StaticFileOptions для пользовательского контента: nosniff, CSP-sandbox и
+    // отдача как download. Любой HTML/SVG скачивается, а не открывается страницей.
     public static StaticFileOptions HardenedStaticOptions()
     {
-        // Кастомный mapping: убираем потенциально исполняемые в браузере типы,
-        // чтобы они отдавались как application/octet-stream и не рендерились inline.
+        // убираем mapping исполняемых в браузере типов - пусть отдаются как octet-stream
         var contentTypeProvider = new FileExtensionContentTypeProvider();
         string[] strip = {
             ".html", ".htm", ".xhtml", ".shtml",

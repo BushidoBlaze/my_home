@@ -1,106 +1,3 @@
-// // plugins
-// import {CalendarDays, MessageCircle, Pin, Loader2} from "lucide-react";
-//
-// // types
-// import type {NewsItem} from "../model/types.ts";
-//
-// interface Props {
-//     list: NewsItem[];
-//     selected: NewsItem | null;
-//     loading: boolean;
-//     error: string | null;
-//     onSelect: (item: NewsItem) => void;
-// }
-//
-// const API_URL = import.meta.env.VITE_API_URL ?? "";
-//
-// // Получаем первое изображение из вложений
-// function getImage(item: NewsItem): string | null {
-//     const img = item.attachments?.find(a => a.mimeType?.startsWith("image/"));
-//     return img ? `${API_URL}${img.fileUrl}` : null;
-// }
-//
-// // Форматируем дату публикации
-// function formatDate(date: string) {
-//     return new Date(date).toLocaleDateString("ru-RU", {
-//         day: "2-digit",
-//         month: "long",
-//         year: "numeric",
-//     });
-// }
-//
-// export function NewsList({list, selected, loading, error, onSelect}: Props) {
-//     if (loading) {
-//         return (
-//             <div className="news-list__loading">
-//                 <Loader2 className="news-list__spinner" size={20}/>
-//                 Загрузка...
-//             </div>
-//         );
-//     }
-//
-//     if (error) {
-//         return <div className="news-list__error">{error}</div>;
-//     }
-//
-//     if (list.length === 0) {
-//         return <div className="news-list__empty">Новостей пока нет</div>;
-//     }
-//
-//     return (
-//         <ul className="news-list">
-//             {list.map(item => {
-//                 const image = getImage(item);
-//                 const isActive = selected?.id === item.id;
-//
-//                 return (
-//                     <li
-//                         key={item.id}
-//                         className={`news-list__item ${isActive ? "news-list__item--active" : ""}`}
-//                         onClick={() => onSelect(item)}
-//                     >
-//                         {/* Обложка новости */}
-//                         {image && (
-//                             <img
-//                                 className="news-list__img"
-//                                 src={image}
-//                                 alt={item.title}
-//                             />
-//                         )}
-//
-//                         <div className="news-list__body">
-//                             {/* Дата и пометка "важно" */}
-//                             <div className="news-list__meta">
-//                                 <span className="news-list__date">
-//                                     <CalendarDays size={13}/>
-//                                     {formatDate(item.publishedAt)}
-//                                 </span>
-//                                 {item.isPinned && (
-//                                     <span className="news-list__pin">
-//                                         <Pin size={12}/> важно
-//                                     </span>
-//                                 )}
-//                             </div>
-//
-//                             <h3 className="news-list__title">{item.title}</h3>
-//
-//                             {/* Превью текста */}
-//                             <p className="news-list__preview">
-//                                 {item.content.slice(0, 80)}{item.content.length > 80 ? "..." : ""}
-//                             </p>
-//
-//                             <span className="news-list__comments">
-//                                 <MessageCircle size={13}/>
-//                                 {item.commentsCount}
-//                             </span>
-//                         </div>
-//                     </li>
-//                 );
-//             })}
-//         </ul>
-//     );
-// }
-
 import {
     CalendarDays,
     ChevronRight,
@@ -121,17 +18,18 @@ interface Props {
     onSelect: (item: NewsItem) => void;
 }
 
-const API_URL = import.meta.env.VITE_API_URL ?? "";
+// Статика лежит в wwwroot бэкенда по корневым путям, а не под /api — отрезаем /api.
+const API_ORIGIN = (import.meta.env.VITE_API_URL ?? "").replace(/\/api\/?$/, "");
 
 /**
  * Возвращает корректный URL для картинки.
  * Для моков с data: URL ничего не добавляем.
- * Для обычных относительных путей префиксуем API_URL.
+ * Для обычных относительных путей префиксуем origin бэкенда.
  */
 function resolveAssetUrl(url: string) {
     if (!url) return "";
     if (/^(data:|blob:|https?:\/\/|\/\/)/.test(url)) return url;
-    return `${API_URL}${url}`;
+    return `${API_ORIGIN}${url}`;
 }
 
 // Получаем первое изображение из вложений

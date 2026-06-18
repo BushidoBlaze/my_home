@@ -52,11 +52,15 @@ public class NewsController : ControllerBase
         page = Math.Max(page, 1);
         pageSize = Math.Clamp(pageSize, 5, 50);
 
+        // Новости принадлежат УК автора; видим только новости своей УК.
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var query = _db.NewsPosts
             .AsNoTracking()
             .Include(x => x.CreatedBy)
             .Include(x => x.Attachments)
             .Include(x => x.Comments)
+            .Where(x => x.CreatedBy.OrganizationId == orgId)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(category))
@@ -134,12 +138,14 @@ public class NewsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var item = await _db.NewsPosts
             .AsNoTracking()
             .Include(x => x.CreatedBy)
             .Include(x => x.Attachments)
             .Include(x => x.Comments)
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == id && x.CreatedBy.OrganizationId == orgId)
             .Select(x => new
             {
                 id = x.Id,
@@ -178,7 +184,8 @@ public class NewsController : ControllerBase
     [HttpGet("{id}/comments")]
     public async Task<IActionResult> GetComments(Guid id)
     {
-        var exists = await _db.NewsPosts.AnyAsync(x => x.Id == id);
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+        var exists = await _db.NewsPosts.AnyAsync(x => x.Id == id && x.CreatedBy.OrganizationId == orgId);
         if (!exists) return NotFound();
 
         var comments = await _db.NewsComments
@@ -215,10 +222,10 @@ public class NewsController : ControllerBase
         var content = dto.Content?.Trim();
 
         if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
-            return BadRequest("��������� � ����� �����������");
+            return BadRequest("Заголовок и текст обязательны");
 
         var author = await _db.Users.FindAsync(CurrentUserId);
-        if (author == null) return NotFound("������������ �� ������");
+        if (author == null) return NotFound("Пользователь не найден");
 
         var post = new NewsPost
         {
@@ -368,12 +375,13 @@ public class NewsController : ControllerBase
     [HttpPost("{id}/comments")]
     public async Task<IActionResult> AddComment(Guid id, [FromBody] CreateNewsCommentDto dto)
     {
-        var postExists = await _db.NewsPosts.AnyAsync(x => x.Id == id);
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+        var postExists = await _db.NewsPosts.AnyAsync(x => x.Id == id && x.CreatedBy.OrganizationId == orgId);
         if (!postExists) return NotFound();
 
         var content = dto.Content?.Trim();
         if (string.IsNullOrWhiteSpace(content))
-            return BadRequest("����������� ������");
+            return BadRequest("Комментарий пуст");
 
         var user = await _db.Users.FindAsync(CurrentUserId);
         if (user == null) return NotFound();
@@ -405,7 +413,7 @@ public class NewsController : ControllerBase
 
         var content = dto.Content?.Trim();
         if (string.IsNullOrWhiteSpace(content))
-            return BadRequest("����������� ������");
+            return BadRequest("Комментарий пуст");
 
         comment.Content = content;
         comment.IsEdited = true;

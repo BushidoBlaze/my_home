@@ -5,6 +5,9 @@ export type TicketType = "drop" | "flame" | "bolt" | "elevator" | "wrench" | "br
 export type TicketPriority = "high" | "med" | "low";
 
 export type Ticket = {
+    /** Реальный uuid из БД — нужен для перехода на /manager/tickets/:id. */
+    realId: string;
+    /** Короткий человекочитаемый код («Т-XXXX») для отображения. */
     id: string;
     type: TicketType;
     title: string;
@@ -12,9 +15,6 @@ export type Ticket = {
     sla: string;
     slaTone: ChipTone;
     priority: TicketPriority;
-    assignee: string | null;
-    attachments: number;
-    comments: number;
 };
 
 export type KanbanColumn = {

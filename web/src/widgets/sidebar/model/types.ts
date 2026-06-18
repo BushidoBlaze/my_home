@@ -4,6 +4,7 @@ export type SidebarItem = {
     icon: LucideIcon;
     path: string;
     label: string;
+    badge?: number | "new";
 };
 
 export type ManagerMenuItem = {

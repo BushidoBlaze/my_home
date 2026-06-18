@@ -4,7 +4,7 @@ import {TrendingUp, Clock, CheckCircle, AlertCircle} from "lucide-react";
 import HeroSphere from "@/shared/ui/heroSphere/HeroSphere.tsx";
 import "./Hero.css";
 
-/* ── Count-up компонент ───────────────────────────────────── */
+// ── Count-up компонент
 interface CountUpProps {
     target: number;
     prefix?: string;
@@ -39,7 +39,7 @@ function CountUp({target, prefix = "", suffix = "", decimals = 0, duration = 280
     return <span className="mgmt-stat__value">{prefix}{display}{suffix}</span>;
 }
 
-/* ── Данные дашборда ──────────────────────────────────────── */
+// ── Данные дашборда
 const DASHBOARD_STATS = [
     {label: "Активных заявок", target: 24, prefix: "", suffix: "", decimals: 0, icon: AlertCircle, color: "#f59e0b"},
     {label: "Закрыто сегодня", target: 17, prefix: "", suffix: "", decimals: 0, icon: CheckCircle, color: "#2ecc71"},
@@ -61,7 +61,7 @@ const RECENT_REQUESTS = [
     {title: "Замена лампочки, кв. 12", status: "Закрыто", statusColor: "#2ecc71"},
 ];
 
-/* ── Компонент ────────────────────────────────────────────── */
+// ── Компонент
 export default function ManagementHero() {
     const navigate = useNavigate();
 

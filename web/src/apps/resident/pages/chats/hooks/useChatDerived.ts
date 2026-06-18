@@ -1,8 +1,6 @@
 import {type Chat} from "@/api/chats.api.ts";
 import {useMemo} from "react";
 
-
-
 import type {ChatMessageUi} from "../model/types.ts";
 
 type Params = {

@@ -1,39 +1,28 @@
-import {requestsApi} from "@/api/requests.api.ts";
-import {notificationsApi} from "@/api/notifications.api.ts";
 import {useCallback, useEffect, useMemo, useState} from "react";
+import {requestsApi} from "@/api/requests.api.ts";
 
-import type {ResidentNotification, ResidentRequest} from "../model/types.ts";
+import type {ResidentRequest} from "../model/types.ts";
 
+// Хук-агрегатор данных главной страницы жителя для блока заявок.
+// Отдельные состояния для первичной загрузки (loading/error) и для action-операций
+// (actionLoadingId/actionError) — чтобы ошибка отмены заявки не ломала весь блок.
+//
+// Уведомления намеренно сюда не входят: они общие для всего кабинета и живут в ResidentTopBar.
 export function useResidentHome() {
     const [requests, setRequests] = useState<ResidentRequest[]>([]);
-    const [notifications, setNotifications] = useState<ResidentNotification[]>([]);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
     const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
     const [actionError, setActionError] = useState("");
-    const [notificationOpen, setNotificationOpen] = useState(false);
 
     const loadData = useCallback(async () => {
         setLoading(true);
         setError("");
         try {
-            const [reqRes, noteRes] = await Promise.allSettled([
-                requestsApi.getMyRequests(),
-                notificationsApi.getMyNotifications({take: 30}),
-            ]);
-
-            if (reqRes.status === "fulfilled") {
-                setRequests(reqRes.value);
-            } else {
-                throw reqRes.reason;
-            }
-
-            if (noteRes.status === "fulfilled") {
-                setNotifications(noteRes.value.items);
-            } else {
-                setNotifications([]);
-            }
+            const list = await requestsApi.getMyRequests();
+            setRequests(list);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Не удалось загрузить заявки");
         } finally {
@@ -45,46 +34,16 @@ export function useResidentHome() {
         void loadData();
     }, [loadData]);
 
+    // Разделение active/done считаем здесь, чтобы UI получал готовое и не дублировал фильтрацию.
     const active = useMemo(() => requests.filter(r => r.status !== "Done"), [requests]);
+
+    // Не более 5 последних закрытых — больше на главной не нужно, остальное на /resident/requests.
     const done = useMemo(
         () => requests.filter(r => r.status === "Done").slice(0, 5),
         [requests]
     );
-    const unreadCount = useMemo(
-        () => notifications.filter(n => !n.isRead).length,
-        [notifications]
-    );
 
-    const toggleNotifications = useCallback(() => {
-        setNotificationOpen(prev => !prev);
-    }, []);
-
-    const markNotificationRead = useCallback(async (id: string) => {
-        const target = notifications.find(n => n.id === id);
-        if (!target) return;
-
-        try {
-            if (target.isRead) {
-                await notificationsApi.markNotificationUnread(id);
-                setNotifications(prev => prev.map(n => (n.id === id ? {...n, isRead: false, readAt: null} : n)));
-            } else {
-                await notificationsApi.markNotificationRead(id);
-                setNotifications(prev => prev.map(n => (n.id === id ? {...n, isRead: true, readAt: new Date().toISOString()} : n)));
-            }
-        } catch {
-            setActionError("Не удалось обновить статус уведомления");
-        }
-    }, [notifications]);
-
-    const markAllRead = useCallback(async () => {
-        try {
-            await notificationsApi.markAllNotificationsRead();
-            setNotifications(prev => prev.map(n => ({...n, isRead: true, readAt: n.readAt ?? new Date().toISOString()})));
-        } catch {
-            setActionError("Не удалось пометить уведомления как прочитанные");
-        }
-    }, []);
-
+    // Оптимистично удаляем заявку из локального стейта — запрашивать список заново не нужно.
     const cancelRequest = useCallback(async (id: string) => {
         setActionError("");
         setActionLoadingId(id);
@@ -100,19 +59,13 @@ export function useResidentHome() {
 
     return {
         requests,
-        notifications,
         loading,
         error,
         actionLoadingId,
         actionError,
-        notificationOpen,
         active,
         done,
-        unreadCount,
         loadData,
-        toggleNotifications,
-        markNotificationRead,
-        markAllRead,
         cancelRequest,
     };
 }

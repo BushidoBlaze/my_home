@@ -1,10 +1,12 @@
 import {ChevronsRight} from "lucide-react";
 import {useNavigate} from "react-router-dom";
-import "./NotFound.css";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
 
 import heroImage from "@/shared/assets/images/notFound/background-image-not-found-page.jpg";
+import "./NotFound.css";
 
 export default function NotFound() {
+    useDocumentTitle('Страница не найдена');
     const navigate = useNavigate();
 
     return (

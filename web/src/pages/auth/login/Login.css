@@ -1,220 +1,367 @@
 .login {
+    width: 100%;
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    font-family: "SF Pro", sans-serif;
-}
 
-/* Левая часть — брендинг */
-.login__brand {
-    background: linear-gradient(135deg, #1a3d1a 0%, #2d6e2d 50%, #1f4f1f 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 48px;
-    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.12fr);
+
     overflow: hidden;
 }
 
-/* Декоративный круг на фоне */
-.login__brand::before {
-    content: "";
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    top: -100px;
-    right: -100px;
+/*Левая часть страницы*/
+.login__brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    position: relative;
+
+    color: #ffffff;
+    background: radial-gradient(120% 80% at 100% 0%,
+    rgba(16, 185, 129, .45), transparent 60%),
+    linear-gradient(180deg, #074d3b 0%, #053b2c 60%, #032b21 100%);
+
+    padding: 44px 48px;
+    overflow: hidden;
 }
 
-.login__brand::after {
-    content: "";
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    bottom: -60px;
-    left: -60px;
-}
+.login__brand-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.login__brand-content {
     position: relative;
     z-index: 1;
-    color: #fff;
+}
+
+/*Кнопка смена языка*/
+.login__language {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: rgba(255, 255, 255, .7);
+
+    border: none;
+    background: none;
+
+    cursor: pointer;
+}
+
+.login__language:hover {
+    color: #ffffff;
+}
+
+/*Секция декоративного текста*/
+.login__brand-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    position: relative;
+    z-index: 1;
+
+    max-width: 460px;
+}
+
+/*Декоративный элемент ui - Платформа для УК и ЖК*/
+.login__eyebrow {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+
+    letter-spacing: .18em;
+    text-transform: uppercase;
+
+    color: rgba(167, 243, 208, .8);
+}
+
+/*Заголовок - Центр управления вашим домом*/
+.login__headline {
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1.08;
+
+    color: #ffffff;
+}
+
+.login__lead {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 16px;
+    line-height: 1.55;
+
+    color: rgba(243, 250, 246, .72);
     max-width: 420px;
 }
 
-.login__brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 48px;
+/* Статистика приложения*/
+.login__statistics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    position: relative;
+    z-index: 1;
 }
 
-.login__brand-title {
-    font-family: "SF Pro", sans-serif;
+.login__statistic--border {
+    border-left: 1px solid rgba(167, 243, 208, 0.53);
+    padding-left: 16px;
+}
+
+.login__statistic-number {
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
+    font-size: 22px;
     font-weight: 600;
-    font-size: 36px;
-    line-height: 1.2;
-    margin-bottom: 16px;
-    color: #fff;
+    line-height: 1;
+
+    color: #ffffff;
 }
 
-.login__brand-subtitle {
-    font-family: "Inter", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.6;
-    margin-bottom: 48px;
+.login__statistic-label {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    line-height: 1.4;
+
+    color: rgba(243, 250, 246, .6);
+    margin-top: 6px;
 }
 
-.login__brand-stats {
-    display: flex;
-    gap: 40px;
-}
-
-.login__brand-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.login__brand-stat-value {
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 24px;
-    color: #fff;
-}
-
-.login__brand-stat-label {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* Правая часть — форма */
+/*Секция - Форма (правая часть)*/
 .login__form-side {
-    background: #f7f8fa;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 60px 48px;
+
+    position: relative;
+
+    padding: 32px 64px;
+    background-color: #f7f9f7;
 }
 
-.login__card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 48px 40px;
+.login__register-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    position: absolute;
+    top: 24px;
+    right: 32px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    color: #6a766f;
+}
+
+.login__register-hint-link {
+    color: #047857;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+.login__register-hint-link:hover {
+    text-decoration: underline;
+}
+
+.login__form-inner {
     width: 100%;
     max-width: 400px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
 .login__title {
     font-family: "SF Pro", sans-serif;
+    font-size: 28px;
     font-weight: 600;
-    font-size: 26px;
-    color: #111;
-    margin-bottom: 6px;
+    line-height: 1.15;
+
+    color: #0e1f17;
+    margin-bottom: 8px;
 }
 
 .login__subtitle {
-    font-family: "Inter", sans-serif;
+    font-family: Raleway, Arial, sans-serif, Helvetica;
     font-size: 14px;
-    color: #888;
-    margin-bottom: 32px;
+    line-height: 1.5;
+
+    color: #6b736f;
 }
 
 .login__error {
-    background: #fff5f5;
-    border: 1px solid #fecaca;
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-family: "Inter", sans-serif;
+    font-family: Inter, Arial, sans-serif, Helvetica;
     font-size: 14px;
-    color: #e53e3e;
-    margin-bottom: 24px;
+
+    color: #b91c1c;
+    background-color: #fee2e2;
+
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+
+    padding: 12px 16px;
 }
 
+/*Форма*/
 .login__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
 }
 
 .login__field {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .login__label {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
     font-weight: 500;
-    color: #444;
+
+    color: #3f4b44;
 }
 
 .login__input-wrap {
-    position: relative;
     display: flex;
     align-items: center;
-}
 
-.login__input-icon {
-    position: absolute;
-    left: 14px;
-    color: #aaa;
-    pointer-events: none;
-}
+    position: relative;
 
-.login__input {
-    width: 100%;
-    padding: 12px 14px 12px 42px;
+    background-color: #ffffff;
+
+    border: 1px solid #e3e8e3;
     border-radius: 10px;
-    border: 1.5px solid #e8e8e8;
-    font-family: "Inter", sans-serif;
-    font-size: 15px;
-    color: #111;
-    outline: none;
-    transition: border-color 0.2s;
-    background: #fafafa;
+
+    transition: border-color .15s, box-shadow .15s;
 }
 
-.login__input--error {
-    border-color: #ef4444;
-    background: #fff8f8;
+/*Фокус внимания на input`s*/
+.login__input-wrap:focus-within {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .22);
 }
 
-.login__input:focus {
-    border-color: #2d6e2d;
-    background: #fff;
+.login__input-wrap--error {
+    border-color: #b91c1c;
 }
 
-.login__toggle-password {
-    position: absolute;
-    right: 10px;
-    display: inline-flex;
+.login__input-wrap--error:focus-within {
+    border-color: #b91c1c;
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, .18);
+}
+
+/*UI-иконки*/
+.login__input-icon {
+    margin-left: 12px;
+    color: #6a766f;
+}
+
+/*Поля ввода*/
+.login__input {
+    height: 44px;
+
+    flex: 1;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    color: #0e1f17;
+
+    padding: 0 14px 0 10px;
+
+    border: 0;
+    outline: 0;
+    min-width: 0;
+    background: transparent;
+}
+
+.login__input::placeholder {
+    color: #97a09a;
+}
+
+/*UI-элемент "Показать/скрыть пароль"*/
+.login__password-toggle {
+    display: flex;
+    align-items: center;
+
+    color: #6a766f;
+
+    padding-right: 10px;
+
+    cursor: pointer;
+
+    border: none;
+    background: none;
+}
+
+.login__password-toggle:hover {
+    color: #3f4b44;
+}
+
+/*Кнопка "Забыли пароль?"*/
+.login__password-hint {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/*Кнопка "Запомнить меня"*/
+.login__remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    color: #3f4b44;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.login__remember input {
+    display: none;
+}
+
+
+.login__checkbox {
+    width: 18px;
+    height: 18px;
+
+    display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
-    background: transparent;
-    color: #666;
-    cursor: pointer;
-    padding: 4px;
+
+    color: transparent;
+    background: #ffffff;
+
+    border-radius: 5px;
+    border: 1px solid #c8d2c9;
+
+    flex-shrink: 0;
+    transition: background .15s, border-color .15s, color .15s;
+}
+
+.login__checkbox--on {
+    background: #059669;
+    border-color: #059669;
+    color: #fff;
 }
 
 .login__forgot-password {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #047857;
+    background: none;
+
     border: none;
-    padding: 0;
-    background: transparent;
-    color: #2d6e2d;
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    text-align: right;
     cursor: pointer;
 }
 
@@ -223,63 +370,154 @@
 }
 
 .login__field-error {
-    margin-top: 2px;
-    font-family: "Inter", sans-serif;
+    font-family: Inter, Arial, sans-serif, Helvetica;
     font-size: 12px;
-    color: #dc2626;
+    color: #b91c1c;
 }
 
-.login__button {
+/*Кнопка входа*/
+.login__button-primary {
+    width: 100%;
+    height: 46px;
+
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-top: 8px;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #2d6e2d, #3d8c3d);
-    color: #fff;
+
     font-family: "SF Pro", sans-serif;
     font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.login__button:hover {
-    opacity: 0.9;
-}
-
-.login__button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.login__spinner {
-    animation: login-spin 0.8s linear infinite;
-}
-
-.login__link {
-    margin-top: 24px;
-    text-align: center;
-    font-family: "Inter", sans-serif;
     font-size: 14px;
-    color: #666;
+
+    color: #ffffff;
+    background: #059669;
+
+    margin-top: 4px;
+
+    border: none;
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: background .15s, transform .05s;
 }
 
-.login__link a {
-    color: #2d6e2d;
+.login__button-primary:hover {
+    background: #047857;
+}
+
+.login__button-primary:active {
+    transform: translateY(1px);
+}
+
+.login__button-primary:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/*Анимация входа*/
+.login__spinner {
+    animation: login-spin .8s linear infinite;
+}
+
+@keyframes login-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* UI-линии */
+.login__divider {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 12px;
     font-weight: 500;
-    text-decoration: none;
+
+    letter-spacing: .12em;
+    text-transform: uppercase;
+
+    color: #97a09a;
 }
 
-.login__link a:hover {
-    text-decoration: underline;
+.login__divider::before,
+.login__divider::after {
+    content: "";
+    height: 1px;
+    background: #d1d3d1;
 }
 
-/* Адаптив */
-@media (max-width: 768px) {
+/*Кнопки быстрого входа*/
+.login__alternative-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.login__button-ghost {
+    height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 400;
+
+    padding: 0 12px;
+
+    border-radius: 10px;
+    border: 1px solid #e3e8e3;
+
+    color: #0e1f17;
+    background-color: #ffffff;
+
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+.login__button-ghost:hover {
+    background: #f0f4f0;
+    border-color: #c8d2c9;
+}
+
+.login__button-ghost--later {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 600;
+    color: #04805C;
+}
+
+/*Сокращения*/
+.login__footer {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #97a09a;
+    text-align: center;
+}
+
+/*Медиа-запросы*/
+@media (max-width: 900px) {
+    .login {
+        grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+
+    .login__headline {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 640px) {
     .login {
         grid-template-columns: 1fr;
     }
@@ -291,13 +529,10 @@
     .login__form-side {
         padding: 40px 24px;
     }
-}
 
-@keyframes login-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
+    .login__register-hint {
+        position: static;
+        justify-content: center;
+        margin-bottom: 8px;
     }
 }

@@ -1,22 +1,16 @@
-import {Star, ShoppingCart, Wrench} from "lucide-react";
+import {Star, ShoppingCart, Shapes} from "lucide-react";
 import type { MarketplaceService } from "../model/types.ts";
 import { CATEGORIES } from "../model/data.ts";
+import { resolveAvatarUrl } from "@/apps/resident/_shared/lib/resolveAvatarUrl.ts";
 
 interface Props {
     service: MarketplaceService;
     onOpen: (id: string) => void;
 }
 
-const API_URL = import.meta.env.VITE_API_URL ?? "";
-
 // Возвращаем объект категории
 function getCategory(id: string) {
     return CATEGORIES.find((c) => c.id === id);
-}
-
-// Возвращаем название категории
-function getCategoryLabel(id: string) {
-    return getCategory(id)?.label ?? id;
 }
 
 // Звезды рейтинга
@@ -39,21 +33,24 @@ function Stars({ rating }: { rating: number }) {
 }
 
 export function ServiceCard({ service, onOpen }: Props) {
+    const category = getCategory(service.category);
+    // Иконка категории — у каждой своя; для неизвестной (старые данные) берём «Прочее».
+    const CategoryIcon = category?.icon ?? Shapes;
+    const categoryLabel = category?.label ?? service.category;
+
     return (
         <div className="mp-card" onClick={() => onOpen(service.id)}>
             <div className="mp-card__image">
                 {service.imageUrl ? (
-                    <img src={`${API_URL}${service.imageUrl}`} alt={service.title} />
+                    <img src={resolveAvatarUrl(service.imageUrl)} alt={service.title} />
                 ) : (
-                    <div className="mp-card__image-placeholder">
-                        <Wrench size={20}/>
-                    </div>
+                    <div className="mp-card__image-placeholder">Нет фото</div>
                 )}
             </div>
 
             <div className="mp-card__body">
                 <span className="mp-card__category">
-                    <Wrench size={14}/> {getCategoryLabel(service.category)}
+                    <CategoryIcon size={14}/> {categoryLabel}
                 </span>
 
                 <h3 className="mp-card__title">{service.title}</h3>

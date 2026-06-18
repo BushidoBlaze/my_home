@@ -17,25 +17,28 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // у разных контроллеров есть DTO с одинаковыми именами (CreateServiceDto и т.п.),
+    // из-за этого swagger.json падал с 500. Берём полное имя типа, чтобы id не конфликтовали.
+    options.CustomSchemaIds(t => (t.FullName ?? t.Name).Replace("+", "."));
+});
 
-// Лимит размера multipart (защита от giant-upload DoS).
+// ограничиваем размер загрузки, чтобы не положили сервер гигантским файлом
 builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(o =>
 {
     o.MultipartBodyLengthLimit = UploadSecurity.MaxFileSizeBytes;
 });
 builder.WebHost.ConfigureKestrel(k =>
 {
-    k.Limits.MaxRequestBodySize = UploadSecurity.MaxFileSizeBytes + 1024 * 1024; // запас на multipart overhead
+    k.Limits.MaxRequestBodySize = UploadSecurity.MaxFileSizeBytes + 1024 * 1024; // запас на overhead multipart
 });
 
 // PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT Auth
-// Ключ берём из env (JWT__KEY / Jwt:Key) либо из конфигурации.
-// Жёстко требуем минимум 32 байта (256 бит для HS256).
+// JWT. Ключ из env (Jwt__Key) или конфига, минимум 32 байта под HS256.
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrWhiteSpace(jwtKey) || Encoding.UTF8.GetByteCount(jwtKey) < 32)
 {
@@ -75,7 +78,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// CORS — точное сравнение Host'а, без подстрочных match'ей.
+// CORS: сверяем host целиком, без сравнения по подстроке
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -88,7 +91,7 @@ builder.Services.AddCors(options =>
                   var host = uri.Host;
                   if (host == "localhost" || host == "127.0.0.1") return true;
 
-                  // Туннели — разрешаем только настоящие поддомены, не подстроку.
+                  // туннели: только настоящие поддомены
                   if (host.EndsWith(".ngrok-free.app", StringComparison.OrdinalIgnoreCase)) return true;
                   if (host.EndsWith(".trycloudflare.com", StringComparison.OrdinalIgnoreCase)) return true;
 
@@ -99,12 +102,12 @@ builder.Services.AddCors(options =>
               .AllowCredentials()); // нужно для SignalR
 });
 
-// Rate limiting — антибрут на /api/auth/*.
+// rate limiting: защита от перебора на /api/auth/*
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    // 10 попыток в минуту с одного IP на эндпоинты авторизации.
+    // 10 попыток в минуту с одного IP на авторизацию
     options.AddPolicy("auth", httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
@@ -116,7 +119,7 @@ builder.Services.AddRateLimiter(options =>
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst
             }));
 
-    // Глобальный лимит — 600 req/min на IP (для отдельной DoS-защиты прикладного уровня).
+    // общий потолок 600 запросов/мин на IP - смягчает простые DoS
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
@@ -129,7 +132,7 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
-// SignalR — детальные ошибки только в Dev.
+// SignalR: подробные ошибки только в dev
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = builder.Environment.IsDevelopment();
@@ -157,12 +160,12 @@ else
 
 app.UseStatusCodePages();
 
-// Security headers — до всего остального.
+// заголовки безопасности ставим раньше всего
 app.UseSecurityHeaders(app.Environment.IsDevelopment());
 
 app.UseCors("Frontend");
 
-// Усиленная отдача пользовательской статики (anti-XSS / sandbox).
+// раздаём загруженные файлы с защитными заголовками
 app.UseStaticFiles(UploadSecurity.HardenedStaticOptions());
 
 app.UseRateLimiter();
@@ -171,7 +174,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Подключаем SignalR Hub
 app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();

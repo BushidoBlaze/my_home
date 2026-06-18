@@ -1,17 +1,24 @@
+// plugins
 import { AlertCircle } from "lucide-react";
-import { useSettings } from "./hooks/useSettings";
-import { NotificationsSection } from "./ui/NotificationsSection";
-import { ChatsSection } from "./ui/ChatsSection";
-import { PrivacySection } from "./ui/PrivacySection";
-import { DevicesSection } from "./ui/DevicesSection";
-import {
-    LanguageSection,
-    InterfaceSection,
-    OtherSection,
-} from "./ui/OtherSections";
+
+//hooks
+import { useSettings } from "./hooks/useSettings.ts";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
+
+// ui
+import { NotificationsSection } from "./ui/NotificationsSection.tsx";
+import { ChatsSection } from "./ui/ChatsSection.tsx";
+import { PrivacySection } from "./ui/PrivacySection.tsx";
+import { DevicesSection } from "./ui/DevicesSection.tsx";
+import { LanguageSection, InterfaceSection, OtherSection} from "./ui/OtherSections.tsx";
+
+// styles
 import "./SettingsPage.css";
 
+
 export function SettingsPage() {
+    useDocumentTitle('Настройки');
+
     const { settings, loading, saving, error, updateSection } = useSettings();
 
     return (

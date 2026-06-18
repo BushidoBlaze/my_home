@@ -1,4 +1,4 @@
-import {requestJson, uploadFileJson} from "@/api/httpClient.ts";
+import {requestJson, requestVoid, uploadFileJson} from "@/api/httpClient.ts";
 
 export interface MyServiceItem {
     id: string;
@@ -32,6 +32,9 @@ export const servicesApi = {
             method: "POST",
             body: JSON.stringify(data),
         }),
+
+    deleteMyService: (id: string) =>
+        requestVoid(`/services/${id}`, {method: "DELETE"}),
 
     uploadServiceImage: (file: File) =>
         uploadFileJson<{ url: string }>("/services/image", file),

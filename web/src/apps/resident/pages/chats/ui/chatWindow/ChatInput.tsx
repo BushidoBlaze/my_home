@@ -1,18 +1,14 @@
+import {useLayoutEffect, useRef} from "react";
 import type {ChangeEvent, KeyboardEvent, RefObject} from "react";
-import {Edit3, Mic, MicOff, Paperclip, Reply, Send, Video, X} from "lucide-react";
+import {Edit3, Paperclip, Reply, SendHorizontal, X} from "lucide-react";
 
-import type {ChatMessageUi, MediaDraft} from "../../model/types.ts";
+import type {ChatMessageUi} from "../../model/types.ts";
 
 type Props = {
     replyTo: ChatMessageUi | null;
     setReplyTo: (msg: ChatMessageUi | null) => void;
     editingMessage: ChatMessageUi | null;
     cancelEdit: () => void;
-    recordingMode: "voice" | "video" | null;
-    stopRecording: () => void;
-    mediaDraft: MediaDraft | null;
-    sendDraftMedia: () => Promise<void>;
-    cancelDraftMedia: () => void;
     fileInputRef: RefObject<HTMLInputElement | null>;
     handleFileInputChange: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
     text: string;
@@ -21,7 +17,6 @@ type Props = {
     handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
     handleDrop: (e: React.DragEvent<HTMLElement>) => Promise<void>;
     setDragActive: (value: boolean) => void;
-    startRecording: (mode: "voice" | "video") => Promise<void>;
     handleSend: () => Promise<void>;
     composerDisabled: boolean;
 };
@@ -31,11 +26,6 @@ export function ChatInput({
                               setReplyTo,
                               editingMessage,
                               cancelEdit,
-                              recordingMode,
-                              stopRecording,
-                              mediaDraft,
-                              sendDraftMedia,
-                              cancelDraftMedia,
                               fileInputRef,
                               handleFileInputChange,
                               text,
@@ -44,10 +34,21 @@ export function ChatInput({
                               handleKeyDown,
                               handleDrop,
                               setDragActive,
-                              startRecording,
                               handleSend,
                               composerDisabled,
                           }: Props) {
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    // Авто-рост высоты textarea по содержимому — поведение как в Telegram.
+    // Высоту сбрасываем в auto, чтобы scrollHeight давал актуальное значение,
+    // потом подставляем его обратно. Потолок задан CSS через max-height.
+    useLayoutEffect(() => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.style.height = "auto";
+        el.style.height = `${el.scrollHeight}px`;
+    }, [text]);
+
     return (
         <div className="chats__input-area">
             {replyTo && (
@@ -75,33 +76,6 @@ export function ChatInput({
                 </div>
             )}
 
-            {recordingMode && (
-                <div className="chats__recording-bar">
-                    <span className="chats__recording-dot"/>
-                    <span>Запись {recordingMode === "voice" ? "голосового" : "видео"} сообщения...</span>
-                    <button onClick={stopRecording}>
-                        <MicOff size={14}/> Остановить
-                    </button>
-                </div>
-            )}
-
-            {mediaDraft && (
-                <div className="chats__recording-bar">
-                    <span>{mediaDraft.mode === "voice" ? "Предпросмотр голосового" : "Предпросмотр видео"}</span>
-                    {mediaDraft.mode === "voice"
-                        ? <audio className="chats__media" controls src={mediaDraft.previewUrl}/>
-                        : <video className="chats__media" controls src={mediaDraft.previewUrl}/>}
-                    <div className="chats__recording-actions">
-                        <button onClick={() => void sendDraftMedia()}>
-                            <Send size={14}/> Отправить
-                        </button>
-                        <button onClick={cancelDraftMedia}>
-                            <X size={14}/> Отмена
-                        </button>
-                    </div>
-                </div>
-            )}
-
             <div className="chats__input-row">
                 <button className="chats__input-btn" onClick={() => fileInputRef.current?.click()}
                         title="Прикрепить файл" disabled={composerDisabled}>
@@ -115,6 +89,7 @@ export function ChatInput({
                 />
 
                 <textarea
+                    ref={textareaRef}
                     className="chats__input"
                     value={text}
                     onChange={e => {
@@ -132,32 +107,12 @@ export function ChatInput({
                     disabled={composerDisabled}
                 />
 
-                <div className="chats__input-tools">
-                    <button
-                        className="chats__input-btn"
-                        onClick={() => void (recordingMode === "voice" ? stopRecording() : startRecording("voice"))}
-                        title="Голосовое сообщение"
-                        disabled={composerDisabled}
-                    >
-                        {recordingMode === "voice" ? <MicOff size={20}/> : <Mic size={20}/>}
-                    </button>
-
-                    <button
-                        className="chats__input-btn"
-                        onClick={() => void (recordingMode === "video" ? stopRecording() : startRecording("video"))}
-                        title="Видео сообщение"
-                        disabled={composerDisabled}
-                    >
-                        {recordingMode === "video" ? <MicOff size={20}/> : <Video size={20}/>}
-                    </button>
-                </div>
-
                 <button
                     className={`chats__send-btn ${text.trim() ? "chats__send-btn--active" : ""}`}
                     onClick={() => void handleSend()}
                     disabled={!text.trim() || composerDisabled}
                 >
-                    <Send size={20}/>
+                    <SendHorizontal size={20}/>
                 </button>
             </div>
         </div>

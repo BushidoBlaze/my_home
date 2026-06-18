@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {expensesApi} from "../model/expensesApi.ts";
+import {expensesApi, type ExpensesChartPoint, type MeterReadingGroup} from "../model/expensesApi.ts";
 import type {
     AutoPaySettings,
     DistributionSlice,
@@ -44,6 +44,16 @@ export function useExpensesPage() {
         queryFn: expensesApi.getDashboard,
     });
 
+    const chartQuery = useQuery({
+        queryKey: ["expenses-chart"],
+        queryFn: () => expensesApi.getChart(12),
+    });
+
+    const meterReadingsQuery = useQuery({
+        queryKey: ["expenses-meter-readings"],
+        queryFn: expensesApi.getMeterReadings,
+    });
+
     const loadDashboard = useCallback(async () => {
         setError(null);
         try {
@@ -78,6 +88,7 @@ export function useExpensesPage() {
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({queryKey: ["expenses-dashboard"]});
+            await queryClient.invalidateQueries({queryKey: ["expenses-chart"]});
             setSuccessMessage("Счет успешно оплачен.");
         },
         onError: (e) => {
@@ -95,7 +106,7 @@ export function useExpensesPage() {
             setSuccessMessage(null);
             setError(null);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
             setSuccessMessage("Показания ИПУ переданы.");
             setMeterForm((prev) => ({
                 meterType: prev.meterType,
@@ -103,6 +114,8 @@ export function useExpensesPage() {
                 readingDate: new Date().toISOString().slice(0, 10),
                 comment: "",
             }));
+            // После приёма показаний — обновляем агрегат, чтобы карточки счётчиков увидели новое значение.
+            await queryClient.invalidateQueries({queryKey: ["expenses-meter-readings"]});
         },
         onError: (e) => {
             setError((e as Error).message || "Ошибка отправки показаний");
@@ -135,8 +148,8 @@ export function useExpensesPage() {
         await payBillMutation.mutateAsync(billId);
     }, [payBillMutation]);
 
-    const submitMeterReading = useCallback(async () => {
-        await submitMeterMutation.mutateAsync(meterForm);
+    const submitMeterReading = useCallback(async (payload?: MeterReadingPayload) => {
+        await submitMeterMutation.mutateAsync(payload ?? meterForm);
     }, [meterForm, submitMeterMutation]);
 
     const saveAutoPay = useCallback(async () => {
@@ -159,6 +172,9 @@ export function useExpensesPage() {
         return `conic-gradient(${parts.join(", ")})`;
     }, [distribution]);
 
+    const chart: ExpensesChartPoint[] = chartQuery.data ?? [];
+    const meterReadings: MeterReadingGroup[] = meterReadingsQuery.data ?? [];
+
     return {
         loading: dashboardQuery.isLoading || dashboardQuery.isFetching,
         error,
@@ -175,6 +191,10 @@ export function useExpensesPage() {
         autoPaySubmitting,
         successMessage,
         chartBackground,
+        chart,
+        chartLoading: chartQuery.isLoading,
+        meterReadings,
+        meterReadingsLoading: meterReadingsQuery.isLoading,
         loadDashboard,
         payBill,
         submitMeterReading,

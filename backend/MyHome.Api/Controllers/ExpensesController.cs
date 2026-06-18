@@ -122,6 +122,117 @@ public class ExpensesController : ControllerBase
         return Ok(new { id = bill.Id, status = bill.Status, paidAt = bill.PaidAt, receiptUrl = bill.ReceiptUrl });
     }
 
+    // GET /api/expenses/meter-readings — последние показания текущего жильца,
+    // сгруппированные по типу счётчика. Используется в UI для подсказки
+    // «предыдущее показание» и расчёта потреблённого объёма.
+    [HttpGet("meter-readings")]
+    public async Task<IActionResult> GetMeterReadings()
+    {
+        var rows = await _db.MeterReadings
+            .AsNoTracking()
+            .Where(m => m.UserId == CurrentUserId)
+            .OrderByDescending(m => m.ReadingDate)
+            .ToListAsync();
+
+        var grouped = rows
+            .GroupBy(m => m.MeterType)
+            .Select(g => new
+            {
+                meterType = g.Key,
+                lastValue = g.First().Value,
+                lastReadingDate = g.First().ReadingDate,
+                history = g.Take(12).Select(x => new {
+                    id = x.Id,
+                    value = x.Value,
+                    readingDate = x.ReadingDate,
+                    comment = x.Comment
+                })
+            });
+
+        return Ok(grouped);
+    }
+
+    // GET /api/expenses/timeline?days=14 — события (платежи, показания) за период
+    [HttpGet("timeline")]
+    public async Task<IActionResult> GetTimeline([FromQuery] int days = 14)
+    {
+        var from = DateTime.UtcNow.AddDays(-days);
+
+        var payments = await _db.UtilityBills
+            .AsNoTracking()
+            .Where(b => b.UserId == CurrentUserId && b.PaidAt != null && b.PaidAt >= from)
+            .Select(b => new {
+                at = b.PaidAt!.Value,
+                kind = "payment",
+                title = b.Title,
+                amount = (decimal?)b.Amount,
+                meta = (string?)null
+            })
+            .ToListAsync();
+
+        var readings = await _db.MeterReadings
+            .AsNoTracking()
+            .Where(m => m.UserId == CurrentUserId && m.CreatedAt >= from)
+            .Select(m => new {
+                at = m.CreatedAt,
+                kind = "reading",
+                title = "Передано показание",
+                amount = (decimal?)null,
+                meta = (string?)(m.MeterType + ": " + m.Value)
+            })
+            .ToListAsync();
+
+        var pendingDue = await _db.UtilityBills
+            .AsNoTracking()
+            .Where(b => b.UserId == CurrentUserId && b.Status != "Paid"
+                && b.DueDate >= from && b.DueDate <= DateTime.UtcNow.AddDays(days))
+            .Select(b => new {
+                at = b.DueDate,
+                kind = "due",
+                title = "Срок оплаты: " + b.Title,
+                amount = (decimal?)b.Amount,
+                meta = (string?)null
+            })
+            .ToListAsync();
+
+        var combined = payments.Concat(readings).Concat(pendingDue)
+            .OrderByDescending(e => e.at)
+            .Take(50);
+
+        return Ok(combined);
+    }
+
+    // GET /api/expenses/chart?months=12 — помесячный график начислений/оплат
+    [HttpGet("chart")]
+    public async Task<IActionResult> GetChart([FromQuery] int months = 12)
+    {
+        var now = DateTime.UtcNow;
+        var start = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-(months - 1));
+
+        var bills = await _db.UtilityBills
+            .AsNoTracking()
+            .Where(b => b.UserId == CurrentUserId && b.CreatedAt >= start)
+            .Select(b => new { b.Amount, b.CreatedAt, b.PaidAt })
+            .ToListAsync();
+
+        var result = new List<object>(months);
+        for (int i = 0; i < months; i++)
+        {
+            var ms = start.AddMonths(i);
+            var me = ms.AddMonths(1);
+            var charged = bills.Where(b => b.CreatedAt >= ms && b.CreatedAt < me).Sum(b => b.Amount);
+            var paid = bills.Where(b => b.PaidAt != null && b.PaidAt >= ms && b.PaidAt < me).Sum(b => b.Amount);
+            result.Add(new {
+                month = ms.ToString("yyyy-MM"),
+                label = RuMonthShort(ms.Month),
+                year = ms.Year,
+                charged,
+                paid
+            });
+        }
+        return Ok(result);
+    }
+
     [HttpPost("meter-readings")]
     public async Task<IActionResult> SubmitMeterReading([FromBody] SubmitMeterReadingDto dto)
     {
@@ -130,13 +241,19 @@ public class ExpensesController : ControllerBase
         if (dto.Value < 0)
             return BadRequest("Показание не может быть отрицательным.");
 
+        // Клиент шлёт дату без времени/зоны (Kind=Unspecified), а колонка —
+        // timestamptz: Npgsql пишет только UTC. Приводим к UTC, иначе SaveChanges падает.
+        var readingDate = dto.ReadingDate is { } rd
+            ? DateTime.SpecifyKind(rd, DateTimeKind.Utc)
+            : DateTime.UtcNow;
+
         var entity = new MeterReading
         {
             Id = Guid.NewGuid(),
             UserId = CurrentUserId,
             MeterType = dto.MeterType.Trim(),
             Value = dto.Value,
-            ReadingDate = dto.ReadingDate ?? DateTime.UtcNow,
+            ReadingDate = readingDate,
             Comment = string.IsNullOrWhiteSpace(dto.Comment) ? null : dto.Comment.Trim(),
             CreatedAt = DateTime.UtcNow
         };
@@ -202,6 +319,14 @@ public class ExpensesController : ControllerBase
         _db.UtilityBills.AddRange(bills);
         await _db.SaveChangesAsync();
     }
+
+    private static string RuMonthShort(int m) => m switch
+    {
+        1 => "янв", 2 => "фев", 3 => "мар", 4 => "апр",
+        5 => "май", 6 => "июн", 7 => "июл", 8 => "авг",
+        9 => "сен", 10 => "окт", 11 => "ноя", 12 => "дек",
+        _ => ""
+    };
 
     public sealed class SubmitMeterReadingDto
     {

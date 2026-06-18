@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ResidentApp.Data.Entities;
+namespace MyHome.Domain.Entities;
 
 public class DeviceSession
 {

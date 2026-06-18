@@ -1,14 +1,14 @@
 import {usersApi, type User} from "@/api/users.api.ts";
 import {servicesApi, type MyServiceItem} from "@/api/services.api.ts";
 import {useEffect, useMemo, useState} from "react";
-import {Frown, Loader2, Plus, X} from "lucide-react";
+import {Loader2, Plus, Trash2, X} from "lucide-react";
+import {resolveAvatarUrl} from "@/apps/resident/_shared/lib/resolveAvatarUrl.ts";
+import {CATEGORIES, FALLBACK_CATEGORY} from "../model/data.ts";
 
 
 type Props = {
     onClose: () => void;
 };
-
-const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 type ProfileDecision = "updateProfile" | "serviceOnly";
 
@@ -21,10 +21,12 @@ export function MyServicesModal({onClose}: Props) {
 
     const [myServices, setMyServices] = useState<MyServiceItem[]>([]);
     const [me, setMe] = useState<User | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const [showCreate, setShowCreate] = useState(false);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [category, setCategory] = useState(FALLBACK_CATEGORY);
     const [price, setPrice] = useState("");
     const [imageUrl, setImageUrl] = useState("");
     const [selectedImageName, setSelectedImageName] = useState("");
@@ -72,6 +74,7 @@ export function MyServicesModal({onClose}: Props) {
     function resetCreateForm() {
         setTitle("");
         setDescription("");
+        setCategory(FALLBACK_CATEGORY);
         setPrice("");
         setImageUrl("");
         setSelectedImageName("");
@@ -174,7 +177,7 @@ export function MyServicesModal({onClose}: Props) {
                 description: description.trim(),
                 price: Number(price),
                 imageUrl: imageUrl || undefined,
-                category: "Home",
+                category: category || FALLBACK_CATEGORY,
                 providerName,
                 providerPhone,
             });
@@ -187,6 +190,25 @@ export function MyServicesModal({onClose}: Props) {
             setError(e instanceof Error ? e.message : "Не удалось создать услугу");
         } finally {
             setSaving(false);
+        }
+    }
+
+    async function deleteService(id: string) {
+        if (!window.confirm("Удалить эту услугу? Действие нельзя отменить.")) return;
+
+        setDeletingId(id);
+        setError(null);
+        setSuccess(null);
+        // Оптимистично убираем карточку — при ошибке вернём список из loadData.
+        setMyServices((prev) => prev.filter((s) => s.id !== id));
+        try {
+            await servicesApi.deleteMyService(id);
+            setSuccess("Услуга удалена");
+        } catch (e) {
+            setError(e instanceof Error ? e.message : "Не удалось удалить услугу");
+            await loadData();
+        } finally {
+            setDeletingId(null);
         }
     }
 
@@ -228,6 +250,14 @@ export function MyServicesModal({onClose}: Props) {
                             <label className="mp-modal__label">Описание *</label>
                             <textarea className="mp-modal__textarea" value={description} rows={3}
                                       onChange={(e) => setDescription(e.target.value)}/>
+
+                            <label className="mp-modal__label">Категория *</label>
+                            <select className="mp-modal__input" value={category}
+                                    onChange={(e) => setCategory(e.target.value)}>
+                                {CATEGORIES.map((c) => (
+                                    <option key={c.id} value={c.id}>{c.label}</option>
+                                ))}
+                            </select>
 
                             <label className="mp-modal__label">Стоимость (₽) *</label>
                             <input className="mp-modal__input" type="number" min="0" value={price}
@@ -320,13 +350,23 @@ export function MyServicesModal({onClose}: Props) {
                             <div className="marketplace__my-service-card" key={service.id}>
                                 <div className="marketplace__my-service-image">
                                     {service.imageUrl ? (
-                                        <img src={`${API_URL}${service.imageUrl}`} alt={service.title}/>
+                                        <img src={resolveAvatarUrl(service.imageUrl)} alt={service.title}/>
                                     ) : (
                                         <div className="marketplace__my-service-empty-image">
-                                            <Frown size={24}/>
-                                            <span>Нету фото</span>
+                                            <span>Нет фото</span>
                                         </div>
                                     )}
+                                    <button
+                                        type="button"
+                                        className="marketplace__my-service-delete"
+                                        title="Удалить услугу"
+                                        disabled={deletingId === service.id}
+                                        onClick={() => void deleteService(service.id)}
+                                    >
+                                        {deletingId === service.id
+                                            ? <Loader2 size={15} className="marketplace__spinner"/>
+                                            : <Trash2 size={15}/>}
+                                    </button>
                                 </div>
                                 <h4>{service.title}</h4>
                                 <p>{service.description}</p>
@@ -335,7 +375,7 @@ export function MyServicesModal({onClose}: Props) {
                                     <div className="marketplace__my-service-provider">
                                         <div className="marketplace__my-service-provider-avatar">
                                             {service.providerAvatarUrl ? (
-                                                <img src={`${API_URL}${service.providerAvatarUrl}`} alt={service.providerName || "Профиль"}/>
+                                                <img src={resolveAvatarUrl(service.providerAvatarUrl)} alt={service.providerName || "Профиль"}/>
                                             ) : (
                                                 <span>{(service.providerName || me?.fullName || "—").trim().charAt(0).toUpperCase()}</span>
                                             )}

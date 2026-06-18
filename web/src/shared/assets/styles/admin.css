@@ -1,14 +1,7 @@
-/* ============================================================
-   Admin design system — общие стили для УК
-   SF Pro / Inter · изумрудный акцент · 4/8/12/16/24 spacing
-   ============================================================ */
-
 /* ---------- Background ---------- */
 .admin-app {
     background: #f5f7f5;
     color: #0f172a;
-    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    -webkit-font-smoothing: antialiased;
 }
 
 .admin-app *,
@@ -49,10 +42,6 @@
 
 .tnum {
     font-variant-numeric: tabular-nums;
-}
-
-.mono {
-    font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 /* ---------- Card ---------- */
@@ -104,7 +93,7 @@
 }
 
 .btn--primary {
-    background: #10b981;
+    background: #047857;
     border-color: #10b981;
     color: #ffffff;
 }
@@ -154,9 +143,12 @@
 .chip__dot {
     width: 6px;
     height: 6px;
-    border-radius: 99px;
+
+    border-radius: 50%;
+
     background: currentColor;
     opacity: 0.85;
+
     display: inline-block;
 }
 

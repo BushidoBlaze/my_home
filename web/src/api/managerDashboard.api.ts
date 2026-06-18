@@ -1,13 +1,9 @@
 import {requestJson} from "@/api/httpClient.ts";
 
-/* ============================================================
-   Manager dashboard API contracts (/manager/home)
-   ============================================================
-   Endpoints are independent per block so each can be cached,
-   refreshed, and authorized separately.
-   ------------------------------------------------------------ */
+// Контракты дашборда менеджера (/manager/home). Каждый блок - отдельная ручка,
+// чтобы кэшировать и обновлять их независимо.
 
-/* ---------- 1. KPI strip (StatRow, 5 cards) ---------- */
+// 1. KPI-строка (StatRow, 5 карточек)
 
 export type DeltaDirection = "up" | "down" | "flat";
 export type StatAccent = "emerald" | "info" | "warning" | "danger" | "violet";
@@ -31,7 +27,7 @@ export interface KpiResponse {
     cards: KpiCard[];
 }
 
-/* ---------- 2. Priority tickets ---------- */
+// 2. Приоритетные заявки
 
 export type TicketCategory = "plumbing" | "electric" | "heating" | "lift" | "repair" | "cleaning" | "yard" | "security" | "other";
 export type ChipTone = "" | "emerald" | "info" | "warning" | "danger" | "violet";
@@ -59,7 +55,7 @@ export interface PriorityTicketsResponse {
     total: number;
 }
 
-/* ---------- 3. Collections (current month) ---------- */
+// 3. Собираемость за месяц
 
 export interface CollectionsResponse {
     /** Plan percent, e.g. 92. */
@@ -76,7 +72,7 @@ export interface CollectionsResponse {
     periodLabel: string;
 }
 
-/* ---------- 4. Regulatory compliance deadlines ---------- */
+// 4. Регуляторные сроки
 
 export type ComplianceCategory = "lift" | "gas" | "fire" | "duct";
 export type ComplianceStatus = "burning" | "soon" | "ok";
@@ -102,7 +98,7 @@ export interface ComplianceResponse {
     total: number;
 }
 
-/* ---------- 5. Activity feed (compact, important only) ---------- */
+// 5. Лента событий
 
 export type ActivityIcon = "check" | "send" | "alert" | "vote" | "gauge" | "info";
 
@@ -130,7 +126,7 @@ export interface ActivityResponse {
     items: ActivityEvent[];
 }
 
-/* ---------- 6. Active votings ---------- */
+// 6. Активные голосования
 
 export interface ActiveVote {
     id: string;
@@ -152,9 +148,7 @@ export interface ActiveVotesResponse {
     items: ActiveVote[];
 }
 
-/* ============================================================
-   Client
-   ============================================================ */
+// клиент
 
 const BASE = "/manager/dashboard";
 

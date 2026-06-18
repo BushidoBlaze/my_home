@@ -16,7 +16,7 @@ public class ChatHub : Hub
 
     private readonly AppDbContext _db;
 
-    // Словарь онлайн пользователей: userId → список connectionId
+    // онлайн-пользователи: userId -> его connectionId-ы
     private static readonly Dictionary<string, HashSet<string>> UserConnections = new();
     private static readonly object Lock = new();
 

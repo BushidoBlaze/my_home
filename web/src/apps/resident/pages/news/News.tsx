@@ -1,5 +1,6 @@
 // hooks
 import {useNews} from "./hooks/useNews.ts";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
 
 // ui
 import {NewsList} from "./ui/NewsList.tsx";
@@ -11,14 +12,18 @@ import "./News.css";
 // Страница новостей — лента объявлений УК
 // Слева список, справа детальный просмотр
 export default function News() {
+    useDocumentTitle('Новости');
+
     const {
         list,
         selected,
         comments,
         listLoading,
         detailLoading,
+        submittingComment,
         error,
         selectNews,
+        addComment,
     } = useNews();
 
     const pinnedCount = list.filter(n => n.isPinned).length;
@@ -54,6 +59,8 @@ export default function News() {
                     selected={selected}
                     comments={comments}
                     loading={detailLoading}
+                    submitting={submittingComment}
+                    onAddComment={addComment}
                 />
             </main>
         </div>

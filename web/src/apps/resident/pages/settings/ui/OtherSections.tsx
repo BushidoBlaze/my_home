@@ -9,9 +9,7 @@ import {
 import { accountApi } from "../model/settingsApi";
 import type { Language, InterfaceSettings, Theme, FontSize } from "../model/types";
 
-/* ================================================================
-   LanguageSection
-================================================================ */
+// выбор языка
 const LANG_OPTIONS: { value: Language; label: string }[] = [
     { value: "ru", label: "🇷🇺 Русский" },
     { value: "en", label: "🇬🇧 English" },
@@ -44,9 +42,7 @@ export function LanguageSection({ value, onChange }: LangProps) {
     );
 }
 
-/* ================================================================
-   InterfaceSection
-================================================================ */
+// тема и размер шрифта
 const THEME_OPTIONS: { value: Theme; label: string }[] = [
     { value: "light", label: "Светлая" },
     { value: "dark", label: "Тёмная" },
@@ -91,9 +87,7 @@ export function InterfaceSection({ value, onChange }: IFaceProps) {
     );
 }
 
-/* ================================================================
-   OtherSection
-================================================================ */
+// OtherSection
 export function OtherSection() {
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [password, setPassword] = useState("");

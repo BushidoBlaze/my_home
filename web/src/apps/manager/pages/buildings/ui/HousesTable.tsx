@@ -1,34 +1,41 @@
 import type {JSX} from "react";
 import {BuildingSwatch} from "@/shared/ui/BuildingSwatch/BuildingSwatch.tsx";
-import type {House} from "../model/types.ts";
-import {HOUSES} from "../model/data.ts";
+import type {BuildingListItem, HouseTone} from "@/api/managerBuildings.api.ts";
 
-const TONE_COLOR: Record<House["tone"], string> = {
+const TONE_COLOR: Record<HouseTone, string> = {
     danger: "#ef4444",
     warning: "#f59e0b",
     ok: "#10b981",
 };
 
-const TONE_LABEL: Record<House["tone"], string> = {
+const TONE_LABEL: Record<HouseTone, string> = {
     danger: "Авария",
     warning: "Внимание",
     ok: "Норма",
 };
 
-const TONE_CHIP: Record<House["tone"], string> = {
+const TONE_CHIP: Record<HouseTone, string> = {
     danger: "danger",
     warning: "warning",
     ok: "emerald",
 };
 
 function flagChipClass(flag: string): string {
-    if (flag === "авария") return "chip--danger";
-    if (flag === "лифт") return "chip--warning";
+    if (flag === "долг") return "chip--danger";
+    if (flag === "заявки") return "chip--warning";
     if (flag === "новый") return "chip--emerald";
     return "";
 }
 
-export default function HousesTable(): JSX.Element {
+interface Props {
+    houses: BuildingListItem[];
+    selectedId: string | null;
+    onSelect: (id: string) => void;
+    formatMoney: (amount: number) => string;
+    formatArea: (m2: number) => string;
+}
+
+export default function HousesTable({houses, selectedId, onSelect, formatMoney, formatArea}: Props): JSX.Element {
     return (
         <div className="bd-table-wrap">
             <table className="bd-table">
@@ -44,8 +51,13 @@ export default function HousesTable(): JSX.Element {
                     </tr>
                 </thead>
                 <tbody>
-                    {HOUSES.map(h => (
-                        <tr key={h.id} className={h.selected ? "bd-table__row bd-table__row--selected" : "bd-table__row"}>
+                    {houses.map(h => (
+                        <tr
+                            key={h.id}
+                            className={h.id === selectedId ? "bd-table__row bd-table__row--selected" : "bd-table__row"}
+                            onClick={() => onSelect(h.id)}
+                            style={{cursor: "pointer"}}
+                        >
                             <td>
                                 <div className="bd-table__addr">
                                     <BuildingSwatch size={32} color={TONE_COLOR[h.tone]}/>
@@ -62,23 +74,23 @@ export default function HousesTable(): JSX.Element {
                                 </div>
                             </td>
                             <td>
-                                <span className="bd-table__series">П-44Т</span>
+                                <span className="bd-table__series">{h.series ?? "—"}</span>
                                 <span className="bd-table__year">· {h.year}</span>
                             </td>
-                            <td className="tnum">{h.apts}</td>
-                            <td>{h.area}</td>
+                            <td className="tnum">{h.apartmentsTotal}</td>
+                            <td>{formatArea(h.areaTotal)}</td>
                             <td>
                                 <span
                                     className="tnum bd-table__debt"
                                     style={{
-                                        color: h.debt === "0 ₽" ? "#64748b" : "#ef4444",
-                                        fontWeight: h.debt === "0 ₽" ? 400 : 600,
+                                        color: h.debt === 0 ? "#64748b" : "#ef4444",
+                                        fontWeight: h.debt === 0 ? 400 : 600,
                                     }}
                                 >
-                                    {h.debt}
+                                    {formatMoney(h.debt)}
                                 </span>
                             </td>
-                            <td><span className="tnum">{h.open}</span></td>
+                            <td><span className="tnum">{h.openTickets}</span></td>
                             <td>
                                 <span className={"chip chip--" + TONE_CHIP[h.tone]}>
                                     <span className="chip__dot"/>{TONE_LABEL[h.tone]}

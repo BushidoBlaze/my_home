@@ -1,0 +1,232 @@
+/* Боковая панель уведомлений — фиксированно справа под топбаром, поверх контента */
+
+.notifications-popover {
+    position: absolute;
+    top: 64px;
+    right: 24px;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 96px);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 50;
+    animation: notifications-popover-in 0.14s ease-out;
+}
+
+@keyframes notifications-popover-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notifications-popover__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.notifications-popover__title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notifications-popover__title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.notifications-popover__counter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 11px;
+    background: #047857;
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+.notifications-popover__mark-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    color: #047857;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.12s;
+}
+
+.notifications-popover__mark-all:hover {
+    background: #ecfdf5;
+}
+
+.notifications-popover__body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 120px;
+}
+
+.notifications-popover__state {
+    padding: 24px 16px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.notifications-popover__state--error {
+    color: #b91c1c;
+}
+
+.notifications-popover__empty {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+/* Список уведомлений — кнопки без обычной обёртки button */
+.notifications-popover__item {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.1s;
+    font: inherit;
+    color: inherit;
+}
+
+.notifications-popover__item:hover {
+    background: #f8fafc;
+}
+
+.notifications-popover__item--unread {
+    background: #f0fdf4;
+}
+
+.notifications-popover__item--unread:hover {
+    background: #dcfce7;
+}
+
+/* Цветовая полоска по типу — слева, 3px */
+.notifications-popover__item--warning {
+    box-shadow: inset 3px 0 0 #f59e0b;
+}
+
+.notifications-popover__item--success {
+    box-shadow: inset 3px 0 0 #10b981;
+}
+
+.notifications-popover__item--info {
+    box-shadow: inset 3px 0 0 #0ea5e9;
+}
+
+.notifications-popover__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: #f1f5f9;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.notifications-popover__item--unread .notifications-popover__icon {
+    background: #dcfce7;
+    color: #047857;
+}
+
+.notifications-popover__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notifications-popover__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.notifications-popover__item-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0f172a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notifications-popover__time {
+    font-size: 11px;
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.notifications-popover__message {
+    font-size: 12.5px;
+    color: #475569;
+    line-height: 1.4;
+    margin-top: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.notifications-popover__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #047857;
+    margin-top: 12px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+    .notifications-popover {
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: auto;
+        max-height: 70vh;
+        border-radius: 16px 16px 0 0;
+    }
+}

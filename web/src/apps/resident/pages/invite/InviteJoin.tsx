@@ -20,7 +20,7 @@ export default function InviteJoin() {
         chatsApi.joinChatByInviteCode(code)
             .then(() => {
                 if (!active) return;
-                navigate("/app/chats", {replace: true});
+                navigate("/resident/chats", {replace: true});
             })
             .catch((e) => {
                 if (!active) return;
@@ -41,7 +41,7 @@ export default function InviteJoin() {
                 <>
                     <h1 style={{marginBottom: "10px"}}>Не удалось присоединиться</h1>
                     <p style={{marginBottom: "16px"}}>{error}</p>
-                    <Link to="/app/chats">Вернуться в чаты</Link>
+                    <Link to="/resident/chats">Вернуться в чаты</Link>
                 </>
             )}
         </div>

@@ -502,3 +502,10 @@
         grid-template-columns: 1fr;
     }
 }
+
+.home-compliance__empty {
+    padding: 18px 4px;
+    text-align: center;
+    font-size: 13px;
+    color: #94a3b8;
+}

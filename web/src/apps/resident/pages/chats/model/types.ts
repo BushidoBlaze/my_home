@@ -8,10 +8,4 @@ export type ChatMessageUi = ChatMessageItem & {
     fileName?: string;
 };
 
-export type MediaDraft = {
-    file: File;
-    mode: "voice" | "video";
-    previewUrl: string;
-};
-
 export type CreateChatMode = "group" | "direct";

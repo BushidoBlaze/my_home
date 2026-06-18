@@ -1,6 +1,4 @@
-/* ============================================================
-   types.ts — типы данных для FeaturesSection (страница /management)
-   ============================================================ */
+// types.ts — типы данных для FeaturesSection (страница /management)
 
 import type {LucideIcon} from "lucide-react";
 

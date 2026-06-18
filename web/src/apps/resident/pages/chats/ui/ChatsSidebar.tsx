@@ -1,6 +1,6 @@
 import {type Chat} from "@/api/chats.api.ts";
 import {useState} from "react";
-import {MessageSquarePlus, Plus, Search, UserPlus, Users} from "lucide-react";
+import {MessageSquarePlus, PanelLeftClose, PanelLeftOpen, Plus, Search, UserPlus, Users} from "lucide-react";
 
 
 import {getChatFallback} from "../model/utils.ts";
@@ -13,9 +13,11 @@ type Props = {
     setActiveChat: (chat: Chat) => void;
     unreadByChat: Record<string, number>;
     openCreateChat: (mode: "group" | "direct") => void;
+    collapsed: boolean;
+    onToggleCollapse: () => void;
 };
 
-export function ChatsSidebar({visibleChats, activeChat, setActiveChat, unreadByChat, openCreateChat}: Props) {
+export function ChatsSidebar({visibleChats, activeChat, setActiveChat, unreadByChat, openCreateChat, collapsed, onToggleCollapse}: Props) {
     const [query, setQuery] = useState("");
 
     const filtered = query.trim()
@@ -40,6 +42,14 @@ export function ChatsSidebar({visibleChats, activeChat, setActiveChat, unreadByC
                     <button className="chats__header-btn" title="Новый личный чат"
                             onClick={() => openCreateChat("direct")}>
                         <UserPlus size={16}/>
+                    </button>
+                    {/* Кнопка сворачивания сайдбара — при сворачивании остаётся только она */}
+                    <button
+                        className="chats__header-btn chats__sidebar-collapse-btn"
+                        title={collapsed ? "Развернуть список чатов" : "Свернуть список чатов"}
+                        onClick={onToggleCollapse}
+                    >
+                        {collapsed ? <PanelLeftOpen size={16}/> : <PanelLeftClose size={16}/>}
                     </button>
                 </div>
             </div>
@@ -99,8 +109,12 @@ export function ChatsSidebar({visibleChats, activeChat, setActiveChat, unreadByC
                                         <span>{getChatFallback(chat)}</span>
                                     )}
                                 </div>
-                                {unread > 0 && (
-                                    <span className="chats__item-unread">{unread > 99 ? "99+" : unread}</span>
+                                {/* В свёрнутом сайдбаре нет места под нижнюю строку,
+                                    поэтому показываем бейдж в углу аватара */}
+                                {collapsed && unread > 0 && (
+                                    <span className="chats__item-unread chats__item-unread--corner">
+                                        {unread > 99 ? "99+" : unread}
+                                    </span>
                                 )}
                             </div>
 
@@ -121,6 +135,12 @@ export function ChatsSidebar({visibleChats, activeChat, setActiveChat, unreadByC
                                     </span>
                                     {chat.type !== "Direct" && (
                                         <span className="chats__item-members">{chat.membersCount} уч.</span>
+                                    )}
+                                    {/* Telegram-стиль: бейдж непрочитанных справа в одну строку с превью */}
+                                    {unread > 0 && (
+                                        <span className="chats__item-unread">
+                                            {unread > 99 ? "99+" : unread}
+                                        </span>
                                     )}
                                 </div>
                             </div>

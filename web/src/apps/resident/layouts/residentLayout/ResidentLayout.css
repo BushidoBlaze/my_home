@@ -1,11 +1,12 @@
 .resident-layout {
     display: flex;
     height: 100vh;
-    background: #f4f6f5;
+    background: #f5f7f5;
 }
 
 .resident-content {
     flex: 1;
-    padding: 24px;
+    min-width: 0;
     overflow-y: auto;
+    background: #f5f7f5;
 }

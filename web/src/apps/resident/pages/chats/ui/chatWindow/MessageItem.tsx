@@ -73,15 +73,16 @@ export function MessageItem({
                     </span>
                 )}
 
-                {replyMsg && (
-                    <div className="chats__msg-reply">
-                        <span className="chats__msg-reply-name">{replyMsg.sender.fullName}</span>
-                        <span className="chats__msg-reply-text">{replyMsg.text}</span>
-                    </div>
-                )}
-
                 <div className="chats__msg-bubble">
                     {msg.isPinned && <Pin size={12} className="chats__msg-pin-icon"/>}
+
+                    {/* Цитата ответа — внутри пузыря сверху, как в Telegram */}
+                    {replyMsg && (
+                        <div className="chats__msg-reply">
+                            <span className="chats__msg-reply-name">{replyMsg.sender.fullName}</span>
+                            <span className="chats__msg-reply-text">{replyMsg.text}</span>
+                        </div>
+                    )}
 
                     {editingMessage?.id === msg.id ? (
                         <div className="chats__msg-editing">

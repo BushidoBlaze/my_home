@@ -14,10 +14,9 @@ export default function PriorityQueue(): JSX.Element {
         adaptPriorityTickets,
     );
 
-    const openTicket = (rowId: string) => {
-        const id = rowId.replace(/^Т-/, "");
-        navigate(`/manager/tickets/${id}`);
-    };
+    // row.id — реальный uuid заявки; короткий «Т-XXXX» показываем только в таблице.
+    const shortCode = (id: string) => `Т-${id.slice(0, 4).toUpperCase()}`;
+    const openTicket = (rowId: string) => navigate(`/manager/tickets/${rowId}`);
 
     return (
         <div className="card home-pq">
@@ -64,7 +63,7 @@ export default function PriorityQueue(): JSX.Element {
                                     style={{cursor: "pointer"}}
                                 >
                                     <td>
-                                        <span className="mono home-pq__id">{row.id}</span>
+                                        <span className="mono home-pq__id">{shortCode(row.id)}</span>
                                     </td>
                                     <td>
                                         <div className="home-pq__title-cell">

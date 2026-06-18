@@ -1,181 +1,135 @@
-import {authApi} from "@/api/auth.api.ts";
 // plugins
-import {useState} from "react";
-import {useNavigate, Link} from "react-router";
-import {Eye, EyeOff, Loader2, Lock, LogIn, Mail} from "lucide-react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
+import {Link} from "react-router";
+import {Eye, EyeOff, Loader2, Lock, Mail, ArrowRight, Smartphone, Landmark, Check} from "lucide-react";
+
+// hooks
+import {useLogin} from "./hooks/useLogin.ts";
 
 // ui
-import Logo from "@/shared/ui/logo/Logo.tsx";
-
-// api
+import LoginBranding from "./ui/LoginBranding.tsx";
 
 // styles
 import "./Login.css";
 
-// Страница входа в систему
-// После успешного логина редиректит жителя → /dashboard, менеджера → /manager
-const loginSchema = z.object({
-    email: z.email("Введите корректный email"),
-    password: z.string().min(6, "Пароль должен содержать минимум 6 символов"),
-});
-
-type LoginFormValues = z.infer<typeof loginSchema>;
-
 export default function Login() {
-    // Состояния UI
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
     const {
-        register,
-        handleSubmit,
-        formState: {errors},
-    } = useForm<LoginFormValues>({
-        resolver: zodResolver(loginSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-        },
-    });
-
-    const navigate = useNavigate();
-
-    async function onSubmit(values: LoginFormValues) {
-        setLoading(true);
-        setError("");
-
-        try {
-            const data = await authApi.login(values);
-
-            // Сохраняем авторизацию в localStorage
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("role", data.role);
-            localStorage.setItem("fullName", data.fullName);
-
-            // Редирект по роли
-            if (data.role === "Manager") {
-                navigate("/manager");
-            } else {
-                navigate("/app/home");
-            }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Ошибка входа");
-        } finally {
-            setLoading(false);
-        }
-    }
+        loading, error,
+        showPassword, setShowPassword,
+        rememberMe, setRememberMe,
+        register, handleSubmit, errors,
+        onSubmit,
+    } = useLogin();
 
     return (
         <div className="login">
+            {/* Визуальная панель (брендинг) */}
+            <LoginBranding/>
 
-            {/* Левая часть — брендинг */}
-            <div className="login__brand">
-                <div className="login__brand-content">
-                    <div className="login__brand-logo">
-                        <Logo/>
-                    </div>
-                    <h1 className="login__brand-title">
-                        Центр управления вашим домом
-                    </h1>
-                    <p className="login__brand-subtitle">
-                        Единая платформа для жильцов и управляющих компаний онлайн
-                    </p>
-
-                    {/* Статистика как на лендинге */}
-                    <div className="login__brand-stats">
-                        <div className="login__brand-stat">
-                            <span className="login__brand-stat-value">4 305</span>
-                            <span className="login__brand-stat-label">клиентов</span>
-                        </div>
-                        <div className="login__brand-stat">
-                            <span className="login__brand-stat-value">166 800 ₽</span>
-                            <span className="login__brand-stat-label">экономим клиенту</span>
-                        </div>
-                    </div>
+            {/*Форма*/}
+            <section className="login__form-side">
+                <div className="login__register-hint">
+                    Нет аккаунта?
+                    <Link to="/register" className="login__register-hint-link">
+                        Зарегистрироваться
+                    </Link>
                 </div>
-            </div>
 
-            {/* Правая часть — форма */}
-            <div className="login__form-side">
-                <div className="login__card">
-                    <h2 className="login__title">Добро пожаловать</h2>
-                    <p className="login__subtitle">Войдите в аккаунт жителя ЖК или управляющей компании</p>
+                <div className="login__form-inner">
+                    <div>
+                        <h2 className="login__title">Войти в кабинет</h2>
+                        <p className="login__subtitle">Жители ЖК и сотрудники УК — единый вход.</p>
+                    </div>
 
-                    {/* Ошибка */}
-                    {error && (
-                        <div className="login__error">
-                            {error}
-                        </div>
-                    )}
+                    {error && <div className="login__error">{error}</div>}
 
                     <form className="login__form" onSubmit={handleSubmit(onSubmit)}>
-
                         {/* Email */}
                         <div className="login__field">
-                            <label className="login__label">Email</label>
-                            <div className="login__input-wrap">
-                                <Mail className="login__input-icon" size={18}/>
+                            <label className="login__label">Email или телефон</label>
+                            <div className={`login__input-wrap${errors.email ? " login__input-wrap--error" : ""}`}>
+                                <Mail className="login__input-icon" size={16} strokeWidth={1.6}/>
                                 <input
-                                    className={`login__input ${errors.email ? "login__input--error" : ""}`}
+                                    className="login__input"
                                     type="email"
+                                    placeholder="ivan@example.com"
                                     {...register("email")}
-                                    placeholder="example@gmail.com"
-                                    required
                                 />
                             </div>
-                            {errors.email && <div className="login__field-error">{errors.email.message}</div>}
+                            {errors.email && <span className="login__field-error">{errors.email.message}</span>}
                         </div>
 
-                        {/* Пароль */}
+                        {/* Password */}
                         <div className="login__field">
                             <label className="login__label">Пароль</label>
-                            <div className="login__input-wrap">
-                                <Lock className="login__input-icon" size={18}/>
+                            <div className={`login__input-wrap${errors.password ? " login__input-wrap--error" : ""}`}>
+                                <Lock className="login__input-icon" size={16} strokeWidth={1.6}/>
                                 <input
-                                    className={`login__input ${errors.password ? "login__input--error" : ""}`}
+                                    className="login__input"
                                     type={showPassword ? "text" : "password"}
+                                    placeholder="Введите пароль"
                                     {...register("password")}
-                                    placeholder="******"
-                                    required
                                 />
                                 <button
                                     type="button"
-                                    className="login__toggle-password"
-                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="login__password-toggle"
+                                    onClick={() => setShowPassword(p => !p)}
                                     aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
                                 >
-                                    {showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}
+                                    {showPassword
+                                        ? <Eye size={16} strokeWidth={1.6}/>
+                                        : <EyeOff size={16} strokeWidth={1.6}/>
+                                    }
                                 </button>
                             </div>
-                            <button type="button" className="login__forgot-password">
-                                Забыли пароль?
-                            </button>
-                            {errors.password && <div className="login__field-error">{errors.password.message}</div>}
+                            <div className="login__password-hint">
+                                <label className="login__remember">
+                                    <input
+                                        type="checkbox"
+                                        checked={rememberMe}
+                                        onChange={e => setRememberMe(e.target.checked)}
+                                    />
+                                    <span className={`login__checkbox${rememberMe ? " login__checkbox--on" : ""}`}>
+                                        {rememberMe && <Check size={10} strokeWidth={2.4}/>}
+                                    </span>
+                                    Запомнить меня
+                                </label>
+                                <button type="button" className="login__forgot-password">Забыли пароль?</button>
+                            </div>
+                            {errors.password && <span className="login__field-error">{errors.password.message}</span>}
                         </div>
 
-                        <button className="login__button" type="submit" disabled={loading}>
-                            {loading ? (
-                                <>
-                                    <Loader2 size={18} className="login__spinner"/>
-                                    Входим...
-                                </>
-                            ) : (
-                                <>
-                                    <LogIn size={18}/>
-                                    Войти
-                                </>
-                            )}
+                        <button className="login__button-primary" type="submit" disabled={loading}>
+                            {loading
+                                ? <><Loader2 size={16} className="login__spinner"/> Входим...</>
+                                : <>Войти <ArrowRight size={16} strokeWidth={2}/></>
+                            }
                         </button>
                     </form>
 
-                    <p className="login__link">
-                        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-                    </p>
+                    <div className="login__divider"><span>или</span></div>
+
+                    <div className="login__alternative-buttons">
+                        <button type="button" className="login__button-ghost">
+                            <Smartphone size={16} strokeWidth={1.6}/>
+                            Код по SMS
+
+                            <span className="login__button-ghost--later">
+                                (Скоро)
+                            </span>
+                        </button>
+                        <button type="button" className="login__button-ghost">
+                            <Landmark size={16} strokeWidth={1.6}/>
+                            Госуслуги
+
+                            <span className="login__button-ghost--later">
+                                (Скоро)
+                            </span>
+                        </button>
+                    </div>
+
+                    <p className="login__footer">Соединение защищено</p>
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

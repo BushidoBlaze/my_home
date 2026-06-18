@@ -1,0 +1,250 @@
+/* Resident Sidebar — боковая навигация кабинета жителя, сворачиваемая в узкую полосу */
+
+.rsb {
+    /* position: relative — чтобы круглая кнопка-toggle (right: -12px) висела относительно панели */
+    position: relative;
+    width: 248px;
+    flex-shrink: 0;
+    height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    box-sizing: border-box;
+    transition: width 0.25s ease;
+    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.rsb__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 14px;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Brand */
+.rsb__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 8px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    margin-bottom: 14px;
+}
+
+.rsb__brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #d1fae5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rsb__brand-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.rsb__brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+}
+
+.rsb__brand-sub {
+    font-size: 11.5px;
+    color: #64748b;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Nav — основной список и нижний (профиль/помощь/выход) */
+.rsb__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.rsb__nav:first-of-type {
+    flex: 1;
+}
+
+.rsb__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+}
+
+.rsb__item:hover {
+    background: #efefef;
+}
+
+.rsb__item--muted {
+    color: #64748b;
+}
+
+.rsb__item--active {
+    background: #d1fae5;
+    color: #047857;
+    font-weight: 700;
+}
+
+.rsb__item--active .rsb__item-icon {
+    color: #10b981;
+}
+
+.rsb__item-icon {
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.rsb__item--active .rsb__item-icon,
+.rsb__item--muted.rsb__item--active .rsb__item-icon {
+    color: #047857;
+}
+
+.rsb__item-label {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Badge — NEW (зелёная пилюля) и число (красный кружок) */
+.rsb__item-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 99px;
+    line-height: 1;
+}
+
+.rsb__item-badge--new {
+    background: #10b981;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+}
+
+.rsb__item-badge--num {
+    background: #ef4444;
+    color: #ffffff;
+    min-width: 18px;
+    padding: 2px 6px;
+    text-align: center;
+}
+
+.rsb__item--active .rsb__item-badge--num {
+    background: #10b981;
+}
+
+/* Разделитель между основным меню и нижним блоком */
+.rsb__divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 10px 0;
+}
+
+/* Toggle — круглая кнопка справа на середине высоты, "вылазит" за границу панели */
+.rsb__toggle {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: background 0.12s, box-shadow 0.12s;
+    z-index: 10;
+}
+
+.rsb__toggle:hover {
+    background: #f1f5f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Свёрнутое состояние — узкая полоса 60px с одними иконками и тултипами по hover */
+.rsb--collapsed {
+    width: 60px;
+    overflow: visible;
+}
+
+.rsb--collapsed .rsb__inner {
+    padding: 20px 6px;
+    overflow: visible;
+}
+
+.rsb--collapsed .rsb__brand {
+    padding: 4px;
+    justify-content: center;
+}
+
+.rsb--collapsed .rsb__brand-text {
+    display: none;
+}
+
+.rsb--collapsed .rsb__nav {
+    overflow: visible;
+}
+
+.rsb--collapsed .rsb__item {
+    justify-content: center;
+    padding: 9px;
+    position: relative;
+}
+
+.rsb--collapsed .rsb__item-label,
+.rsb--collapsed .rsb__item-badge--new,
+.rsb--collapsed .rsb__item-badge--num {
+    display: none;
+}
+
+/* Тултип в свёрнутом виде — собственная подсказка через ::after,
+   нативный title работает с большой задержкой и без стилей. */
+.rsb--collapsed .rsb__item[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: #2C624F;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Треугольная "стрелочка" слева от тултипа */
+.rsb--collapsed .rsb__item[data-tooltip]:hover::before {
+    content: "";
+    position: absolute;
+    left: calc(100% + 6px);
+    top: 50%;
+    transform: translateY(-50%);
+    border: 4px solid transparent;
+    border-right-color: #2C624F;
+    pointer-events: none;
+    z-index: 200;
+}

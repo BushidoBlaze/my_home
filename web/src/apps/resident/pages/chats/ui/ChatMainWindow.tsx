@@ -3,7 +3,7 @@ import type {ChangeEvent, KeyboardEvent, RefObject} from "react";
 import {Pin} from "lucide-react";
 
 
-import type {ChatMessageUi, MediaDraft, PresenceMap} from "../model/types.ts";
+import type {ChatMessageUi, PresenceMap} from "../model/types.ts";
 import {ChatHeader} from "./chatWindow/ChatHeader.tsx";
 import {MessageList} from "./chatWindow/MessageList.tsx";
 import {ChatInput} from "./chatWindow/ChatInput.tsx";
@@ -46,18 +46,14 @@ type Props = {
     typingUser: string | null;
     bottomRef: RefObject<HTMLDivElement | null>;
     messagesRef: RefObject<HTMLDivElement | null>;
-    recordingMode: "voice" | "video" | null;
-    stopRecording: () => void;
-    mediaDraft: MediaDraft | null;
-    sendDraftMedia: () => Promise<void>;
-    cancelDraftMedia: () => void;
     fileInputRef: RefObject<HTMLInputElement | null>;
     handleFileInputChange: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
     handleTyping: () => void;
     handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
     handleDrop: (e: React.DragEvent<HTMLElement>) => Promise<void>;
-    startRecording: (mode: "voice" | "video") => Promise<void>;
     composerDisabled: boolean;
+    contextOpen: boolean;
+    onToggleContext: () => void;
 };
 
 export function ChatMainWindow(props: Props) {
@@ -99,18 +95,14 @@ export function ChatMainWindow(props: Props) {
         typingUser,
         bottomRef,
         messagesRef,
-        recordingMode,
-        stopRecording,
-        mediaDraft,
-        sendDraftMedia,
-        cancelDraftMedia,
         fileInputRef,
         handleFileInputChange,
         handleTyping,
         handleKeyDown,
         handleDrop,
-        startRecording,
         composerDisabled,
+        contextOpen,
+        onToggleContext,
     } = props;
 
     return (
@@ -133,13 +125,52 @@ export function ChatMainWindow(props: Props) {
                 pinned={pinned}
                 search={search}
                 setSearch={setSearch}
+                contextOpen={contextOpen}
+                onToggleContext={onToggleContext}
             />
 
-            {showPinned && pinned.length > 0 && (
+            {/* Telegram-стиль: всегда показываем последний пин одной строкой.
+                Клик скроллит к этому сообщению с короткой подсветкой. */}
+            {pinned.length > 0 && (() => {
+                const latest = pinned[pinned.length - 1];
+
+                const jumpToPinned = () => {
+                    const el = document.getElementById(`msg-${latest.id}`);
+                    if (!el) return;
+
+                    el.scrollIntoView({behavior: "smooth", block: "center"});
+
+                    // Кратковременная подсветка, чтобы взгляд легко нашёл сообщение
+                    el.classList.add("chats__msg-highlight");
+                    window.setTimeout(() => {
+                        el.classList.remove("chats__msg-highlight");
+                    }, 1600);
+                };
+
+                return (
+                    <button
+                        type="button"
+                        className="chats__pinned-bar"
+                        onClick={jumpToPinned}
+                        title="Перейти к закреплённому"
+                    >
+                        <Pin size={14} className="chats__pinned-bar-icon"/>
+                        <div className="chats__pinned-bar-info">
+                            <span className="chats__pinned-bar-label">
+                                Закреплённое
+                                {pinned.length > 1 && ` · ${pinned.length}`}
+                            </span>
+                            <span className="chats__pinned-bar-text">
+                                {latest.text || "Вложение"}
+                            </span>
+                        </div>
+                    </button>
+                );
+            })()}
+
+            {/* Расширенный список — открывается по клику на бар или иконку пина в шапке */}
+            {showPinned && pinned.length > 1 && (
                 <div className="chats__pinned">
-                    <div className="chats__pinned-header">
-                        <Pin size={14}/> Закреплённые сообщения
-                    </div>
                     {pinned.map(msg => (
                         <div key={msg.id} className="chats__pinned-item">
                             <span className="chats__pinned-sender">{msg.sender.fullName}:</span>
@@ -183,11 +214,6 @@ export function ChatMainWindow(props: Props) {
                 setReplyTo={setReplyTo}
                 editingMessage={editingMessage}
                 cancelEdit={cancelEdit}
-                recordingMode={recordingMode}
-                stopRecording={stopRecording}
-                mediaDraft={mediaDraft}
-                sendDraftMedia={sendDraftMedia}
-                cancelDraftMedia={cancelDraftMedia}
                 fileInputRef={fileInputRef}
                 handleFileInputChange={handleFileInputChange}
                 text={text}
@@ -196,7 +222,6 @@ export function ChatMainWindow(props: Props) {
                 handleKeyDown={handleKeyDown}
                 handleDrop={handleDrop}
                 setDragActive={setDragActive}
-                startRecording={startRecording}
                 handleSend={handleSend}
                 composerDisabled={composerDisabled}
             />

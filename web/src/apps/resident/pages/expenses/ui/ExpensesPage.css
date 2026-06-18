@@ -1,699 +1,1020 @@
-/* ── Page ─────────────────────────────────────────────────────── */
-.exp-page {
+.expenses-page {
+    min-height: 100%;
+
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    padding-bottom: 40px;
 }
 
-.exp-page__header {
+.expenses-page__content {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    padding: 4px 0 4px;
+    gap: 20px;
+
+    padding: 0 32px 36px;
 }
 
-.exp-page__title {
-    margin: 0;
-    font-family: "SF Pro", sans-serif;
-    font-size: 1.625rem;
-    font-weight: 700;
-    color: #0f3d2e;
-}
+/*Сообщения Успех/Ошибка*/
+.expenses-page__notice {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
 
-.exp-page__subtitle {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #888;
-}
-
-/* ── Notices ──────────────────────────────────────────────────── */
-.exp-notice {
     border-radius: 12px;
     padding: 10px 14px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
 }
 
-.exp-notice--error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
+.expenses-page__notice--success {
+    color: #065f46;
+    background-color: #dcfce7;
+
+    border: 1px solid #a7f3d0;
+}
+
+.expenses-page__notice--error {
     color: #b91c1c;
+    background-color: #fee2e2;
+
+    border: 1px solid #fecaca;
 }
 
-.exp-notice--success {
-    background: #ecfdf3;
-    border: 1px solid #bbf7d0;
-    color: #166534;
-}
+/*Секция оплаты*/
+.expenses-page__hero {
+    background-color: #ffffff;
 
-/* ── Summary stats ────────────────────────────────────────────── */
-.exp-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-}
-
-.exp-stat {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 20px;
-    border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-
-.exp-stat--charged { border-left: 4px solid #2ecc71; }
-.exp-stat--paid    { border-left: 4px solid #3b82f6; }
-.exp-stat--debt    { border-left: 4px solid #ef4444; }
-
-.exp-stat__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-.exp-stat--charged .exp-stat__icon { background: #dcfce7; color: #16a34a; }
-.exp-stat--paid    .exp-stat__icon { background: #dbeafe; color: #2563eb; }
-.exp-stat--debt    .exp-stat__icon { background: #fee2e2; color: #ef4444; }
-
-.exp-stat__label {
-    display: block;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
-    margin-bottom: 4px;
-}
-
-.exp-stat__value {
-    display: block;
-    font-family: "SF Pro", sans-serif;
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: #0f3d2e;
-}
-
-/* ── Tab navigation ───────────────────────────────────────────── */
-.exp-tabs {
-    display: flex;
-    gap: 4px;
-    background: #fff;
+    border: 1px solid #e3e8e3;
     border-radius: 14px;
-    padding: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-    overflow-x: auto;
-    scrollbar-width: none;
+
+    overflow: hidden;
 }
 
-.exp-tabs::-webkit-scrollbar { display: none; }
+.expenses-page__hero-tiles {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
 
-.exp-tab {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.expenses-page__period-tile {
+    padding: 22px;
+    border-right: 1px solid #e1e1e1;
+
+    background: transparent;
+}
+
+.expenses-page__period-tile:last-child {
+    border-right: none;
+}
+
+.expenses-page__period-tile--main {
+    background: linear-gradient(135deg, rgba(191, 250, 223, 0.84), #ffffff);
+}
+
+.expenses-page__period-tile-label {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #6a766f;
+
+    text-transform: uppercase;
+}
+
+.expenses-page__period-tile-value {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-weight: 600;
+    line-height: 1.05;
+
+    margin-top: 6px;
+}
+
+.expenses-page__period-tile-sub {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+
+    color: #6a766f;
+
+    margin-top: 4px;
+}
+
+.expenses-page__period-tile-delta {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.expenses-page__period-tile-cta {
+    margin-top: 14px;
+}
+
+/*Секция кнопок - Счета Аналитика Показания ИПУ Автоплатёж История Квитанции*/
+.expenses-page__hero-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 22px;
+}
+
+/*Кнока секции - Счета Аналитика Показания ИПУ Автоплатёж История Квитанции*/
+.expenses-page__hero-tab {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+
     padding: 8px 14px;
-    border-radius: 10px;
-    border: none;
-    background: none;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #666;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s, color 0.15s;
-    position: relative;
-}
-
-.exp-tab:hover {
-    background: #f0f5f2;
-    color: #1f7a5a;
-}
-
-.exp-tab--active {
-    background: #e8f5ee;
-    color: #1f7a5a;
-    font-weight: 600;
-}
-
-.exp-tab__badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 18px;
-    height: 18px;
     border-radius: 9px;
-    background: #ef4444;
-    color: #fff;
-    font-size: 0.625rem;
-    font-weight: 700;
-    padding: 0 4px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 400;
+
+    color: #000000;
+    background: transparent;
+    border: 1px solid #bfbfbf;
+
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
 }
 
-/* ── Panel (tab content) ──────────────────────────────────────── */
-.exp-panel {
-    background: #fff;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    animation: exp-fade-in 0.18s ease;
+.expenses-page__hero-tab:hover {
+    color: #047857;
+    background-color: #f3f3f3;
 }
 
-@keyframes exp-fade-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
+.expenses-page__hero-tab--active {
+    color: #ffffff;
+    background-color: #059669;
+    font-weight: 500;
 }
 
-.exp-panel__head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #f0f5f2;
+.expenses-page__hero-tab--active:hover {
+    color: #ffffff;
+    background-color: #047857;
 }
 
-.exp-panel__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: #e8f5ee;
-    color: #1f7a5a;
-    flex-shrink: 0;
-}
-
-.exp-panel__title {
-    margin: 0;
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 1.0625rem;
-    color: #0f3d2e;
+.expenses-page__hero-tabs-spacer {
     flex: 1;
 }
 
-.exp-panel__count {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+.expenses-page__hero-tabs-button {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+/*Секция счетов*/
+.expenses-page__card {
+    background: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+.expenses-page__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    border-bottom: 1px solid #edf0ec;
+
+    padding: 18px 22px;
+}
+
+.expenses-page__card-title {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 16px;
     font-weight: 600;
-    color: #1f7a5a;
-    background: #e8f5ee;
-    border-radius: 20px;
-    padding: 3px 10px;
+
+    color: #000000;
 }
 
-.exp-panel__count--warn {
-    color: #c2410c;
-    background: #fff7ed;
+.expenses-page__card-sub {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: #6a766f;
+
+    margin-top: 6px;
 }
 
-.exp-panel__desc {
-    margin: -10px 0 16px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #888;
-    line-height: 1.5;
+.expenses-page__card-header-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
 }
 
-/* ── Bills ────────────────────────────────────────────────────── */
-.exp-bills {
+.expenses-page__section-label {
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    color: #6a766f;
+
+    margin: 10px 4px;
+}
+
+.expenses-page__bills-section {
+    padding: 18px 22px 8px;
+}
+
+.expenses-page__bills-section--paid {
+    padding: 8px 22px 22px;
+}
+
+.expenses-page__bills-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.exp-bills + .exp-bills {
-    margin-top: 20px;
-}
-
-.exp-bills__group-label {
-    margin: 0 0 8px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #888;
-}
-
-.exp-bill {
+/*Карточки оплаты*/
+.expenses-page__bill-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
-    border: 1.5px solid #e8f0ec;
-    border-radius: 14px;
+
+    background-color: #f7f9f7;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
     padding: 14px 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.exp-bill--pending {
-    border-left: 3px solid #f59e0b;
+.expenses-page__bill-row--unpaid {
+    background: #fdf6e7;
+    border-left: 3px solid #b45309;
 }
 
-.exp-bill--pending:hover {
-    border-color: #fcd34d;
-    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.1);
-}
-
-.exp-bill--done {
-    opacity: 0.75;
-    background: #fafcfa;
-}
-
-.exp-bill__left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.expenses-page__bill-row-info {
+    flex: 1;
     min-width: 0;
 }
 
-.exp-bill__category {
-    width: fit-content;
-    font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
+.expenses-page__bill-row-chip {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+
+    margin-bottom: 6px;
+}
+
+.expenses-page__bill-row-title {
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
+    font-size: 14px;
     font-weight: 600;
-    color: #1f7a5a;
-    background: #e8f5ee;
-    border-radius: 20px;
-    padding: 2px 8px;
+
+    color: #000000;
 }
 
-.exp-bill__title {
-    margin: 0;
-    font-family: "SF Pro", sans-serif;
-    font-size: 0.9375rem;
+.expenses-page__bill-row-sub {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    color: #6a766f;
+
+    margin-top: 6px;
+}
+
+.expenses-page__bill-row-amount {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 18px;
     font-weight: 600;
-    color: #111;
-}
+    line-height: 1.05;
 
-.exp-bill__meta {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
-}
-
-.exp-bill__right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    color: #0e1f17;
     flex-shrink: 0;
 }
 
-.exp-bill__amount {
-    font-family: "SF Pro", sans-serif;
-    font-size: 1.0625rem;
-    font-weight: 700;
-    color: #0f3d2e;
-}
+.expenses-page__bill-row-button,
+.expenses-page__bill-row-status {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
 
-.exp-bill__paid-badge {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #16a34a;
-    background: #dcfce7;
-    border-radius: 999px;
-    padding: 4px 10px;
-}
-
-/* ── Chart ────────────────────────────────────────────────────── */
-.exp-chart-wrap {
-    display: flex;
-    gap: 24px;
-    align-items: center;
-}
-
-.exp-chart {
-    width: 240px;
-    height: 240px;
     flex-shrink: 0;
-    border-radius: 16px;
-    border: 1.5px solid #e8f0ec;
-    background: #fcfefd;
-    padding: 10px;
 }
 
-.exp-legend {
+/*Секция - Аналитика*/
+.expenses-page__analytics-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
+}
+
+.expenses-page__chart-body {
+    padding: 22px;
+}
+
+.expenses-page__monthly-chart-svg {
+    display: block;
+}
+
+.expenses-page__chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.expenses-page__chart-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.expenses-page__chart-legend-swatch {
+    width: 10px;
+    height: 10px;
+
+    border-radius: 6px;
+}
+
+.expenses-page__chart-legend-text {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 300;
+
+    color: #8f8f8f;
+}
+
+.expenses-page__period-pill {
+    background-color: #eef2ee;
+}
+
+/* Блок - Структура (Секция Аналитика)*/
+.expenses-page__structure-body {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 22px;
+}
+
+.expenses-page__structure-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     flex: 1;
 }
 
-.exp-legend-item {
+.expenses-page__structure-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px 12px;
-    border-radius: 10px;
-    background: #f7faf8;
-    transition: background 0.15s;
-}
-
-.exp-legend-item:hover {
-    background: #edf5f0;
-}
-
-.exp-legend-label {
-    display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #444;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
 }
 
-.exp-legend-dot {
-    width: 10px;
-    height: 10px;
+.expenses-page__structure-dot {
+    width: 8px;
+    height: 8px;
+
     border-radius: 50%;
+
     flex-shrink: 0;
 }
 
-.exp-legend-value {
-    font-family: "SF Pro", sans-serif;
-    font-size: 0.875rem;
-    color: #0f3d2e;
+.expenses-page__structure-label {
+    flex: 1;
+    color: #3f4b44;
 }
 
-/* ── Form ─────────────────────────────────────────────────────── */
-.exp-form {
+.expenses-page__structure-value {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-weight: 600;
+
+    color: #0e1f17;
+}
+
+.expenses-page__structure-pct {
+    width: 30px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    text-align: right;
+
+    color: #6a766f;
+}
+
+/*Секция Показания ИПУ*/
+.expenses-page__meters-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+
+    padding: 22px;
+}
+
+.expenses-page__meter-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 12px;
+
+    padding: 14px;
+}
+
+.expenses-page__meter-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.expenses-page__meter-card-icon {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.expenses-page__meter-card-titles {
+    flex: 1;
+    min-width: 0;
+}
+
+.expenses-page__meter-card-type {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #000000;
+}
+
+.expenses-page__meter-card-loc {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+
+    color: #6a766f;
+}
+
+.expenses-page__meter-card-done {
+    color: #047857;
+    flex-shrink: 0;
+}
+
+.expenses-page__meter-card-value {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.expenses-page__meter-card-unit {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #6a766f;
+
+    margin-left: 4px;
+}
+
+.expenses-page__meter-card-meta {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+
+    color: #6a766f;
+
+    margin-top: 3px;
+}
+
+.expenses-page__meter-card-button {
+    width: 100%;
+    justify-content: center;
+}
+
+.expenses-page__meter-card-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.expenses-page__meter-card-input {
+    width: 100%;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: #000000;
+    background-color: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 8px;
+
+    padding: 8px 10px;
+
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.expenses-page__meter-card-input:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+}
+
+.expenses-page__meter-card-edit-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.expenses-page__meter-card-edit-actions .expenses-page__meter-card-button {
+    flex: 1;
+}
+
+.expenses-page__meter-card-cancel {
+    width: 32px;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+/* ── Card title icon ── */
+.expenses-page__card-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.expenses-page__card-title-icon {
+    color: #047857;
+}
+
+/* ── "What is included" expandable ── */
+.expenses-page__what-is {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #065f46;
+    background-color: #ecfdf5;
+
+    border: 1px solid #a7f3d0;
+    border-radius: 10px;
+
+    margin: 0 22px 12px;
+    padding: 12px 14px;
+}
+
+.expenses-page__what-is p {
+    margin: 0;
+}
+
+/* ── Account popover ── */
+.expenses-page__account-popover {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 12px;
+
+    padding: 14px 18px;
+}
+
+.expenses-page__account-popover-label {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    color: #6a766f;
+}
+
+.expenses-page__account-popover-number {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #0e1f17;
+
+    margin-top: 6px;
+}
+
+/* ── Form (autopay) ── */
+.expenses-page__form {
     display: flex;
     flex-direction: column;
     gap: 14px;
+
+    padding: 22px;
 }
 
-.exp-form__row {
+.expenses-page__form-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
 
-.exp-form__row--two {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.expenses-page__form-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 6px;
 }
 
-.exp-label {
+.expenses-page__field {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
+}
+
+.expenses-page__field-label {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
     font-weight: 500;
-    color: #374151;
+
+    color: #3f4b44;
 }
 
-.exp-optional {
-    font-weight: 400;
-    color: #9ca3af;
-}
-
-.exp-input {
-    border: 1.5px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 0.875rem;
-    font-family: "Inter", sans-serif;
-    color: #111;
-    outline: none;
-    background: #f9fafb;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+.expenses-page__field-input {
     width: 100%;
-    box-sizing: border-box;
-    appearance: none;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: #000000;
+    background-color: #ffffff;
+
+    border: 1.5px solid #e3e8e3;
+    border-radius: 10px;
+
+    padding: 10px 12px;
+
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.exp-input:focus {
-    border-color: #1f7a5a;
-    box-shadow: 0 0 0 3px rgba(31, 122, 90, 0.10);
-    background: #fff;
+.expenses-page__field-input:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
 }
 
-.exp-input:disabled {
-    opacity: 0.5;
+.expenses-page__field-input:disabled {
+    color: #97a09a;
+    background-color: #f7f9f7;
     cursor: not-allowed;
 }
 
-.exp-textarea {
-    resize: vertical;
-    min-height: 88px;
-}
-
-/* ── Toggle ───────────────────────────────────────────────────── */
-.exp-toggle-row {
+/* ── Toggle switch ── */
+.expenses-page__toggle-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 14px 16px;
-    border: 1.5px solid #e8f0ec;
+
+    background-color: #f7f9f7;
+
+    border: 1px solid #e3e8e3;
     border-radius: 12px;
-    background: #f9fafb;
+
+    padding: 14px 16px;
 }
 
-.exp-toggle-row__label {
-    display: block;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
+.expenses-page__toggle-label {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
     font-weight: 600;
-    color: #0f3d2e;
+
+    color: #000000;
 }
 
-.exp-toggle-row__desc {
-    display: block;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
-    margin-top: 2px;
+.expenses-page__toggle-description {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    color: #6a766f;
+
+    margin-top: 6px;
 }
 
-.exp-toggle {
-    position: relative;
+.expenses-page__toggle {
     width: 44px;
     height: 26px;
-    border-radius: 26px;
+
+    background-color: #cbd5e1;
+
+    position: relative;
+
     border: none;
-    background: #d1d5db;
+    border-radius: 26px;
+
     cursor: pointer;
     transition: background 0.2s;
     flex-shrink: 0;
 }
 
-.exp-toggle--on {
-    background: #2ecc71;
+.expenses-page__toggle--enabled {
+    background-color: #10b981;
 }
 
-.exp-toggle__thumb {
+.expenses-page__toggle-thumb {
     position: absolute;
     top: 3px;
     left: 3px;
     width: 20px;
     height: 20px;
+
+    background-color: #ffffff;
+
     border-radius: 50%;
-    background: #fff;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s;
 }
 
-.exp-toggle--on .exp-toggle__thumb {
+.expenses-page__toggle--enabled .expenses-page__toggle-thumb {
     transform: translateX(18px);
 }
 
-/* ── Buttons ──────────────────────────────────────────────────── */
-.exp-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    border: none;
-    border-radius: 10px;
-    padding: 9px 16px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.15s;
-    width: fit-content;
-}
-
-.exp-btn--primary {
-    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
-    color: #fff;
-}
-
-.exp-btn--primary:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-1px);
-}
-
-.exp-btn--primary:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* ── History ──────────────────────────────────────────────────── */
-.exp-history {
+/* ── History list ── */
+.expenses-page__history-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
+    padding: 8px 22px 22px;
 }
 
-.exp-history-item {
+.expenses-page__history-item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    gap: 12px;
+
+    background-color: #f7f9f7;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
     padding: 12px 14px;
-    border: 1.5px solid #e8f0ec;
-    border-radius: 12px;
-    transition: border-color 0.2s, background 0.2s;
+
+    transition: border-color 0.15s, background 0.15s;
 }
 
-.exp-history-item:hover {
-    border-color: #a8d5b5;
-    background: #fcfeff;
+.expenses-page__history-item:hover {
+    border-color: #a7f3d0;
+    background-color: #ffffff;
 }
 
-.exp-history-item__left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-}
+.expenses-page__history-item-icon {
+    width: 32px;
+    height: 32px;
 
-.exp-history-item__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+
     border-radius: 8px;
-    background: #dcfce7;
-    color: #16a34a;
+
+    color: #047857;
+    background-color: #d1fae5;
+
     flex-shrink: 0;
 }
 
-.exp-history-item__title {
-    margin: 0 0 2px;
-    font-family: "SF Pro", sans-serif;
-    font-size: 0.9rem;
+.expenses-page__history-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.expenses-page__history-item-title {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
     font-weight: 600;
-    color: #111;
+
+    color: #000000;
 }
 
-.exp-history-item__date {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
+.expenses-page__history-item-date {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+
+    color: #6a766f;
+
+    margin-top: 6px;
 }
 
-.exp-history-item__right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.expenses-page__history-item-amount {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #000000;
+
     flex-shrink: 0;
 }
 
-.exp-history-item__amount {
-    font-family: "SF Pro", sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #0f3d2e;
-}
-
-.exp-receipt-btn {
+.expenses-page__receipt-link {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
     font-weight: 600;
-    color: #1f7a5a;
-    background: #e8f5ee;
+
+    color: #047857;
+    background-color: #d1fae5;
+
     border-radius: 8px;
-    padding: 4px 8px;
-    text-decoration: none;
+
+    padding: 5px 9px;
     transition: background 0.15s;
+    flex-shrink: 0;
 }
 
-.exp-receipt-btn:hover {
-    background: #d1ead9;
+.expenses-page__receipt-link:hover {
+    background-color: #a7f3d0;
 }
 
-/* ── Empty & muted ────────────────────────────────────────────── */
-.exp-muted {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #888;
+.expenses-page__receipt-empty {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    color: #97a09a;
+
+    flex-shrink: 0;
 }
 
-.exp-empty {
+/* ── Receipts grid ── */
+.expenses-page__receipts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+
+    padding: 22px;
+}
+
+.expenses-page__receipt-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: inherit;
+    background-color: #f7f9f7;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 12px;
+
+    padding: 14px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.expenses-page__receipt-card:hover {
+    background-color: #ffffff;
+    border-color: #a7f3d0;
+    transform: translateY(-1px);
+}
+
+.expenses-page__receipt-card-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #047857;
+    background-color: #d1fae5;
+
+    border-radius: 9px;
+    flex-shrink: 0;
+}
+
+.expenses-page__receipt-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.expenses-page__receipt-card-title {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #000000;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.expenses-page__receipt-card-date {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    color: #6a766f;
+
+    margin-top: 6px;
+}
+
+.expenses-page__receipt-card-download {
+    color: #6a766f;
+    flex-shrink: 0;
+}
+
+/* ── Empty state ── */
+.expenses-page__empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    padding: 36px 0;
-    color: #d1e8da;
+
+    color: #c8d2c9;
+
+    padding: 60px 22px;
 }
 
-.exp-empty p {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #aaa;
+.expenses-page__empty p {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: #6a766f;
 }
 
-/* ── Responsive ───────────────────────────────────────────────── */
-@media (max-width: 960px) {
-    .exp-stats {
+/* ── Placeholder ── */
+.expenses-page__placeholder {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: #97a09a;
+}
+
+
+/*Медиа-запросы*/
+@media (max-width: 1100px) {
+    .expenses-page__hero-tiles {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .expenses-page__period-tile:nth-child(2) {
+        border-right: none;
+    }
+
+    .expenses-page__analytics-row {
         grid-template-columns: 1fr;
     }
 
-    .exp-form__row {
+    .expenses-page__meters-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+    .expenses-page__content {
+        padding: 0 16px 28px;
+    }
+
+    .expenses-page__hero-tiles {
         grid-template-columns: 1fr;
     }
 
-    .exp-form__row--two {
-        grid-template-columns: 1fr;
+    .expenses-page__period-tile {
+        border-right: none;
+        border-bottom: 1px solid #edf0ec;
     }
 
-    .exp-chart-wrap {
+    .expenses-page__period-tile:last-child {
+        border-bottom: none;
+    }
+
+    .expenses-page__hero-tabs {
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .expenses-page__hero-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .expenses-page__meters-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .expenses-page__bill-row {
+        flex-wrap: wrap;
+    }
+
+    .expenses-page__structure-body {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .exp-chart {
-        width: 100%;
-        height: 220px;
-    }
-}
-
-@media (max-width: 640px) {
-    .exp-panel {
-        padding: 16px;
+    .expenses-page__form-grid {
+        grid-template-columns: 1fr;
     }
 
-    .exp-bill {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .exp-bill__right {
-        width: 100%;
-        justify-content: space-between;
+    .expenses-page__account-popover {
+        flex-wrap: wrap;
     }
 }

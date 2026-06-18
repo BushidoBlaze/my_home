@@ -1,25 +1,56 @@
-import type {JSX} from "react";
-import {TrendingUp, Send, Vote} from "lucide-react";
+import {useCallback, useEffect, useState, type JSX} from "react";
+import {TrendingUp, Send, Vote, Lock, AlertCircle} from "lucide-react";
 import {toast} from "sonner";
 import {Avatar} from "@/shared/ui/Avatar/Avatar.tsx";
 import {Progress} from "@/shared/ui/Progress/Progress.tsx";
-import type {Poll, VoterEntry} from "../model/types.ts";
-import {NON_VOTERS} from "../model/data.ts";
+import {pollsApi, type NonVoterItem} from "@/api/polls.api.ts";
+import type {Poll} from "../model/types.ts";
 
 interface PollDetailProps {
     poll: Poll | null;
-    /** Список не голосовавших; пока берём из общего демо. */
-    nonVoters?: VoterEntry[];
+    /** Вызывается когда статус голосования меняется (например, после закрытия). */
+    onChanged?: () => void;
 }
 
-export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailProps): JSX.Element {
+export default function PollDetail({poll, onChanged}: PollDetailProps): JSX.Element {
+    const [nonVoters, setNonVoters] = useState<NonVoterItem[]>([]);
+    const [nvLoading, setNvLoading] = useState(false);
+    const [nvError, setNvError] = useState<string | null>(null);
+    const [remindingAll, setRemindingAll] = useState(false);
+    const [remindingOne, setRemindingOne] = useState<string | null>(null);
+    const [closing, setClosing] = useState(false);
+
+    const loadNonVoters = useCallback(async (id: string) => {
+        setNvLoading(true);
+        setNvError(null);
+        try {
+            const list = await pollsApi.getNonVoters(id);
+            setNonVoters(list);
+        } catch (e) {
+            setNvError(e instanceof Error ? e.message : "Не удалось загрузить список");
+            setNonVoters([]);
+        } finally {
+            setNvLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!poll) {
+            setNonVoters([]);
+            return;
+        }
+        void loadNonVoters(poll.id);
+    }, [poll, loadNonVoters]);
+
     if (!poll) {
         return (
             <aside className="vote-detail">
                 <div className="vote-detail__empty">
                     <Vote size={32} strokeWidth={1.5}/>
                     <div className="vote-detail__empty-title">Выберите голосование</div>
-                    <div className="vote-detail__empty-sub">Кликните на карточку слева, чтобы посмотреть детали и работать с участниками</div>
+                    <div className="vote-detail__empty-sub">
+                        Кликните на карточку слева, чтобы посмотреть детали и работать с участниками
+                    </div>
                 </div>
             </aside>
         );
@@ -27,7 +58,7 @@ export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailPro
 
     const votedCount = poll.votes.for + poll.votes.against + poll.votes.abstain;
     const totalCount = poll.votes.total;
-    const nonVotersCount = totalCount - votedCount;
+    const nonVotersCount = nonVoters.length || (totalCount - votedCount);
 
     const results = [
         {label: "За", n: poll.votes.for, color: "#10b981"},
@@ -35,21 +66,58 @@ export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailPro
         {label: "Воздержались", n: poll.votes.abstain, color: "#f59e0b"},
     ];
 
-    const statusToneClass = "chip chip--" + poll.statusTone;
     const quorumReached = poll.quorum >= poll.quorumGoal;
     const quorumNote = quorumReached
         ? `Цель кворума — ${poll.quorumGoal}%, набран. Голосование состоится.`
         : `Цель кворума — ${poll.quorumGoal}%, не набран. Осталось ${poll.endsIn}.`;
 
-    const remindAll = () => {
-        toast.success(`Напоминание отправлено ${nonVotersCount} жильцам`, {
-            description: `«${poll.title}»`,
-        });
+    const remindAll = async () => {
+        if (remindingAll) return;
+        setRemindingAll(true);
+        try {
+            const r = await pollsApi.remindAll(poll.id);
+            toast.success(`Напоминание отправлено ${r.notified} жильцам`, {description: `«${poll.title}»`});
+        } catch (e) {
+            toast.error("Не удалось отправить напоминание", {
+                description: e instanceof Error ? e.message : undefined,
+            });
+        } finally {
+            setRemindingAll(false);
+        }
     };
 
-    const remindOne = (name: string) => {
-        toast.success("Напоминание отправлено", {description: name});
+    const remindOne = async (userId: string, name: string) => {
+        if (remindingOne) return;
+        setRemindingOne(userId);
+        try {
+            await pollsApi.remindOne(poll.id, userId);
+            toast.success("Напоминание отправлено", {description: name});
+        } catch (e) {
+            toast.error("Не удалось отправить напоминание", {
+                description: e instanceof Error ? e.message : undefined,
+            });
+        } finally {
+            setRemindingOne(null);
+        }
     };
+
+    const closePoll = async () => {
+        if (!confirm(`Закрыть голосование «${poll.title}»? Жильцы больше не смогут голосовать.`)) return;
+        setClosing(true);
+        try {
+            await pollsApi.closePoll(poll.id);
+            toast.success("Голосование закрыто");
+            onChanged?.();
+        } catch (e) {
+            toast.error("Не удалось закрыть", {
+                description: e instanceof Error ? e.message : undefined,
+            });
+        } finally {
+            setClosing(false);
+        }
+    };
+
+    const statusToneClass = "chip chip--" + poll.statusTone;
 
     return (
         <aside className="vote-detail">
@@ -57,9 +125,9 @@ export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailPro
             <div className="vote-detail__section">
                 <div className="vote-detail__head">
                     <span className={statusToneClass}><span className="chip__dot"/>{poll.status}</span>
-                    {poll.createdAt && poll.author && (
+                    {poll.createdAt && (
                         <span className="vote-detail__head-text">
-                            · создано {poll.createdAt} · {poll.author}
+                            · создано {poll.createdAt}{poll.author ? ` · ${poll.author}` : ""}
                         </span>
                     )}
                 </div>
@@ -128,7 +196,9 @@ export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailPro
                             <div className="vote-detail__result-row">
                                 <span className="vote-detail__result-label">{r.label}</span>
                                 <span className="tnum vote-detail__result-count">
-                                    {r.n} <span style={{color: "#64748b", fontWeight: 400}}>· {votedCount > 0 ? Math.round((r.n / votedCount) * 100) : 0}%</span>
+                                    {r.n} <span style={{color: "#64748b", fontWeight: 400}}>
+                                        · {votedCount > 0 ? Math.round((r.n / votedCount) * 100) : 0}%
+                                    </span>
                                 </span>
                             </div>
                             <Progress value={r.n} max={Math.max(votedCount, 1)} color={r.color} h={5}/>
@@ -138,29 +208,70 @@ export default function PollDetail({poll, nonVoters = NON_VOTERS}: PollDetailPro
             </div>
 
             {/* Non-voters */}
-            <div className="vote-detail__section-last">
+            <div className="vote-detail__section">
                 <div className="vote-detail__voters-head">
                     <div className="t-eyebrow">Не проголосовали · {nonVotersCount}</div>
-                    <button className="btn btn--sm" onClick={remindAll}>Напомнить всем</button>
+                    <button
+                        className="btn btn--sm"
+                        onClick={remindAll}
+                        disabled={remindingAll || nonVoters.length === 0}
+                    >
+                        {remindingAll ? "Отправляем…" : "Напомнить всем"}
+                    </button>
                 </div>
-                <div className="vote-detail__voters">
-                    {nonVoters.map((v, i) => (
-                        <div key={i} className="vote-detail__voter">
-                            <Avatar name={v.name} size={26}/>
-                            <div className="vote-detail__voter-main">
-                                <div className="vote-detail__voter-name">{v.name}</div>
-                                <div className="vote-detail__voter-meta">{v.apt} · {v.last}</div>
+
+                {nvLoading && (
+                    <div className="vote-detail__nv-state">Загружаем список…</div>
+                )}
+                {!nvLoading && nvError && (
+                    <div className="vote-detail__nv-state vote-detail__nv-state--error">
+                        <AlertCircle size={14}/> {nvError}
+                    </div>
+                )}
+                {!nvLoading && !nvError && nonVoters.length === 0 && (
+                    <div className="vote-detail__nv-state">Все жильцы уже проголосовали 🎉</div>
+                )}
+
+                {!nvLoading && nonVoters.length > 0 && (
+                    <div className="vote-detail__voters">
+                        {nonVoters.slice(0, 10).map(v => (
+                            <div key={v.id} className="vote-detail__voter">
+                                <Avatar name={v.fullName} size={26}/>
+                                <div className="vote-detail__voter-main">
+                                    <div className="vote-detail__voter-name">{v.fullName}</div>
+                                    <div className="vote-detail__voter-meta">
+                                        {v.apartmentNumber ? `кв. ${v.apartmentNumber}` : "адрес не указан"}
+                                        {v.lastSeen && v.lastSeen !== "—" ? ` · ${v.lastSeen}` : ""}
+                                    </div>
+                                </div>
+                                <button
+                                    className="btn btn--icon btn--sm btn--ghost"
+                                    onClick={() => remindOne(v.id, v.fullName)}
+                                    disabled={remindingOne === v.id}
+                                    title={`Напомнить ${v.fullName}`}
+                                >
+                                    <Send size={12}/>
+                                </button>
                             </div>
-                            <button
-                                className="btn btn--icon btn--sm btn--ghost"
-                                onClick={() => remindOne(v.name)}
-                                title={`Напомнить ${v.name}`}
-                            >
-                                <Send size={12}/>
-                            </button>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                        {nonVoters.length > 10 && (
+                            <div className="vote-detail__nv-more">
+                                и ещё {nonVoters.length - 10} жильцов
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* Danger zone */}
+            <div className="vote-detail__section-last">
+                <button
+                    className="btn btn--sm vote-detail__close-btn"
+                    onClick={closePoll}
+                    disabled={closing}
+                >
+                    <Lock size={12}/> {closing ? "Закрываем…" : "Закрыть голосование"}
+                </button>
             </div>
         </aside>
     );

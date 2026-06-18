@@ -46,8 +46,11 @@ import ManagerBuildings from "@/apps/manager/pages/buildings/Buildings.tsx";
 import ManagerBilling from "@/apps/manager/pages/billing/Billing.tsx";
 import ManagerMeters from "@/apps/manager/pages/meters/Meters.tsx";
 import ManagerVoting from "@/apps/manager/pages/voting/Voting.tsx";
-import ManagerChat from "@/apps/manager/pages/chat/Chat.tsx";
+// Менеджер использует тот же полноценный чат, что и жилец — это просто
+// другой пользователь с теми же чатами/сообщениями. Дубль страницы убран.
+import ManagerChat from "@/apps/resident/pages/chats/Chats.tsx";
 import ManagerAccount from "@/apps/manager/pages/account/Account.tsx";
+import ManagerNews from "@/apps/manager/pages/news/News.tsx";
 
 // 404
 import NotFound from "@/pages/notFound/NotFound.tsx";
@@ -103,7 +106,7 @@ function AppRoutes() {
                 }/>
 
                 {/* Кабинет жителя */}
-                <Route path="/app" element={
+                <Route path="/resident" element={
                     <PrivateRoute>
                         <ResidentLayout/>
                     </PrivateRoute>
@@ -136,7 +139,13 @@ function AppRoutes() {
                     <Route path="vote" element={<ManagerVoting/>}/>
                     <Route path="chat" element={<ManagerChat/>}/>
                     <Route path="account" element={<ManagerAccount/>}/>
+                    <Route path="news" element={<ManagerNews/>}/>
+                    <Route path="*" element={<Navigate to="home" replace/>}/>
                 </Route>
+
+                {/* Ещё не реализованы — полноэкранный 404 вне layout-а УК */}
+                <Route path="/manager/users" element={<NotFound/>}/>
+                <Route path="/manager/report" element={<NotFound/>}/>
 
                 <Route path="*" element={<NotFound/>}/>
             </Routes>

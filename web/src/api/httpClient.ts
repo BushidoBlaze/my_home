@@ -47,6 +47,21 @@ export async function requestJson<T>(url: string, options: RequestInit = {}): Pr
     return response.json() as Promise<T>;
 }
 
+export async function requestVoid(url: string, options: RequestInit = {}): Promise<void> {
+    const token = getToken();
+    const response = await fetch(`${API_URL}${url}`, {
+        ...options,
+        headers: {
+            ...(token ? {Authorization: `Bearer ${token}`} : {}),
+            ...(options.headers ?? {}),
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(await readErrorMessage(response));
+    }
+}
+
 export async function uploadFileJson<T>(url: string, file: File): Promise<T> {
     const token = getToken();
     const formData = new FormData();

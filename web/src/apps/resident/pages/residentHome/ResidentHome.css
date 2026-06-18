@@ -1,618 +1,825 @@
-.res-home {
+/* Resident Home — главная страница жителя: квартира, платёж, заявки, события и объявления */
+.resident-home,
+.resident-home * {
+    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.resident-home .mono,
+.resident-home .tnum {
+    font-feature-settings: "tnum" 1;
+}
+
+.resident-home {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     width: 100%;
+    color: #0f172a;
+    background: #f5f7f5;
 }
 
-/* Шапка */
-.res-home__header {
+.resident-home__content {
+    padding: 0 32px 36px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.res-home__greeting {
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 1.625rem;
-    color: #0f3d2e;
-    margin-bottom: 4px;
+/*HERO — квартира + платёж*/
+.resident-home__hero {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 20px;
 }
 
-.res-home__date {
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #888;
-    text-transform: capitalize;
-}
-
-.res-home__bell {
+.resident-home__apartment {
     position: relative;
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    border: none;
-    background: #fff;
-    color: #1f7a5a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 28px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0e3d2c 0%, #064e3b 55%, #047857 100%);
+    min-height: 232px;
 }
 
-.res-home__bell-badge {
+.resident-home__apartment-pattern {
     position: absolute;
-    top: -6px;
-    right: -6px;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 9px;
-    background: #ef4444;
-    color: #fff;
-    font-size: 0.6875rem;
-    font-family: "Inter", sans-serif;
+    right: -40px;
+    width: 320px;
+    height: 200px;
+    opacity: 0.13;
+    pointer-events: none;
+}
+
+.resident-home__apartment-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    height: 100%;
+}
+
+.resident-home__apartment-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.resident-home__apartment-label {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.resident-home__apartment-address {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.resident-home__apartment-info {
+    font-size: 16px;
+    opacity: 0.85;
+    margin-top: 4px;
+    letter-spacing: -0.01em;
+}
+
+.resident-home__apartment-stats {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.resident-home__apartment-separator {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.resident-home__apartment-stat-label {
+    font-size: 11px;
+    opacity: 0.65;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.resident-home__apartment-stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 2px;
+    letter-spacing: -0.02em;
+}
+
+.resident-home__apartment-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.resident-home__apartment-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+
+.resident-home__apartment-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.resident-home__apartment-button--primary {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.resident-home__apartment-button--primary:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Карточка ближайшего платежа — сумма, дата, кнопки оплаты, прогресс-Donut */
+.resident-home__payment {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.resident-home__payment-head {
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.resident-home__payment-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+}
+
+.resident-home__payment-body {
+    padding: 20px 22px;
+    flex: 1;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.resident-home__payment-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.resident-home__payment-amount {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #0f172a;
+    line-height: 1.05;
+}
+
+.resident-home__payment-sub {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.resident-home__payment-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.resident-home__payment-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 10px;
+}
+
+/* Smart actions — ряд из 4 действий: показания, заявка, голосование, маркетплейс */
+.resident-home__smart-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.resident-home__smart-action {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: inherit;
+    transition: transform 0.12s, box-shadow 0.12s;
+}
+
+.resident-home__smart-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.resident-home__smart-action-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resident-home__smart-action-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
 }
 
-.res-home__notice-drawer-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.28);
-    z-index: 70;
-    display: flex;
-    justify-content: flex-end;
-    opacity: 1;
-    transition: opacity 0.22s ease;
+.resident-home__smart-action-progress {
+    font-size: 12.5px;
+    font-weight: 600;
 }
 
-.res-home__notice-drawer-overlay--closing {
-    opacity: 0;
+.resident-home__smart-action-text {
+    flex: 1;
 }
 
-.res-home__notice-drawer {
-    width: min(420px, 100%);
-    height: 100%;
-    background: #f8fafc;
-    box-shadow: -14px 0 36px rgba(2, 6, 23, 0.22);
-    padding: 16px;
-    overflow-y: auto;
-    animation: res-home-drawer-in 0.26s ease-out;
-    transform: translateX(0);
-}
-
-.res-home__notice-drawer--closing {
-    animation: res-home-drawer-out 0.22s ease-in forwards;
-}
-
-@keyframes res-home-drawer-in {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-@keyframes res-home-drawer-out {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(100%);
-    }
-}
-
-.res-home__notice-panel-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
-
-.res-home__notice-panel-head h3 {
-    margin: 0;
-    font-family: "SF Pro", sans-serif;
-    font-size: 1.0625rem;
+.resident-home__smart-action-title {
+    font-size: 14.5px;
+    font-weight: 600;
     color: #0f172a;
 }
 
-.res-home__notice-subtitle {
-    margin: 2px 0 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+.resident-home__smart-action-sub {
+    font-size: 12px;
     color: #64748b;
+    margin-top: 3px;
+    line-height: 1.35;
 }
 
-.res-home__notice-panel-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.res-home__link-btn {
-    border: 1px solid #d1fae5;
-    background: #ecfdf5;
-    color: #065f46;
-    font-size: 0.75rem;
-    font-family: "Inter", sans-serif;
-    border-radius: 8px;
-    padding: 6px 10px;
-    cursor: pointer;
-}
-
-.res-home__drawer-close {
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+.resident-home__smart-action-cta {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #4b5563;
-}
-
-.res-home__notice-empty {
-    border: 1px dashed #cbd5e1;
-    border-radius: 14px;
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: #64748b;
-    background: #fff;
-}
-
-.res-home__notice-empty-text {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    line-height: 1.45;
-    text-align: center;
-    color: #475569;
-    max-width: 260px;
-}
-
-.res-home__notice-group {
-    margin-bottom: 14px;
-}
-
-.res-home__notice-group-title {
-    margin: 0 0 8px;
-    padding: 0 4px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
+    gap: 4px;
+    margin-top: auto;
+    padding-top: 4px;
+    font-size: 13px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: #64748b;
 }
 
-/* Статистика */
-.res-home__stats {
+/* Split — две колонки в ряд: заявки + неделя, голосование + новости */
+.resident-home__split {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.res-home__stat {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 20px;
-    border-radius: 16px;
-    background: #fff;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-
-.res-home__stat--active { border-left: 4px solid #f59e0b; }
-.res-home__stat--done   { border-left: 4px solid #2ecc71; }
-.res-home__stat--alert  { border-left: 4px solid #ef4444; }
-
-.res-home__stat--active .res-home__stat-icon { color: #f59e0b; }
-.res-home__stat--done   .res-home__stat-icon { color: #2ecc71; }
-.res-home__stat--alert  .res-home__stat-icon { color: #ef4444; }
-
-.res-home__stat-value {
-    font-family: "SF Pro", sans-serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #0f3d2e;
-    display: block;
-}
-
-.res-home__stat-label {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
-}
-
-/* Секции */
-.res-home__section {
-    background: #fff;
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-
-.res-home__section-header {
+.resident-home__section-head {
+    padding: 18px 22px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.res-home__section-title {
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 1.0625rem;
-    color: #0f3d2e;
-}
-
-.res-home__section-link {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #1f7a5a;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.res-home__quick-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 1px solid #f1f5f9;
     gap: 12px;
 }
 
-.res-home__quick-item {
-    text-decoration: none;
-    color: #0f3d2e;
-    background: #f6fbf8;
-    border: 1px solid #d9ece3;
-    border-radius: 12px;
-    padding: 12px;
+.resident-home__section-sub {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.resident-home__loading {
+    padding: 32px 22px;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.resident-home__inline-error {
+    padding: 16px 22px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
+    justify-content: space-between;
+    gap: 12px;
+    color: #b91c1c;
+    background: #fff5f5;
+}
+
+.resident-home__empty {
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: #64748b;
+}
+
+.resident-home__empty-text {
+    margin-top: 4px;
+    font-size: 13.5px;
+    color: #334155;
     font-weight: 500;
 }
 
-.res-home__notifications {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.resident-home__empty-action {
+    margin-top: 8px;
 }
 
-.res-home__notice {
-    border: 1px solid #e2e8f0;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
+.resident-home__spacer {
+    flex: 1;
+}
+
+/* Карточка заявок жителя — первая активная (с шагами и описанием) + список недавно закрытых */
+.resident-home__ticket {
+    padding: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+}
+
+.resident-home__ticket-active {
+    padding: 20px 22px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.resident-home__ticket-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.resident-home__ticket-icon {
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
-    padding: 11px 12px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-}
-
-.res-home__notice:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
-}
-
-.res-home__notice strong {
-    font-size: 0.8125rem;
-    font-weight: 600;
-}
-
-.res-home__notice-top {
+    background: #e0f2fe;
+    color: #0369a1;
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.res-home__notice-time {
-    font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
-    color: #64748b;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 
-.res-home__notice--info {
-    background: #f8fbff;
-    color: #1e3a8a;
-    border-left: 4px solid #3b82f6;
+.resident-home__ticket-main {
+    flex: 1;
+    min-width: 0;
 }
 
-.res-home__notice--success {
-    background: #f5fffa;
-    color: #166534;
-    border-left: 4px solid #22c55e;
+.resident-home__ticket-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
-.res-home__notice--warning {
-    background: #fffaf5;
-    color: #9a3412;
-    border-left: 4px solid #f97316;
+.resident-home__ticket-id {
+    font-size: 11px;
+    color: #64748b;
 }
 
-.res-home__notice--read {
-    opacity: 0.7;
-    background: #fff;
-    border-left-color: #cbd5e1;
+.resident-home__ticket-title {
+    font-size: 15.5px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: #0f172a;
 }
 
-/* Карточки активных заявок */
-.res-home__cards {
+.resident-home__ticket-progress {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.resident-home__ticket-progress-label {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.resident-home__ticket-progress-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* Stepper — горизонтальные шаги статуса заявки */
+.resident-home__stepper {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.resident-home__step-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.resident-home__step-wrap:last-child {
+    flex: 0 0 auto;
+}
+
+.resident-home__step {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-}
-
-.res-home__card {
-    border: 1.5px solid #e8f0ec;
-    border-radius: 14px;
-    padding: 16px;
-    transition: border-color 0.2s;
-}
-
-.res-home__card:hover {
-    border-color: #2ecc71;
-}
-
-.res-home__card-top {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    gap: 4px;
+    flex-shrink: 0;
+    width: 64px;
 }
 
-.res-home__card-category {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #1f7a5a;
-    background: #e8f5ee;
-    padding: 3px 10px;
-    border-radius: 20px;
+.resident-home__step-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #e1e1e1;
+}
+
+.resident-home__step-dot--done {
+    background: #047857;
+}
+
+.resident-home__step-dot--current {
+    background: #ffffff;
+    border: 2px solid #10b981;
+}
+
+.resident-home__step-dot-inner {
+    width: 6px;
+    height: 6px;
+    background: #047857;
+    border-radius: 50%;
+}
+
+.resident-home__step-label {
+    font-size: 11px;
+    color: #64748b;
+    text-align: center;
     font-weight: 500;
 }
 
-.res-home__card-status {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
+.resident-home__step-label--current {
+    color: #0f172a;
+    font-weight: 700;
 }
 
-.res-home__card-status--new        { background: #fef3c7; color: #d97706; }
-.res-home__card-status--inprogress { background: #dbeafe; color: #2563eb; }
-.res-home__card-status--done       { background: #dcfce7; color: #16a34a; }
-
-.res-home__card-title {
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    color: #111;
-    margin-bottom: 4px;
+.resident-home__step-bar {
+    flex: 1;
+    height: 2px;
+    background: #f1f5f9;
+    margin-bottom: 18px;
 }
 
-.res-home__card-desc {
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #666;
+.resident-home__step-bar--active {
+    background: #047857;
+}
+
+.resident-home__ticket-update {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.resident-home__ticket-update-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.resident-home__ticket-update-meta {
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+.resident-home__ticket-update-msg {
+    font-size: 13px;
+    color: #0f172a;
+    margin-top: 3px;
+    line-height: 1.4;
+}
+
+.resident-home__ticket-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+/* Недавно закрытые заявки — компактный список под активной */
+.resident-home__done {
+    padding: 14px 22px 18px;
+}
+
+.resident-home__done-title {
     margin-bottom: 8px;
 }
 
-.res-home__card-date {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #aaa;
+.resident-home__done-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.res-home__card-progress-wrap {
-    margin: 8px 0;
+.resident-home__done-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #0f172a;
 }
 
-.res-home__card-progress-meta {
+.resident-home__done-item-check {
+    color: #047857;
+}
+
+.resident-home__done-item-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.resident-home__done-item-id {
+    color: #64748b;
+    font-size: 11px;
+}
+
+.resident-home__done-item-date {
+    color: #64748b;
+    font-size: 12px;
+    min-width: 60px;
+    text-align: right;
+}
+
+/* Лента событий дома на неделю — отображаются только дни с событиями */
+.resident-home__week {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.resident-home__week-list {
+    padding: 8px 22px 20px;
+}
+
+.resident-home__week-row {
+    display: flex;
+    gap: 14px;
+    padding: 8px 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.resident-home__week-row:first-child {
+    border-top: none;
+}
+
+.resident-home__week-day {
+    width: 42px;
+    text-align: center;
+    flex-shrink: 0;
+    padding: 6px 0;
+    border-radius: 8px;
+    color: #334155;
+}
+
+.resident-home__week-day--current {
+    background: #047857;
+    color: #ffffff;
+}
+
+.resident-home__week-day-name {
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.resident-home__week-day-num {
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 1px;
+}
+
+.resident-home__week-events {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 6px;
+}
+
+.resident-home__week-event {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.resident-home__week-event-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.resident-home__week-event-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.resident-home__week-event-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.resident-home__week-event-time {
+    font-size: 11.5px;
+    color: #64748b;
+    margin-top: 1px;
+}
+
+/* Карточка активного голосования с прогрессом кворума */
+.resident-home__vote {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.resident-home__vote-body {
+    padding: 20px 22px;
+}
+
+.resident-home__vote-desc {
+    font-size: 13.5px;
+    color: #334155;
+    line-height: 1.55;
+}
+
+.resident-home__vote-quorum {
+    margin-top: 16px;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 12px;
+}
+
+.resident-home__vote-quorum-row {
     display: flex;
     justify-content: space-between;
-    gap: 8px;
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
-.res-home__card-progress {
-    width: 100%;
-    height: 8px;
-    border-radius: 999px;
-    background: #edf2ef;
+.resident-home__vote-quorum-label {
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+.resident-home__vote-quorum-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.resident-home__vote-quorum-fraction {
+    color: #64748b;
+    font-weight: 400;
+}
+
+.resident-home__vote-action {
+    margin-top: 14px;
+}
+
+/* Карточка последних объявлений УК */
+.resident-home__news {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.resident-home__news-list {
+    padding: 0 22px 18px;
+}
+
+.resident-home__news-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid #f1f5f9;
+}
+
+.resident-home__news-item:first-child {
+    border-top: none;
+}
+
+.resident-home__news-pin {
+    color: #ef4444;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.resident-home__news-pin-stub {
+    width: 14px;
+    flex-shrink: 0;
+}
+
+.resident-home__news-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.resident-home__news-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.resident-home__news-time {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.resident-home__news-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+    color: #0f172a;
+    line-height: 1.3;
+}
+
+.resident-home__news-text {
+    font-size: 12.5px;
+    color: #64748b;
+    margin-top: 3px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.res-home__card-progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
-}
-
-.res-home__card-actions {
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.res-home__action-btn {
-    border: 1px solid #d8e7df;
-    background: #fff;
-    color: #0f3d2e;
-    border-radius: 10px;
-    padding: 8px 10px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    font-family: "Inter", sans-serif;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background-color 0.16s ease, color 0.16s ease;
-}
-
-.res-home__action-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-    border-color: #b7d4c6;
-    box-shadow: 0 8px 16px rgba(15, 61, 46, 0.12);
-}
-
-.res-home__action-btn:focus-visible {
-    outline: 2px solid #1f7a5a;
-    outline-offset: 2px;
-}
-
-.res-home__action-btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-}
-
-.res-home__action-btn--danger {
-    border-color: #fecaca;
-    color: #b91c1c;
-}
-
-.res-home__action-btn--danger:hover:not(:disabled) {
-    border-color: #fca5a5;
-    background: #fef2f2;
-    color: #991b1b;
-}
-
-.res-home__action-btn--primary {
-    background: #1f7a5a;
-    border-color: #1f7a5a;
-    color: #fff;
-}
-
-.res-home__action-btn--primary:hover:not(:disabled) {
-    background: #166246;
-    border-color: #166246;
-    box-shadow: 0 8px 16px rgba(31, 122, 90, 0.3);
-}
-
-.res-home__error-block {
-    border: 1px solid #fecaca;
-    background: #fef2f2;
-    color: #b91c1c;
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-}
-
-.res-home__error-inline {
-    margin: 8px 0;
-    color: #b91c1c;
-    font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-}
-
-/* Пустое состояние */
-.res-home__empty-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    padding: 32px 0;
-    color: #ccc;
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-}
-
-.res-home__empty-icon { color: #d1e8da; }
-
-/* Выполненные */
-.res-home__done-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.res-home__done-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: #f7faf8;
-    border-radius: 12px;
-}
-
-.res-home__done-icon { color: #2ecc71; flex-shrink: 0; }
-
-.res-home__done-info {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.res-home__done-title {
-    font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #555;
-}
-
-.res-home__done-date {
-    font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #aaa;
-}
-
-@media (max-width: 960px) {
-    .res-home__stats {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 640px) {
-    .res-home__header {
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .res-home__section {
-        padding: 16px;
-    }
-
-    .res-home__quick-grid {
+/* Responsive — ниже 1180px колонки складываются вертикально, ниже 720px — мобильная раскладка */
+@media (max-width: 1180px) {
+    .resident-home__hero,
+    .resident-home__split {
         grid-template-columns: 1fr;
     }
 
-    .res-home__done-info {
+    .resident-home__smart-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 720px) {
+    .resident-home {
+        padding: 20px 16px 28px;
+    }
+
+    .resident-home__apartment {
+        padding: 22px;
+    }
+
+    .resident-home__payment-body {
         flex-direction: column;
-        gap: 4px;
+        align-items: flex-start;
+    }
+
+    .resident-home__smart-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .resident-home__stepper {
+        overflow-x: auto;
     }
 }

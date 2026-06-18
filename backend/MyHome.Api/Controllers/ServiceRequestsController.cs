@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyHome.Api.Security;
 using MyHome.Domain.Entities;
 using MyHome.Infrastructure.Persistence;
 using System.Security.Claims;
@@ -19,7 +20,7 @@ public class ServiceRequestsController : ControllerBase
     private Guid CurrentUserId =>
         Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    // Житель: мои заявки
+    // Р–РёС‚РµР»СЊ: СЃРїРёСЃРѕРє СЃРІРѕРёС… Р·Р°СЏРІРѕРє
     [HttpGet("my")]
     public async Task<IActionResult> GetMy()
     {
@@ -39,7 +40,7 @@ public class ServiceRequestsController : ControllerBase
         return Ok(requests);
     }
 
-    // Житель: создать заявку
+    // Р–РёС‚РµР»СЊ: СЃРѕР·РґР°С‚СЊ Р·Р°СЏРІРєСѓ
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRequestDto dto)
     {
@@ -57,8 +58,8 @@ public class ServiceRequestsController : ControllerBase
         {
             Id = Guid.NewGuid(),
             UserId = CurrentUserId,
-            Title = "Заявка создана",
-            Message = $"Заявка \"{request.Title}\" принята в работу",
+            Title = "Р—Р°СЏРІРєР° СЃРѕР·РґР°РЅР°",
+            Message = $"Р—Р°СЏРІРєР° \"{request.Title}\" РїСЂРёРЅСЏС‚Р° РІ СЂР°Р±РѕС‚Сѓ",
             Type = "Success",
             RelatedRequestId = request.Id
         });
@@ -66,29 +67,94 @@ public class ServiceRequestsController : ControllerBase
         return Ok(request);
     }
 
-    // УК: все заявки
+    // РњРљ: СЃРїРёСЃРѕРє РІСЃРµС… Р·Р°СЏРІРѕРє (РґР»СЏ РєР°РЅР±Р°РЅР° Рё СЃРїРёСЃРєР°)
     [HttpGet("all")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetAll()
     {
+        // РЎРєРѕСѓРї РїРѕ РЈРљ: РјРµРЅРµРґР¶РµСЂ РІРёРґРёС‚ С‚РѕР»СЊРєРѕ Р·Р°СЏРІРєРё Р¶РёР»СЊС†РѕРІ СЃРІРѕРёС… РґРѕРјРѕРІ.
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+        if (orgId == null) return Ok(Array.Empty<object>());
+
         var requests = await _db.ServiceRequests
             .Include(r => r.Resident)
+            .Include(r => r.Assignee)
+            .Where(r => r.Resident.OrganizationId == orgId)
             .OrderByDescending(r => r.CreatedAt)
             .Select(r => new {
                 r.Id,
                 r.Title,
+                r.Description,
                 r.Category,
                 r.Status,
+                r.Priority,
                 r.CreatedAt,
-                r.Description,
-                Resident = r.Resident.FullName
+                r.UpdatedAt,
+                Resident = new {
+                    r.Resident.Id,
+                    r.Resident.FullName,
+                    r.Resident.Street,
+                    r.Resident.House,
+                    r.Resident.Building,
+                    r.Resident.Entrance,
+                    r.Resident.ApartmentNumber
+                },
+                Assignee = r.Assignee == null ? null : new {
+                    r.Assignee.Id,
+                    r.Assignee.FullName
+                }
             })
             .ToListAsync();
 
         return Ok(requests);
     }
 
-    // УК: сменить статус заявки
+    // РњРљ: РѕРґРЅР° Р·Р°СЏРІРєР° РїРѕ id (РґР»СЏ СЃС‚СЂР°РЅРёС†С‹ РґРµС‚Р°Р»Рё)
+    [HttpGet("{id:guid}")]
+    [Authorize(Roles = "Manager")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
+        var r = await _db.ServiceRequests
+            .Include(x => x.Resident)
+            .Include(x => x.Assignee)
+            .Where(x => x.Id == id && x.Resident.OrganizationId == orgId)
+            .Select(x => new {
+                x.Id,
+                x.Title,
+                x.Description,
+                x.Category,
+                x.Status,
+                x.Priority,
+                x.CreatedAt,
+                x.UpdatedAt,
+                Resident = new {
+                    x.Resident.Id,
+                    x.Resident.FullName,
+                    x.Resident.Phone,
+                    x.Resident.Email,
+                    x.Resident.AvatarUrl,
+                    x.Resident.Street,
+                    x.Resident.House,
+                    x.Resident.Building,
+                    x.Resident.Entrance,
+                    x.Resident.Floor,
+                    x.Resident.ApartmentNumber
+                },
+                Assignee = x.Assignee == null ? null : new {
+                    x.Assignee.Id,
+                    x.Assignee.FullName,
+                    x.Assignee.AvatarUrl,
+                    x.Assignee.Phone
+                }
+            })
+            .FirstOrDefaultAsync();
+
+        return r == null ? NotFound() : Ok(r);
+    }
+
+    // РњРљ: РёР·РјРµРЅРёС‚СЊ СЃС‚Р°С‚СѓСЃ Р·Р°СЏРІРєРё
     [HttpPatch("{id}/status")]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateStatusDto dto)
@@ -103,12 +169,14 @@ public class ServiceRequestsController : ControllerBase
         {
             Id = Guid.NewGuid(),
             UserId = request.ResidentId,
-            Title = "Статус заявки обновлен",
+            Title = "РЎС‚Р°С‚СѓСЃ Р·Р°СЏРІРєРё РёР·РјРµРЅС‘РЅ",
             Message = dto.Status switch
             {
-                "InProgress" => $"Заявка \"{request.Title}\" переведена в работу",
-                "Done" => $"Заявка \"{request.Title}\" выполнена",
-                _ => $"Заявка \"{request.Title}\" получила статус: {dto.Status}"
+                "Assigned"   => $"Р—Р°СЏРІРєР° \"{request.Title}\" РЅР°Р·РЅР°С‡РµРЅР° РёСЃРїРѕР»РЅРёС‚РµР»СЋ",
+                "InProgress" => $"Р—Р°СЏРІРєР° \"{request.Title}\" РїСЂРёРЅСЏС‚Р° РІ СЂР°Р±РѕС‚Сѓ",
+                "Review"     => $"Р—Р°СЏРІРєР° \"{request.Title}\" РїСЂРѕС…РѕРґРёС‚ РїСЂРѕРІРµСЂРєСѓ",
+                "Done"       => $"Р—Р°СЏРІРєР° \"{request.Title}\" РІС‹РїРѕР»РЅРµРЅР°",
+                _            => $"Р—Р°СЏРІРєР° \"{request.Title}\" РѕР±РЅРѕРІР»РµРЅР°: СЃС‚Р°С‚СѓСЃ {dto.Status}"
             },
             Type = dto.Status == "Done" ? "Success" : "Info",
             RelatedRequestId = request.Id
@@ -118,18 +186,18 @@ public class ServiceRequestsController : ControllerBase
         return Ok(new { request.Id, request.Status });
     }
 
-    // PUT /api/requests/{id} — редактировать заявку (только автор)
+    // PUT /api/requests/{id} вЂ” СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р·Р°СЏРІРєРё (С‚РѕР»СЊРєРѕ Р°РІС‚РѕСЂ)
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequestDto dto)
     {
         var request = await _db.ServiceRequests.FindAsync(id);
         if (request == null) return NotFound();
 
-        // Редактировать может только владелец заявки
+        // Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ СЂР°Р·СЂРµС€РµРЅРѕ С‚РѕР»СЊРєРѕ СЃРІРѕРµР№ Р·Р°СЏРІРєРµ
         if (request.ResidentId != CurrentUserId) return Forbid();
 
-        // Нельзя редактировать выполненную заявку
-        if (request.Status == "Done") return BadRequest("Нельзя редактировать выполненную заявку");
+        // РќРµР»СЊР·СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р·Р°РєСЂС‹С‚СѓСЋ Р·Р°СЏРІРєСѓ
+        if (request.Status == "Done") return BadRequest("РќРµР»СЊР·СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Р·Р°РєСЂС‹С‚СѓСЋ Р·Р°СЏРІРєСѓ");
 
         request.Title = dto.Title;
         request.Description = dto.Description;
@@ -140,7 +208,7 @@ public class ServiceRequestsController : ControllerBase
         return Ok(request);
     }
 
-    // DELETE /api/requests/{id} — удалить заявку (только автор)
+    // DELETE /api/requests/{id} вЂ” СѓРґР°Р»РёС‚СЊ Р·Р°СЏРІРєСѓ (С‚РѕР»СЊРєРѕ Р°РІС‚РѕСЂ)
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
@@ -153,8 +221,8 @@ public class ServiceRequestsController : ControllerBase
         {
             Id = Guid.NewGuid(),
             UserId = CurrentUserId,
-            Title = "Заявка отменена",
-            Message = $"Заявка \"{request.Title}\" была отменена",
+            Title = "Р—Р°СЏРІРєР° РѕС‚РјРµРЅРµРЅР°",
+            Message = $"Р—Р°СЏРІРєР° \"{request.Title}\" Р±С‹Р»Р° РѕС‚РјРµРЅРµРЅР°",
             Type = "Warning",
             RelatedRequestId = request.Id
         });

@@ -1,6 +1,7 @@
 import {X} from "lucide-react";
 import type {ServiceOrder} from "../model/types.ts";
 import {ORDER_STATUS} from "../model/data.ts";
+import {resolveAvatarUrl} from "@/apps/resident/_shared/lib/resolveAvatarUrl.ts";
 
 interface Props {
     orders: ServiceOrder[];
@@ -8,8 +9,6 @@ interface Props {
     onCancel: (id: string) => void;
     onClose: () => void;
 }
-
-const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 export function OrderHistory({orders, loading, onCancel, onClose}: Props) {
     return (
@@ -42,7 +41,7 @@ export function OrderHistory({orders, loading, onCancel, onClose}: Props) {
                                     {/* Фото услуги */}
                                     <div className="mp-orders__image">
                                         {order.service.imageUrl ? (
-                                            <img src={`${API_URL}${order.service.imageUrl}`} alt={order.service.title}/>
+                                            <img src={resolveAvatarUrl(order.service.imageUrl)} alt={order.service.title}/>
                                         ) : (
                                             <div className="mp-orders__image-placeholder">📦</div>
                                         )}

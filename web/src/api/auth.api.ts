@@ -24,4 +24,17 @@ export const authApi = {
             method: "POST",
             body: JSON.stringify(data),
         }),
+
+    // Регистрация УК: создаёт организацию и её менеджера.
+    registerManager: (data: {
+        companyName: string;
+        email: string;
+        password: string;
+        contactName?: string;
+        phone?: string;
+    }) =>
+        requestJson<{ id: string; email: string; fullName: string; role: string }>("/auth/register-manager", {
+            method: "POST",
+            body: JSON.stringify(data),
+        }),
 };

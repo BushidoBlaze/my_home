@@ -1,25 +1,48 @@
-import {chatsApi, type Chat, type ChatDetails, type ChatMemberItem, type ChatMessageItem, type ChatUserLookupItem} from "@/api/chats.api.ts";
+//plugins
 import {useEffect, useRef, useState} from "react";
 import {jwtDecode} from "jwt-decode";
 
+// api
+import {
+    chatsApi,
+    type Chat,
+    type ChatDetails,
+    type ChatMemberItem,
+    type ChatMessageItem,
+    type ChatUserLookupItem
+} from "@/api/chats.api.ts";
+
+//types
 import type {ChatMessageUi, CreateChatMode, PresenceMap} from "./model/types.ts";
+
+//data
+import {API_ORIGIN} from "./data/constants.ts";
+
+//hooks
 import {useChatDerived} from "./hooks/useChatDerived.ts";
 import {useGroupActions} from "./hooks/useGroupActions.ts";
 import {useCreateChatActions} from "./hooks/useCreateChatActions.ts";
 import {useChatConnection} from "./hooks/useChatConnection.ts";
 import {useChatSettings} from "./hooks/useChatSettings.ts";
-import {useMediaRecord} from "./hooks/useMediaRecord.ts";
 import {useMessageActions} from "./hooks/useMessageActions.ts";
-import {API_ORIGIN} from "./data/constants.ts";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
+
+//ui
 import {ChatsSidebar} from "./ui/ChatsSidebar.tsx";
 import {ChatsEmpty} from "./ui/ChatsEmpty.tsx";
 import {ChatMainWindow} from "./ui/ChatMainWindow.tsx";
 import {ChatSettingsModal} from "./ui/ChatSettingsModal.tsx";
 import {CreateChatModal} from "./ui/CreateChatModal.tsx";
+import {ChatContextPanel} from "./ui/ChatContextPanel.tsx";
 
+// styles
 import "./Chats.css";
 
-const CHAT_READ_STATE_KEY = "chatLastReadById";
+// Ключ хранения "когда я в последний раз читал чат" в localStorage.
+// Привязываем к userId, иначе при смене аккаунта в том же браузере
+// read-state предыдущего пользователя сделает новые сообщения «прочитанными»
+// и бейдж непрочитанных не появится.
+const buildReadStateKey = (userId: string) => `chatLastReadById:${userId || "anonymous"}`;
 
 function normalizeMessage(msg: ChatMessageItem): ChatMessageUi {
     return {
@@ -36,6 +59,8 @@ type TokenPayload = {
 };
 
 export default function Chats() {
+    useDocumentTitle('Чаты');
+
     const token = localStorage.getItem("token");
     const localRole = (localStorage.getItem("role") ?? "").toLowerCase();
     let tokenPayload: TokenPayload | null = null;
@@ -55,9 +80,11 @@ export default function Chats() {
         : "";
 
     const [chats, setChats] = useState<Chat[]>([]);
+    // Read-state живёт под ключом, привязанным к userId — изоляция между аккаунтами
+    const readStateKey = buildReadStateKey(currentUserId);
     const [lastReadByChat, setLastReadByChat] = useState<Record<string, string>>(() => {
         try {
-            const raw = localStorage.getItem(CHAT_READ_STATE_KEY);
+            const raw = localStorage.getItem(readStateKey);
             if (!raw) return {};
             return JSON.parse(raw) as Record<string, string>;
         } catch {
@@ -108,6 +135,11 @@ export default function Chats() {
     const [dragActive, setDragActive] = useState(false);
 
     const [presence, setPresence] = useState<PresenceMap>({});
+
+    // Управление видимостью боковых панелей. Хранится локально:
+    // при перезагрузке оба сворачивания сбрасываются — это умышленно
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [contextOpen, setContextOpen] = useState(true);
 
     const [createChatOpen, setCreateChatOpen] = useState(false);
     const [createChatMode, setCreateChatMode] = useState<CreateChatMode>("group");
@@ -210,8 +242,9 @@ export default function Chats() {
     }, [messages]);
 
     useEffect(() => {
-        localStorage.setItem(CHAT_READ_STATE_KEY, JSON.stringify(lastReadByChat));
-    }, [lastReadByChat]);
+        // Сохраняем под user-scoped ключом, чтобы read-state не утекал между аккаунтами
+        localStorage.setItem(readStateKey, JSON.stringify(lastReadByChat));
+    }, [readStateKey, lastReadByChat]);
 
     useEffect(() => {
         setUnreadByChat(() => {
@@ -292,9 +325,9 @@ export default function Chats() {
         setReplyTo(null);
         setEditingMessage(null);
         setShowSearch(false);
-            setSearch("");
-            setSearchedMessages([]);
-            setSearchLoading(false);
+        setSearch("");
+        setSearchedMessages([]);
+        setSearchLoading(false);
         setShowPinned(false);
         setEmojiPicker(null);
         setPage(1);
@@ -413,18 +446,6 @@ export default function Chats() {
     });
 
     const {
-        recordingMode,
-        mediaDraft,
-        startRecording,
-        stopRecording,
-        sendDraftMedia,
-        cancelDraftMedia,
-    } = useMediaRecord({
-        activeChatId: activeChat?.id,
-        onSendFile: handleFileUpload,
-    });
-
-    const {
         saveGroupSettings,
         generateInvite,
         addMember,
@@ -480,16 +501,24 @@ export default function Chats() {
     const canPinMessages = isPlatformAdmin || currentRole === "Admin";
 
     return (
-        <div className="chats">
+        <div
+            className={"chats"
+                + (sidebarCollapsed ? " chats--sidebar-collapsed" : "")
+                + (!contextOpen ? " chats--no-context" : "")
+            }
+        >
             <ChatsSidebar
                 visibleChats={visibleChats}
                 activeChat={activeChat}
                 setActiveChat={setActiveChat}
                 unreadByChat={unreadByChat}
                 openCreateChat={openCreateChat}
+                collapsed={sidebarCollapsed}
+                onToggleCollapse={() => setSidebarCollapsed(c => !c)}
             />
 
             {activeChat ? (
+                <>
                 <ChatMainWindow
                     activeChat={activeChat}
                     dragActive={dragActive}
@@ -528,19 +557,26 @@ export default function Chats() {
                     typingUser={typingUser}
                     bottomRef={bottomRef}
                     messagesRef={messagesRef}
-                    recordingMode={recordingMode}
-                    stopRecording={stopRecording}
-                    mediaDraft={mediaDraft}
-                    sendDraftMedia={sendDraftMedia}
-                    cancelDraftMedia={cancelDraftMedia}
                     fileInputRef={fileInputRef}
                     handleFileInputChange={handleFileInputChange}
                     handleTyping={handleTyping}
                     handleKeyDown={handleKeyDown}
                     handleDrop={handleDrop}
-                    startRecording={startRecording}
                     composerDisabled={composerDisabled}
+                    contextOpen={contextOpen}
+                    onToggleContext={() => setContextOpen(c => !c)}
                 />
+                <ChatContextPanel
+                    activeChat={activeChat}
+                    chatDetails={chatDetails}
+                    members={members}
+                    pinned={pinned}
+                    currentUserId={currentUserId}
+                    presence={presence}
+                    openSettings={openSettings}
+                    setShowPinned={setShowPinned}
+                />
+                </>
             ) : (
                 <ChatsEmpty/>
             )}

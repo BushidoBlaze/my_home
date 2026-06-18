@@ -36,9 +36,13 @@
     background: #f8fafc;
 }
 
-.filter-bar__tab--active {
-    background: #f1f5f9;
-    color: #0f172a;
+.filter-bar__tab--active,
+.filter-bar__tab--active:hover {
+    background: #047857;
+    border-color: #047857;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(4, 120, 87, 0.25);
 }
 
 .filter-bar__divider {
@@ -47,21 +51,10 @@
     background: #f1f5f9;
 }
 
-.filter-bar__filters {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex: 1;
-}
-
-.filter-bar__more {
-    color: #64748b;
-    font-size: 12px;
-}
-
 .filter-bar__views {
     display: flex;
     gap: 4px;
+    margin-left: auto;
 }
 
 /* ---------- Board ---------- */
@@ -212,24 +205,13 @@
     scrollbar-color: #cbd5e1 transparent;
 }
 
-.kanban-col__add {
-    height: 32px;
-    border: 1px dashed #cbd5e1;
-    background: transparent;
+.kanban-col__empty {
+    padding: 16px 0;
+    border: 1px dashed #e2e8f0;
     border-radius: 8px;
-    color: #64748b;
-    cursor: pointer;
-    font-family: inherit;
+    color: #94a3b8;
     font-size: 12px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.kanban-col__add:hover {
-    background: #f1f5f9;
+    text-align: center;
 }
 
 /* ---------- Card ---------- */

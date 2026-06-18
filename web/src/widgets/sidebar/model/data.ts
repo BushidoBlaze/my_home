@@ -16,20 +16,25 @@ import {
     Users,
     CreditCard,
     FileText,
+    Megaphone,
 } from "lucide-react";
 import type {SidebarItem, ManagerMenuGroup} from "./types.ts";
 
 export const RESIDENT_MENU: SidebarItem[] = [
-    {icon: Home, path: "/app/home", label: "Главная"},
-    {icon: ClipboardList, path: "/app/requests", label: "Заявки"},
-    {icon: Wallet, path: "/app/expenses", label: "Расходы"},
-    {icon: MessageCircle, path: "/app/chats", label: "Чаты"},
-    {icon: Vote, path: "/app/voting", label: "Голосования"},
-    {icon: ShoppingCart, path: "/app/marketplace", label: "Маркетплейс"},
-    {icon: Newspaper, path: "/app/news", label: "Новости"},
-    {icon: Settings, path: "/app/settings", label: "Настройки"},
-    {icon: User, path: "/app/account", label: "Аккаунт"},
-    {icon: HelpCircle, path: "/app/help", label: "Помощь"},
+    {icon: Home, path: "/resident/home", label: "Главная"},
+    {icon: Wallet, path: "/resident/expenses", label: "Расходы"},
+    {icon: ClipboardList, path: "/resident/requests", label: "Заявки"},
+    {icon: MessageCircle, path: "/resident/chats", label: "Чаты"},
+    {icon: Vote, path: "/resident/voting", label: "Голосования"},
+    {icon: ShoppingCart, path: "/resident/marketplace", label: "Маркетплейс"},
+    {icon: Newspaper, path: "/resident/news", label: "Новости УК", badge: "new"},
+];
+
+/** Нижний блок резидент-сайдбара: профиль, помощь, выход. */
+export const RESIDENT_MENU_BOTTOM: SidebarItem[] = [
+    {icon: User, path: "/resident/account", label: "Профиль"},
+    {icon: Settings, path: "/resident/settings", label: "Настройки"},
+    {icon: HelpCircle, path: "/resident/help", label: "Помощь"},
     {icon: LogOut, path: "/login", label: "Выход"},
 ];
 
@@ -38,8 +43,8 @@ export const MANAGER_MENU_GROUPS: ManagerMenuGroup[] = [
         title: "Операции",
         items: [
             {id: "home", label: "Дашборд", icon: Home, path: "/manager/home"},
-            {id: "tickets", label: "Заявки", icon: Inbox, path: "/manager/tickets", badge: 14},
-            {id: "chat", label: "Чат и обращения", icon: MessageCircle, path: "/manager/chat", badge: 3},
+            {id: "tickets", label: "Заявки", icon: Inbox, path: "/manager/tickets"},
+            {id: "chat", label: "Чат и обращения", icon: MessageCircle, path: "/manager/chat"},
             {id: "meter", label: "Показания", icon: Gauge, path: "/manager/meter"},
         ],
     },
@@ -54,7 +59,8 @@ export const MANAGER_MENU_GROUPS: ManagerMenuGroup[] = [
     {
         title: "Сообщество",
         items: [
-            {id: "vote", label: "Голосования", icon: Vote, path: "/manager/vote", badge: "new"},
+            {id: "vote", label: "Голосования", icon: Vote, path: "/manager/vote"},
+            {id: "news", label: "Новости", icon: Megaphone, path: "/manager/news"},
             {id: "report", label: "Отчёты", icon: FileText, path: "/manager/report"},
         ],
     },

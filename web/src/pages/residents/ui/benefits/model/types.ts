@@ -1,6 +1,4 @@
-/* ============================================================
-   types.ts — типы данных для BenefitsSection (страница /residents)
-   ============================================================ */
+// types.ts — типы данных для BenefitsSection (страница /residents)
 
 import type { LucideIcon } from "lucide-react";
 

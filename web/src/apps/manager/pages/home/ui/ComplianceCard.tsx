@@ -47,7 +47,10 @@ export default function ComplianceCard(): JSX.Element {
             {!loading && (error || !items) && (
                 <DataError compact title="Сроки недоступны" onRetry={retry}/>
             )}
-            {!loading && !error && items && (
+            {!loading && !error && items && items.length === 0 && (
+                <div className="home-compliance__empty">Ближайших сроков нет</div>
+            )}
+            {!loading && !error && items && items.length > 0 && (
                 <ul className="home-compliance__list">
                     {items.map(item => {
                         const Icon = CATEGORY_ICON[item.category];

@@ -1,7 +1,4 @@
-/* ============================================================
-   NewsletterSection — подписка на рассылку страницы /blog
-   Тёмный фон, email-форма, локальный useState для success-состояния
-   ============================================================ */
+// NewsletterSection — подписка на рассылку страницы /blog — Тёмный фон, email-форма, локальный useState для success-состояния
 
 import { useState } from "react";
 import "./NewsletterSection.css";

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-/* ================================================================
-   SettingRow — строка с лейблом, описанием и правым слотом
-================================================================ */
+// SettingRow — строка с лейблом, описанием и правым слотом
 interface SettingRowProps {
     icon?: React.ReactNode;
     label: string;
@@ -41,9 +39,7 @@ export function SettingRow({
     );
 }
 
-/* ================================================================
-   Toggle
-================================================================ */
+// Toggle
 interface ToggleProps {
     checked: boolean;
     onChange: (v: boolean) => void;
@@ -64,9 +60,7 @@ export function Toggle({ checked, onChange, disabled }: ToggleProps) {
     );
 }
 
-/* ================================================================
-   SectionCard — обёртка секции
-================================================================ */
+// SectionCard — обёртка секции
 interface SectionCardProps {
     title: string;
     icon: React.ReactNode;
@@ -100,9 +94,7 @@ export function SectionCard({
     );
 }
 
-/* ================================================================
-   Select pill — для выбора одного из нескольких вариантов
-================================================================ */
+// Select pill — для выбора одного из нескольких вариантов
 interface SelectPillProps<T extends string> {
     value: T;
     options: { value: T; label: string }[];
@@ -130,9 +122,7 @@ export function SelectPill<T extends string>({
     );
 }
 
-/* ================================================================
-   ConfirmModal
-================================================================ */
+// ConfirmModal
 interface ConfirmModalProps {
     title: string;
     description: string;

@@ -1,16 +1,17 @@
 import type {JSX} from "react";
-import {Filter, Columns3, List, Calendar} from "lucide-react";
+import {Columns3, List, Calendar} from "lucide-react";
 import {FILTER_TABS} from "../model/data.ts";
 
 export type TicketsView = "kanban" | "list" | "calendar";
 
 interface FilterBarProps {
     activeTab?: string;
+    onTabChange: (tab: string) => void;
     view: TicketsView;
     onViewChange: (view: TicketsView) => void;
 }
 
-export default function FilterBar({activeTab = "all", view, onViewChange}: FilterBarProps): JSX.Element {
+export default function FilterBar({activeTab = "all", onTabChange, view, onViewChange}: FilterBarProps): JSX.Element {
     const viewBtnClass = (target: TicketsView) =>
         "btn btn--sm" + (view === target ? "" : " btn--ghost");
     const viewBtnStyle = (target: TicketsView) =>
@@ -23,18 +24,11 @@ export default function FilterBar({activeTab = "all", view, onViewChange}: Filte
                     <button
                         key={tab.id}
                         className={"filter-bar__tab" + (tab.id === activeTab ? " filter-bar__tab--active" : "")}
+                        onClick={() => onTabChange(tab.id)}
                     >
                         {tab.label}
                     </button>
                 ))}
-            </div>
-            <div className="filter-bar__divider"/>
-            <div className="filter-bar__filters">
-                <button className="btn btn--sm"><Filter size={12}/> Дом</button>
-                <button className="btn btn--sm">Тип</button>
-                <button className="btn btn--sm">Исполнитель</button>
-                <button className="btn btn--sm">Период · май</button>
-                <span className="filter-bar__more">+ ещё</span>
             </div>
             <div className="filter-bar__views">
                 <button

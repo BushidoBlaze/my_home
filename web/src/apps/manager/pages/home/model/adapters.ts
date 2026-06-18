@@ -1,8 +1,5 @@
-/* =============================================================================
-   Адаптеры API → локальные типы компонентов.
-   API не отдаёт иконки (это компоненты React, не сериализуются), поэтому
-   клиент мапит ID/категорию на иконку из lucide-react.
-   ============================================================================= */
+// Адаптеры из ответов API в типы компонентов.
+// Иконки сервер не отдаёт (это React-компоненты), поэтому маппим их тут по id/категории.
 
 import {
     Inbox, UserX, AlertTriangle, RussianRuble, Gauge,
@@ -28,7 +25,7 @@ import type {
     ActiveVote,
 } from "./types.ts";
 
-// ---------- KPI -------------------------------------------------------------
+// KPI
 
 const KPI_ICON: Record<string, LucideIcon> = {
     tickets: Inbox,
@@ -51,7 +48,7 @@ export function adaptKpi(api: KpiResponse): HomeStat[] {
     }));
 }
 
-// ---------- Priority tickets -----------------------------------------------
+// приоритетные заявки
 
 const CATEGORY_ICON: Record<ApiTicket["category"], {icon: LucideIcon; bg: string; fg: string}> = {
     plumbing: {icon: Droplet, bg: "#e0f2fe", fg: "#0ea5e9"},
@@ -85,7 +82,7 @@ export function adaptPriorityTickets(api: PriorityTicketsResponse): PriorityTick
     });
 }
 
-// ---------- Collections -----------------------------------------------------
+// собираемость
 
 export function adaptCollections(api: CollectionsResponse): CollectionsData {
     return {
@@ -98,7 +95,7 @@ export function adaptCollections(api: CollectionsResponse): CollectionsData {
     };
 }
 
-// ---------- Compliance ------------------------------------------------------
+// регуляторные сроки
 
 export function adaptCompliance(api: ComplianceResponse): ComplianceDeadline[] {
     return api.items.map(c => ({
@@ -112,7 +109,7 @@ export function adaptCompliance(api: ComplianceResponse): ComplianceDeadline[] {
     }));
 }
 
-// ---------- Activity --------------------------------------------------------
+// лента событий
 
 const ACTIVITY_ICON: Record<string, LucideIcon> = {
     check: CheckCircle2,
@@ -139,7 +136,7 @@ export function adaptActivity(api: ActivityResponse): ActivityEvent[] {
     }));
 }
 
-// ---------- Active votes ----------------------------------------------------
+// активные голосования
 
 export function adaptActiveVotes(api: ActiveVotesResponse): ActiveVote[] {
     return api.items.map(v => ({

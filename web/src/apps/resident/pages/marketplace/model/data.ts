@@ -7,11 +7,14 @@ import {
     Flower,
     BookOpen,
     Sparkles,
+    Shapes,
 } from "lucide-react";
 
 
 // Категории маркетплейса
-// Добавляй новые здесь — они автоматически появятся в фильтре
+// Добавляй новые здесь — они автоматически появятся в фильтре и в форме создания.
+// «Прочее» всегда держим последним — это запасная категория для услуг,
+// которым не подошла ни одна из специализированных.
 export const CATEGORIES: MarketplaceCategory[] = [
     {id: "Cleaning", label: "Клининг", icon: Bubbles},
     {id: "Repair", label: "Мелкий ремонт", icon: Wrench},
@@ -19,8 +22,12 @@ export const CATEGORIES: MarketplaceCategory[] = [
     {id: "Appliances", label: "Бытовые услуги", icon: HomeIcon},
     {id: "Home", label: "Дом и участок", icon: Flower},
     {id: "Beauty", label: "Красота", icon: Sparkles},
-    {id: "Education", label: "Обучение и дети", icon: BookOpen}
+    {id: "Education", label: "Обучение и дети", icon: BookOpen},
+    {id: "Other", label: "Прочее", icon: Shapes},
 ];
+
+// Запасная категория — на неё опирается форма создания услуги по умолчанию.
+export const FALLBACK_CATEGORY = "Other";
 
 // Варианты сортировки
 export const SORT_OPTIONS = [

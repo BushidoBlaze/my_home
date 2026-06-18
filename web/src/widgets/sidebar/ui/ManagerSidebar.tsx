@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import {Avatar} from "@/shared/ui/Avatar/Avatar.tsx";
 import {MANAGER_MENU_GROUPS, MANAGER_BRAND, MANAGER_USER} from "../model/data.ts";
+import {useManagerBadges} from "../hooks/useManagerBadges.ts";
+import {usersApi, type User} from "@/api/users.api.ts";
 import "./ManagerSidebar.css";
 
 export default function ManagerSidebar() {
@@ -14,6 +16,16 @@ export default function ManagerSidebar() {
     const [profileOpen, setProfileOpen] = useState(false);
     const navigate = useNavigate();
     const footerRef = useRef<HTMLDivElement | null>(null);
+    const badges = useManagerBadges();
+
+    // Реальные данные текущего менеджера и его УК (с фолбэком на статику).
+    const [me, setMe] = useState<User | null>(null);
+    useEffect(() => {
+        usersApi.getMe().then(setMe).catch(() => {});
+    }, []);
+
+    const orgName = me?.organizationName || MANAGER_BRAND.subtitle;
+    const managerName = me?.fullName || MANAGER_USER.name;
 
     // Закрываем dropdown при клике вне его.
     useEffect(() => {
@@ -55,7 +67,7 @@ export default function ManagerSidebar() {
                     </div>
                     <div className="msb__brand-text">
                         <div className="msb__brand-title">{MANAGER_BRAND.name}</div>
-                        <div className="msb__brand-sub">{MANAGER_BRAND.subtitle}</div>
+                        <div className="msb__brand-sub">{orgName}</div>
                     </div>
                     <ChevronDown size={14} style={{color: "#64748b"}}/>
                 </button>
@@ -80,6 +92,7 @@ export default function ManagerSidebar() {
                                 <div className="t-eyebrow msb__group-title">{group.title}</div>
                                 {group.items.map(item => {
                                     const ItemIcon = item.icon;
+                                    const badge = badges[item.path] ?? item.badge;
                                     return (
                                         <NavLink
                                             key={item.id}
@@ -96,10 +109,10 @@ export default function ManagerSidebar() {
                                                         style={{color: isActive ? "#10b981" : "#64748b"}}
                                                     />
                                                     <span className="msb__item-label">{item.label}</span>
-                                                    {item.badge === "new" ? (
+                                                    {badge === "new" ? (
                                                         <span className="chip chip--emerald msb__item-badge-new">NEW</span>
-                                                    ) : typeof item.badge === "number" ? (
-                                                        <span className="msb__item-badge">{item.badge}</span>
+                                                    ) : typeof badge === "number" ? (
+                                                        <span className="msb__item-badge">{badge}</span>
                                                     ) : null}
                                                 </>
                                             )}
@@ -117,9 +130,9 @@ export default function ManagerSidebar() {
                         className="msb__user msb__user--btn"
                         onClick={() => setProfileOpen(v => !v)}
                     >
-                        <Avatar name={MANAGER_USER.name} size={32}/>
+                        <Avatar name={managerName} size={32}/>
                         <div className="msb__user-text">
-                            <div className="msb__user-name">{MANAGER_USER.name}</div>
+                            <div className="msb__user-name">{managerName}</div>
                             <div className="msb__user-role">{MANAGER_USER.role}</div>
                         </div>
                         <SettingsIcon size={16} style={{color: "#64748b"}}/>

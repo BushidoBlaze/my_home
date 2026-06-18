@@ -1,18 +1,58 @@
-import {SquareArrowOutUpRight} from "lucide-react";
+import {Zap, CreditCard, ClipboardList, ListChecks, BarChart3, Wallet, Building2} from "lucide-react";
 import type {RegisterFeature} from "./types.ts";
 
-// Преимущества для жителя (ЖК)
+// Преимущества для жителя (ЖК) — показываются на брендовой панели
 export const RESIDENT_FEATURES: RegisterFeature[] = [
-    {id: 1, text: "Подача заявок онлайн", icon: SquareArrowOutUpRight},
-    {id: 2, text: "Прозрачный учёт расходов", icon: SquareArrowOutUpRight},
-    {id: 3, text: "Контроль статусов в реальном времени", icon: SquareArrowOutUpRight},
-    {id: 4, text: "Голосования и опросы", icon: SquareArrowOutUpRight},
+    {
+        id: 1,
+        icon: Zap,
+        title: "Передача показаний",
+        subtitle: "Одним движением — фото счётчика или ручной ввод",
+    },
+    {
+        id: 2,
+        icon: CreditCard,
+        title: "Оплата без комиссии",
+        subtitle: "Картой, СБП, через Госуслуги — все начисления в одном чеке",
+    },
+    {
+        id: 3,
+        icon: ClipboardList,
+        title: "Заявки 24 / 7",
+        subtitle: "Сантехник, электрик, уборка — статус в реальном времени",
+    },
+    {
+        id: 4,
+        icon: ListChecks,
+        title: "Голосования и опросы",
+        subtitle: "Юридически значимые решения собрания собственников",
+    },
 ];
 
-// Преимущества для управляющей компании (УК)
+// Преимущества для управляющей компании (УК) — показываются на графитовой панели
 export const MANAGER_FEATURES: RegisterFeature[] = [
-    {id: 1, text: "Единый портал для диспетчерской и бухгалтерии", icon: SquareArrowOutUpRight},
-    {id: 2, text: "Автоматизация обработки заявок жителей", icon: SquareArrowOutUpRight},
-    {id: 3, text: "Аналитика и дашборды в реальном времени", icon: SquareArrowOutUpRight},
-    {id: 4, text: "Управление несколькими домами из одного окна", icon: SquareArrowOutUpRight},
+    {
+        id: 1,
+        icon: ClipboardList,
+        title: "Диспетчерская",
+        subtitle: "SLA, маршрутизация по бригадам, фото-отчёты от мастеров",
+    },
+    {
+        id: 2,
+        icon: BarChart3,
+        title: "Аналитика и KPI",
+        subtitle: "Дашборды по домам, расходам, оплачиваемости — в реальном времени",
+    },
+    {
+        id: 3,
+        icon: Wallet,
+        title: "Биллинг и взыскания",
+        subtitle: "Импорт начислений, эквайринг и автоматизация задолженностей",
+    },
+    {
+        id: 4,
+        icon: Building2,
+        title: "Несколько домов",
+        subtitle: "Один портал на весь фонд — без переключения учёток",
+    },
 ];

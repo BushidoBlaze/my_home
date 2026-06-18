@@ -2,6 +2,7 @@
 export interface NewsAttachment {
     fileUrl: string;
     mimeType: string;
+    fileName?: string;
     name?: string;
 }
 

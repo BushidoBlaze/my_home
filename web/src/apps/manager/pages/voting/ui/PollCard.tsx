@@ -1,8 +1,9 @@
-import type {JSX} from "react";
+import {useState, type JSX} from "react";
 import {Vote} from "lucide-react";
 import {toast} from "sonner";
 import type {Poll} from "../model/types.ts";
 import {COVER_COLORS} from "../model/data.ts";
+import {pollsApi} from "@/api/polls.api.ts";
 
 interface PollCardProps {
     poll: Poll;
@@ -13,7 +14,9 @@ interface PollCardProps {
 export default function PollCard({poll, selected, onSelect}: PollCardProps): JSX.Element {
     const cc = COVER_COLORS[poll.cover] || COVER_COLORS.emerald;
     const supportPct = Math.round((poll.votes.for / (poll.votes.for + poll.votes.against || 1)) * 100);
-    const notVoted = poll.votes.total - poll.votes.for - poll.votes.against - poll.votes.abstain;
+    const notVoted = Math.max(poll.votes.total - poll.votes.for - poll.votes.against - poll.votes.abstain, 0);
+
+    const [reminding, setReminding] = useState(false);
 
     const cardClass = "vote-card" + (selected ? " vote-card--selected" : "");
 
@@ -21,9 +24,20 @@ export default function PollCard({poll, selected, onSelect}: PollCardProps): JSX
         e.stopPropagation();
         onSelect(poll.id);
     };
-    const handleRemind = (e: React.MouseEvent) => {
+    const handleRemind = async (e: React.MouseEvent) => {
         e.stopPropagation();
-        toast.success(`Напоминание отправлено ${notVoted} жильцам`, {description: `«${poll.title}»`});
+        if (reminding) return;
+        setReminding(true);
+        try {
+            const r = await pollsApi.remindAll(poll.id);
+            toast.success(`Напоминание отправлено ${r.notified} жильцам`, {description: `«${poll.title}»`});
+        } catch (err) {
+            toast.error("Не удалось отправить напоминание", {
+                description: err instanceof Error ? err.message : undefined,
+            });
+        } finally {
+            setReminding(false);
+        }
     };
     const handleProtocol = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -125,7 +139,9 @@ export default function PollCard({poll, selected, onSelect}: PollCardProps): JSX
 
                 <div className="vote-card__actions">
                     <button className="btn btn--sm" onClick={handleOpen}>Открыть</button>
-                    <button className="btn btn--sm btn--ghost" onClick={handleRemind}>Напомнить · {notVoted}</button>
+                    <button className="btn btn--sm btn--ghost" onClick={handleRemind} disabled={reminding}>
+                        {reminding ? "Отправляем…" : `Напомнить · ${notVoted}`}
+                    </button>
                     <button className="btn btn--sm btn--ghost" onClick={handleProtocol}>Протокол</button>
                     <span className="vote-card__spacer"/>
                     <span className="tnum vote-card__support">Поддержка: {supportPct}%</span>

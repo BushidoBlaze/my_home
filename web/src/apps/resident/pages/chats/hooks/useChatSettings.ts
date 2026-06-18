@@ -36,8 +36,14 @@ export function useChatSettings(params: Params) {
         setMenuOpen(false);
     }
 
+    // Детали и участники нужны не только модалке настроек, но и правой context-панели,
+    // поэтому грузим их при каждой смене активного чата
     useEffect(() => {
-        if (!settingsOpen || !activeChat) return;
+        if (!activeChat) {
+            setChatDetails(null);
+            setMembers([]);
+            return;
+        }
 
         let cancelled = false;
 
@@ -67,7 +73,7 @@ export function useChatSettings(params: Params) {
         return () => {
             cancelled = true;
         };
-    }, [settingsOpen, activeChat]);
+    }, [activeChat]);
 
     return {
         openSettings,

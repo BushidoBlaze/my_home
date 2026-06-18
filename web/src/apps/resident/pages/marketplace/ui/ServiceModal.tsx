@@ -2,6 +2,7 @@ import {useState} from "react";
 import {X, Star, Phone, Calendar, MessageCircle} from "lucide-react";
 import type {ServiceDetail} from "../model/types.ts";
 import {CATEGORIES} from "../model/data.ts";
+import {resolveAvatarUrl} from "@/apps/resident/_shared/lib/resolveAvatarUrl.ts";
 
 interface Props {
     service: ServiceDetail;
@@ -9,8 +10,6 @@ interface Props {
     onOrder: (scheduledAt: Date, comment: string) => Promise<void>;
     onReview: (rating: number, comment: string) => Promise<void>;
 }
-
-const API_URL = import.meta.env.VITE_API_URL ?? "";
 
 function Stars({rating, interactive = false, onRate}: {
     rating: number;
@@ -122,7 +121,7 @@ export function ServiceModal({service, onClose, onOrder, onReview}: Props) {
                 {/* Фото */}
                 {service.imageUrl && (
                     <div className="mp-modal__image">
-                        <img src={`${API_URL}${service.imageUrl}`} alt={service.title}/>
+                        <img src={resolveAvatarUrl(service.imageUrl)} alt={service.title}/>
                     </div>
                 )}
 
@@ -161,7 +160,7 @@ export function ServiceModal({service, onClose, onOrder, onReview}: Props) {
                             <div className="mp-modal__provider">
                                 <div className="mp-modal__provider-avatar">
                                     {service.provider.avatarUrl ? (
-                                        <img src={`${API_URL}${service.provider.avatarUrl}`} alt={service.provider.fullName}/>
+                                        <img src={resolveAvatarUrl(service.provider.avatarUrl)} alt={service.provider.fullName}/>
                                     ) : (
                                         <span>{getInitials(service.provider.fullName)}</span>
                                     )}
@@ -294,7 +293,7 @@ export function ServiceModal({service, onClose, onOrder, onReview}: Props) {
                                             <div className="mp-modal__review-header">
                                                 <div className="mp-modal__review-avatar">
                                                     {r.resident.avatarUrl ? (
-                                                        <img src={`${API_URL}${r.resident.avatarUrl}`} alt={r.resident.fullName}/>
+                                                        <img src={resolveAvatarUrl(r.resident.avatarUrl)} alt={r.resident.fullName}/>
                                                     ) : (
                                                         <span>{getInitials(r.resident.fullName)}</span>
                                                     )}

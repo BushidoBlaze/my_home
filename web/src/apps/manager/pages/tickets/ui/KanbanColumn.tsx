@@ -1,5 +1,4 @@
 import type {JSX} from "react";
-import {MoreHorizontal, Plus} from "lucide-react";
 import KanbanCard from "./KanbanCard.tsx";
 import type {KanbanColumn as KanbanColumnData} from "../model/types.ts";
 
@@ -16,9 +15,6 @@ export default function KanbanColumn({column}: KanbanColumnProps): JSX.Element {
                     <span className="kanban-col__title">{column.title}</span>
                     <span className="kanban-col__count">· {column.count}</span>
                 </div>
-                <button className="btn btn--icon btn--sm btn--ghost">
-                    <MoreHorizontal size={13}/>
-                </button>
             </div>
 
             {column.sub && <div className="kanban-col__sub">{column.sub}</div>}
@@ -27,9 +23,9 @@ export default function KanbanColumn({column}: KanbanColumnProps): JSX.Element {
                 {column.tickets.map(t => (
                     <KanbanCard key={t.id} ticket={t}/>
                 ))}
-                <button className="kanban-col__add">
-                    <Plus size={12}/> Добавить
-                </button>
+                {column.tickets.length === 0 && (
+                    <div className="kanban-col__empty">Нет заявок</div>
+                )}
             </div>
         </div>
     );

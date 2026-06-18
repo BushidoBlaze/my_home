@@ -1,7 +1,4 @@
-/* ============================================================
-   FeaturesSection — секция ключевых возможностей /management
-   Сетка 3 колонки с иконками, заголовками и описаниями
-   ============================================================ */
+// FeaturesSection — секция ключевых возможностей /management — Сетка 3 колонки с иконками, заголовками и описаниями
 
 import MainTitle from "@/shared/ui/mainTitle/MainTitle.tsx";
 import {MANAGEMENT_FEATURES} from "../model/data.ts";

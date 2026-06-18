@@ -4,8 +4,11 @@ import SloganLabel from "@/shared/ui/sloganLabel/SloganLabel.tsx";
 import TariffsSection from "@/widgets/tariffsSection/ui/TariffsSection.tsx";
 import ContactSection from "@/pages/home/ui/contact/ui/ContactSection.tsx";
 import FAQSection from "@/pages/home/ui/FAQ/ui/FAQSection.tsx";
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
 
 export default function Home() {
+    useDocumentTitle('Платформа управления жилым комплексом');
+
     return (
         <>
             {/*Главная секция*/}

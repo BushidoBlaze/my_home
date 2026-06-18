@@ -1,85 +1,61 @@
-/* ============================================================
-   REGISTER PAGE
-   Страница регистрации с двумя режимами:
-   - Житель (ЖК): форма слева, бренд справа
-   - УК: бренд слева, форма справа
-   Переключение сопровождается плавной анимацией слайда
-   ============================================================ */
-
-
-/* ─── Корневой контейнер ─────────────────────────────────── */
-
 .register {
+    width: 100%;
     min-height: 100vh;
+
     display: grid;
+    /* По умолчанию: левая колонка узкая (бренд жителя), правая широкая (форма жителя) */
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.12fr);
 
-    /*
-      Два равных столбца.
-      При смене режима слоты меняются местами через order,
-      что визуально переставляет форму и бренд.
-    */
-    grid-template-columns: 1fr 1fr;
-
-    font-family: "SF Pro", sans-serif;
-
-    /* Убираем горизонтальный overflow во время анимации */
     overflow: hidden;
 }
 
+/* Режим УК: форма слева и должна быть шире бренда — переворачиваем пропорции */
+.register--manager {
+    grid-template-columns: minmax(0, 1.18fr) minmax(0, 1.22fr);
+}
 
-/* ─── Слоты (обёртки формы и бренда) ────────────────────── */
-
-/*
-  Каждый слот занимает одну строку сетки.
-  Позиция (order) меняется при смене режима —
-  это и создаёт эффект перестановки.
-*/
+/*Слоты с анимацией при смене режима*/
 .register__slot {
+    min-height: 100vh;
+
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
     grid-row: 1;
 }
 
-/* Слот формы: в режиме жителя — первый (слева) */
-.register__slot--form.register__slot--left {
+.register__slot--left {
     grid-column: 1;
     order: 1;
-    animation: register-slide-in-left 0.42s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Слот формы: в режиме УК — второй (справа) */
-.register__slot--form.register__slot--right {
+.register__slot--right {
     grid-column: 2;
     order: 2;
-    animation: register-slide-in-right 0.42s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Слот бренда: в режиме жителя — второй (справа) */
-.register__slot--brand.register__slot--right {
-    grid-column: 2;
-    order: 2;
-    animation: register-slide-in-right 0.42s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Слот бренда: в режиме УК — первый (слева) */
 .register__slot--brand.register__slot--left {
-    grid-column: 1;
-    order: 1;
-    animation: register-slide-in-left 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: register-slide-left .42s cubic-bezier(.4, 0, .2, 1);
 }
 
-/* Бренд и форма-сайд растягиваются на всю высоту слота */
+.register__slot--brand.register__slot--right {
+    animation: register-slide-right .42s cubic-bezier(.4, 0, .2, 1);
+}
+
+.register__slot--form.register__slot--left {
+    animation: register-slide-left .42s cubic-bezier(.4, 0, .2, 1);
+}
+
+.register__slot--form.register__slot--right {
+    animation: register-slide-right .42s cubic-bezier(.4, 0, .2, 1);
+}
+
 .register__slot--brand .register__brand,
 .register__slot--form .register__form-side {
     flex: 1;
     min-height: 100vh;
 }
 
-
-/* ─── Анимации слайда ────────────────────────────────────── */
-
-@keyframes register-slide-in-left {
+@keyframes register-slide-left {
     from {
         opacity: 0;
         transform: translateX(-28px);
@@ -90,7 +66,7 @@
     }
 }
 
-@keyframes register-slide-in-right {
+@keyframes register-slide-right {
     from {
         opacity: 0;
         transform: translateX(28px);
@@ -102,377 +78,626 @@
 }
 
 
-/* ─── Переключатель режимов ──────────────────────────────── */
-
-/*
-  Фиксирован по центру экрана поверх обеих колонок.
-  Использует backdrop-filter для эффекта стекла.
-*/
-.register__switcher {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 200;
-
-    display: flex;
-    gap: 4px;
-    padding: 4px;
-
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 30px;
-
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-}
-
-.register__switch-btn {
-    padding: 9px 22px;
-    border-radius: 24px;
-    border: none;
-
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-
-    color: rgba(255, 255, 255, 0.8);
-    background: transparent;
-
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Активная кнопка переключателя */
-.register__switch-btn--active {
-    background: #fff;
-    color: #1a3d1a;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-}
-
-
-/* ─── Брендинговая секция ────────────────────────────────── */
-
+/* Брендовая панель — общий каркас для жителя и УК.
+   Конкретная подложка задаётся модификатором --emerald / --graphite. */
 .register__brand {
-    background: linear-gradient(135deg, #1a3d1a 0%, #2d6e2d 50%, #1f4f1f 100%);
-
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 50px 48px;
+    flex-direction: column;
+    justify-content: space-between;
 
     position: relative;
+
+    color: #fff;
+
+    padding: 40px 44px;
     overflow: hidden;
 }
 
-/* Декоративные круги на фоне */
-.register__brand::before {
-    content: "";
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    top: -100px;
-    right: -100px;
-    pointer-events: none;
+/* Изумрудная подложка — для регистрации жителя */
+.register__brand--emerald {
+    background:
+        radial-gradient(120% 80% at 100% 0%, rgba(16, 185, 129, .45), transparent 60%),
+        linear-gradient(180deg, #074d3b 0%, #053b2c 60%, #032b21 100%);
 }
 
-.register__brand::after {
-    content: "";
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    bottom: -60px;
-    left: -60px;
-    pointer-events: none;
+/* Графитовая подложка — для заявки УК (визуально серьёзнее, «корпоративнее») */
+.register__brand--graphite {
+    background: radial-gradient(120% 80% at 100% 0%, rgba(16, 185, 129, .45), transparent 60%),
+    linear-gradient(180deg, #074d3b 0%, #053b2c 60%, #032b21 100%);
 }
 
-/* Контент бренда поверх декора */
-.register__brand-content {
+.register__brand-skyline {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .55;
+}
+
+.register__brand-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     position: relative;
     z-index: 1;
-    color: #fff;
-    max-width: 420px;
 }
 
-.register__brand-logo {
-    display: flex;
+.register__brand-back {
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 48px;
+    gap: 6px;
+
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+
+    color: rgba(255, 255, 255, .7);
 }
 
-.register__brand-title {
-    font-family: "SF Pro", sans-serif;
+.register__brand-back:hover {
+    color: #ffffff;
+}
+
+.register__brand-body {
+    max-width: 440px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    position: relative;
+    z-index: 1;
+}
+
+/*Регистрация < 2 минут*/
+.register__brand-chip {
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #f3faf6;
+    background-color: rgba(255, 255, 255, .1);
+
+    padding: 6px 10px 6px 8px;
+    border-radius: 999px;
+
+    backdrop-filter: blur(8px);
+}
+
+.register__brand-chip-dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background-color: #6ee7b7;
+    flex-shrink: 0;
+}
+
+.register__brand-headline {
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
     font-weight: 600;
-    font-size: 32px;
-    line-height: 1.2;
-    margin-bottom: 16px;
-    color: #fff;
+    font-size: 52px;
+
+    line-height: 1.1;
+
+    color: #ffffff;
 }
 
-.register__brand-subtitle {
-    font-family: "Inter", sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-    color: rgba(255, 255, 255, 0.7);
+.register__brand-lead {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    line-height: 1.55;
+
+    color: rgba(243, 250, 246, .7);
 }
 
-/* Список преимуществ */
+/* Features list */
 .register__brand-features {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    gap: 14px;
+
+    position: relative;
+    z-index: 1;
 }
 
 .register__brand-feature {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    font-family: "Inter", sans-serif;
-    font-size: 15px;
-    color: rgba(255, 255, 255, 0.85);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: start;
+    gap: 12px;
 }
 
 .register__brand-feature-icon {
-    flex-shrink: 0;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-
-/* ─── Секция формы ───────────────────────────────────────── */
-
-.register__form-side {
-    background: #f7f8fa;
+    width: 28px;
+    height: 28px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 50px 48px;
+    color: rgba(255, 255, 255, .92);
+    background-color: rgba(255, 255, 255, .1);
+
+    border-radius: 8px;
+    flex-shrink: 0;
 }
 
-/* Карточка с формой */
-.register__card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 48px 40px;
+.register__brand-feature-title {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.35;
+
+    color: #f3faf6;
+}
+
+.register__brand-feature-subtitle {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    line-height: 1.45;
+
+    color: rgba(243, 250, 246, .62);
+    margin-top: 2px;
+}
+
+/*Панель формы*/
+.register__form-side {
+    display: flex;
+    flex-direction: column;
+
+    background-color: #ffffff;
+
+    padding: 32px 56px;
+    overflow: auto;
+}
+
+/*Верхняя строка: переключатель + ссылка*/
+.register__form-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 28px;
+    flex-shrink: 0;
+}
+
+/*Переключатель ролей*/
+.register__role-switcher {
+    display: inline-flex;
+    gap: 2px;
+
+    background-color: #f1f4f1;
+
+    border-radius: 999px;
+    border: 1px solid #e3e8e3;
+
+    padding: 4px;
+}
+
+.register__role-button {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #6a766f;
+
+    border-radius: 999px;
+    padding: 8px 16px;
+
+    cursor: pointer;
+    border: none;
+    background: none;
+    white-space: nowrap;
+
+    transition: background .18s, color .18s, box-shadow .18s;
+}
+
+.register__role-button--active {
+    color: #0e1f17;
+    background-color: #ffffff;
+
+    box-shadow: 0 1px 0 rgba(14, 31, 23, .04), 0 1px 2px rgba(14, 31, 23, .04);
+}
+
+.register__role-button:hover:not(.register__role-button--active) {
+    color: #0e1f17;
+}
+
+/*Ссылка - Есть аккаунт?*/
+.register__login-hint {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 13px;
+
+    color: #6a766f;
+}
+
+.register__login-hint-link {
+    color: #047857;
+    font-weight: 600;
+    margin-left: 2px;
+}
+
+.register__login-hint-link:hover {
+    text-decoration: underline;
+}
+
+/*Центрированный контент формы*/
+.register__form-inner {
     width: 100%;
-    max-width: 400px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    max-width: 440px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    margin: auto 0;
 }
 
 .register__title {
-    font-family: "SF Pro", sans-serif;
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
     font-weight: 600;
     font-size: 26px;
-    color: #111;
-    margin-bottom: 6px;
+    line-height: 1.15;
+
+    color: #0e1f17;
+
+    margin-bottom: 8px;
 }
 
 .register__subtitle {
-    font-family: "Inter", sans-serif;
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-weight: 400;
     font-size: 14px;
-    color: #888;
-    margin-bottom: 32px;
 }
 
-/* Сообщение об ошибке */
+/* ── Индикатор шагов ── */
+.register__steps {
+    display: flex;
+    align-items: center;
+}
+
+.register__step-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.register__step-number {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+
+    color: #6a766f;
+    background-color: #f1f4f1;
+
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.register__step-number--active {
+    color: #ffffff;
+    background-color: #059669;
+}
+
+.register__step-number--done {
+    color: #047857;
+    background-color: #ecfdf5;
+}
+
+.register__step-label {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #6a766f;
+}
+
+.register__step-label--active {
+    color: #0e1f17;
+}
+
+.register__step-bar {
+    width: 22px;
+    height: 1px;
+
+    background-color: #dde4dd;
+
+    margin: 0 4px;
+}
+
+/*Ошибка*/
 .register__error {
-    background: #fff5f5;
-    border: 1px solid #fecaca;
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-bottom: 24px;
-
-    font-family: "Inter", sans-serif;
+    font-family: Inter, Arial, sans-serif, Helvetica;
     font-size: 14px;
-    color: #e53e3e;
+
+    color: #b91c1c;
+
+    background-color: #fee2e2;
+
+    border: 1px solid #fca5a5;
+    border-radius: 10px;
+
+    padding: 12px 16px;
 }
 
-
-/* ─── Форма и поля ───────────────────────────────────────── */
-
+/*Форма и поля*/
 .register__form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
+}
+
+.register__row-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
 .register__field {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .register__label {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 12px;
     font-weight: 500;
-    color: #444;
+
+    color: #3f4b44;
 }
 
-/* Обёртка поля с иконкой */
 .register__input-wrap {
-    position: relative;
     display: flex;
     align-items: center;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
+    transition: border-color .15s, box-shadow .15s;
 }
 
-/* Иконка слева внутри поля */
+.register__input-wrap:focus-within {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .22);
+}
+
+.register__input-wrap--error {
+    border-color: #b91c1c;
+}
+
+.register__input-wrap--error:focus-within {
+    border-color: #b91c1c;
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, .18);
+}
+
 .register__input-icon {
-    position: absolute;
-    left: 14px;
-    color: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6a766f;
+
+    margin-left: 12px;
+
     pointer-events: none;
+    flex-shrink: 0;
 }
 
 .register__input {
-    width: 100%;
+    min-width: 0;
+    height: 44px;
 
-    /* Отступы с учётом иконки слева (и кнопки eye справа) */
-    padding: 12px 42px 12px 42px;
-    border-radius: 10px;
-    border: 1.5px solid #e8e8e8;
+    flex: 1;
 
-    font-family: "Inter", sans-serif;
-    font-size: 15px;
-    color: #111;
-    background: #fafafa;
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    color: #0e1f17;
 
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-}
+    padding: 0 14px 0 10px;
 
-.register__input:focus {
-    border-color: #2d6e2d;
-    background: #fff;
-}
-
-/* Кнопка показать/скрыть пароль */
-.register__toggle-password {
-    position: absolute;
-    right: 14px;
+    border: 0;
+    outline: 0;
     background: none;
-    border: none;
-    cursor: pointer;
-    color: #aaa;
+}
+
+/* Поле без иконки (Фамилия) */
+.register__input--no-icon {
+    padding: 0 14px 0 10px;
+}
+
+.register__input::placeholder {
+    color: #97a09a;
+}
+
+.register__input-hint {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+
+    color: #97a09a;
+}
+
+.register__password-toggle {
     display: flex;
     align-items: center;
-    padding: 0;
-    transition: color 0.2s;
+
+    color: #6a766f;
+
+    padding-right: 10px;
+
+    cursor: pointer;
+    border: none;
+    background: none;
+    flex-shrink: 0;
+    line-height: 0;
 }
 
-.register__toggle-password:hover {
-    color: #555;
+.register__password-toggle:hover {
+    color: #3f4b44;
 }
 
+.register__field-error {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
 
-/* ─── Чекбокс согласия (только для УК) ──────────────────── */
+    color: #b91c1c;
+}
 
-.register__agree {
+/* ── Чекбокс согласия ── */
+.register__agreement {
     display: flex;
     align-items: flex-start;
     gap: 10px;
+
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 14px;
+    line-height: 1.45;
+
+    color: #3f4b44;
+
     cursor: pointer;
+    user-select: none;
 }
 
-.register__agree-checkbox {
+.register__agreement-checkbox {
+    display: none;
+}
+
+.register__agreement-box {
     width: 18px;
     height: 18px;
-    margin-top: 2px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: transparent;
+    background-color: #ffffff;
+
+    border-radius: 5px;
+    border: 1px solid #c8d2c9;
+
     flex-shrink: 0;
-    accent-color: #2d6e2d;
-    cursor: pointer;
+    margin-top: 1px;
+    transition: background .15s, border-color .15s, color .15s;
 }
 
-.register__agree-text {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    color: #555;
-    line-height: 1.5;
+.register__agreement-checkbox:checked ~ .register__agreement-box,
+.register__agreement:has(.register__agreement-checkbox:checked) .register__agreement-box {
+    color: #ffffff;
+    background-color: #059669;
+    border-color: #059669;
 }
 
-.register__agree-link {
-    color: #2d6e2d;
+.register__agreement-box--error {
+    border-color: #b91c1c;
+}
+
+.register__agreement a {
+    color: #047857;
+}
+
+.register__agreement a:hover {
     text-decoration: underline;
 }
 
-.register__agree-link:hover {
-    color: #1a3d1a;
-}
+/* ── Кнопка submit ── */
+.register__button-primary {
+    width: 100%;
+    height: 46px;
 
-
-/* ─── Кнопка отправки ────────────────────────────────────── */
-
-.register__button {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-top: 8px;
-    padding: 14px;
+
+    font-family: "SF Pro", Arial, sans-serif, Helvetica;
+    font-weight: 600;
+    font-size: 14px;
+
+    color: #ffffff;
+    background-color: #059669;
+
     border-radius: 10px;
     border: none;
 
-    background: linear-gradient(135deg, #2d6e2d, #3d8c3d);
-    color: #fff;
-
-    font-family: "SF Pro", sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-
+    margin-top: 4px;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: background .15s, transform .05s;
 }
 
-.register__button:hover {
-    opacity: 0.9;
+.register__button-primary:hover {
+    background: #047857;
 }
 
-.register__button:disabled {
-    opacity: 0.6;
+.register__button-primary:active {
+    transform: translateY(1px);
+}
+
+.register__button-primary:disabled {
+    opacity: .6;
     cursor: not-allowed;
+    transform: none;
 }
 
+.register__spinner {
+    animation: register-spin .8s linear infinite;
+}
 
-/* ─── Ссылка на вход ─────────────────────────────────────── */
+@keyframes register-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-.register__link {
-    margin-top: 24px;
+/* Footer note */
+.register__footer {
+    font-family: Inter, Arial, sans-serif, Helvetica;
+    font-size: 12px;
+    line-height: 1.5;
+
+    color: #97a09a;
     text-align: center;
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    color: #666;
 }
 
-.register__link a {
-    color: #2d6e2d;
-    font-weight: 500;
-    text-decoration: none;
+/*Медиа-запросы*/
+@media (max-width: 900px) {
+    .register__brand-headline {
+        font-size: 30px;
+    }
+
+    .register__form-side {
+        padding: 32px 36px;
+    }
 }
 
-.register__link a:hover {
-    text-decoration: underline;
-}
-
-
-/* ─── Адаптив ────────────────────────────────────────────── */
-
-@media (max-width: 768px) {
-    /* На мобильных — одна колонка, бренд скрываем */
+@media (max-width: 640px) {
     .register {
         grid-template-columns: 1fr;
     }
@@ -481,7 +706,7 @@
         display: none;
     }
 
-    .register__slot--form {
+    .register__slot--left, .register__slot--right {
         grid-column: 1 !important;
         order: 1 !important;
     }
@@ -491,9 +716,137 @@
         min-height: 100vh;
     }
 
-    /* Переключатель на мобильных — уже */
-    .register__switch-btn {
-        padding: 8px 14px;
-        font-size: 12px;
+    .register__form-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
     }
+
+    .register__row-two {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   Дополнения для формы УК: eyebrow, широкий контейнер, кнопки
+   портфеля, навигационный ряд и ghost-кнопка «Назад».
+   Резидентская форма и общие поля используют стили выше.
+══════════════════════════════════════════════════════════════ */
+
+/* Eyebrow в брендовой графитовой панели — заменяет chip жителя */
+.register__brand-eyebrow {
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 10.5px;
+    font-weight: 600;
+
+    letter-spacing: .12em;
+    text-transform: uppercase;
+
+    color: rgba(110, 231, 183, .9);
+
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* Eyebrow над заголовком формы УК («Подключение УК») */
+.register__form-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 10.5px;
+    font-weight: 600;
+
+    letter-spacing: .12em;
+    text-transform: uppercase;
+
+    color: #047857;
+}
+
+/* Расширенный контейнер для формы УК — у неё больше полей в 2 колонки */
+.register__form-inner--wide {
+    max-width: 540px;
+}
+
+/* ── Размер портфеля: группа кнопок-radio ── */
+.register__portfolio-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.register__portfolio-button {
+    height: 38px;
+    padding: 0 10px;
+
+    font-family: Raleway, Arial, sans-serif, Helvetica;
+    font-size: 12.5px;
+    font-weight: 500;
+
+    color: #0e1f17;
+    background: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+}
+
+.register__portfolio-button:hover {
+    background: #f0f4f0;
+    border-color: #c8d2c9;
+}
+
+/* Активная кнопка подсвечивается изумрудом, как и primary-цвет проекта */
+.register__portfolio-button--active,
+.register__portfolio-button--active:hover {
+    color: #047857;
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+/* ── Нижний ряд: «Назад» + «Отправить заявку» ── */
+.register__navigation-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+/* Ghost-кнопка для «Назад» — используется и как <Link>, и как <button> */
+.register__button-ghost {
+    height: 46px;
+    padding: 0 18px;
+    flex: 0 0 auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    font-family: "SF Pro", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+
+    color: #0e1f17;
+    background: #ffffff;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+.register__button-ghost:hover {
+    background: #f0f4f0;
+    border-color: #c8d2c9;
+}
+
+/* Модификатор: основная кнопка занимает остаток ширины ряда */
+.register__button-primary--flex {
+    flex: 1;
+    margin-top: 0;
 }

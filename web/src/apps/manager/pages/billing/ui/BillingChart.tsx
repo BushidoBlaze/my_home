@@ -1,13 +1,25 @@
 import type {JSX} from "react";
-import {CHART_DATA} from "../model/data.ts";
+import type {BillingChartPoint} from "@/api/managerBilling.api.ts";
 
-export default function BillingChart(): JSX.Element {
-    const max = Math.max(...CHART_DATA.map(d => d.charged));
+interface Props {
+    data: BillingChartPoint[];
+}
+
+export default function BillingChart({data}: Props): JSX.Element {
+    if (data.length === 0) {
+        return (
+            <div style={{padding: 24, textAlign: "center", color: "#64748b", fontSize: 13}}>
+                Данных за период пока нет.
+            </div>
+        );
+    }
+
+    const max = Math.max(1, ...data.map(d => Math.max(d.charged, d.paid)));
     const w = 720;
     const h = 200;
     const pad = 24;
     const gap = 6;
-    const groupW = (w - pad * 2) / CHART_DATA.length;
+    const groupW = (w - pad * 2) / data.length;
     const barW = (groupW - gap * 2) / 2;
 
     return (
@@ -29,7 +41,7 @@ export default function BillingChart(): JSX.Element {
                     strokeDasharray="3 4"
                 />
             ))}
-            {CHART_DATA.map((d, i) => {
+            {data.map((d, i) => {
                 const x = pad + groupW * i + gap;
                 const cH = (d.charged / max) * (h - pad - 10);
                 const pH = (d.paid / max) * (h - pad - 10);
@@ -43,7 +55,7 @@ export default function BillingChart(): JSX.Element {
                             textAnchor="middle"
                             style={{font: "500 10px 'SF Pro Display', 'SF Pro', 'Inter', system-ui, sans-serif", fill: "#64748b"}}
                         >
-                            {d.m}
+                            {d.label}
                         </text>
                     </g>
                 );

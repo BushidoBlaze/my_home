@@ -1,6 +1,5 @@
 import type {JSX} from "react";
-import {Paperclip, MessageCircle} from "lucide-react";
-import {Avatar} from "@/shared/ui/Avatar/Avatar.tsx";
+import {Link} from "react-router-dom";
 import type {Ticket} from "../model/types.ts";
 import {KANBAN_TYPES} from "../model/data.ts";
 
@@ -18,7 +17,11 @@ export default function KanbanCard({ticket}: KanbanCardProps): JSX.Element {
                 : "1px solid #e2e8f0";
 
     return (
-        <div className="kanban-card" style={{borderLeft}}>
+        <Link
+            to={`/manager/tickets/${ticket.realId}`}
+            className="kanban-card"
+            style={{borderLeft, display: "block", textDecoration: "none", color: "inherit"}}
+        >
             <div className="kanban-card__head">
                 <span className="mono kanban-card__id">{ticket.id}</span>
                 <div className="kanban-card__badges">
@@ -42,31 +45,6 @@ export default function KanbanCard({ticket}: KanbanCardProps): JSX.Element {
                     <div className="kanban-card__addr">{ticket.addr}</div>
                 </div>
             </div>
-
-            <div className="kanban-card__foot">
-                {ticket.assignee ? (
-                    <div className="kanban-card__assignee">
-                        <Avatar name={ticket.assignee} size={20}/>
-                        <span>{ticket.assignee}</span>
-                    </div>
-                ) : (
-                    <span className="kanban-card__assignee-empty">+ исполнитель</span>
-                )}
-                <div className="kanban-card__meta">
-                    {ticket.attachments > 0 && (
-                        <span className="kanban-card__meta-item">
-                            <Paperclip size={11}/>
-                            {ticket.attachments}
-                        </span>
-                    )}
-                    {ticket.comments > 0 && (
-                        <span className="kanban-card__meta-item">
-                            <MessageCircle size={11}/>
-                            {ticket.comments}
-                        </span>
-                    )}
-                </div>
-            </div>
-        </div>
+        </Link>
     );
 }

@@ -1,5 +1,5 @@
 import {type Chat} from "@/api/chats.api.ts";
-import {MoreVertical, Phone, Pin, Search, Video, X} from "lucide-react";
+import {MoreVertical, PanelRightClose, PanelRightOpen, Pin, Search, X} from "lucide-react";
 
 
 import type {ChatMessageUi} from "../../model/types.ts";
@@ -16,6 +16,8 @@ type Props = {
     pinned: ChatMessageUi[];
     search: string;
     setSearch: (value: string) => void;
+    contextOpen: boolean;
+    onToggleContext: () => void;
 };
 
 export function ChatHeader({
@@ -27,6 +29,8 @@ export function ChatHeader({
                                showSearch,
                                search,
                                setSearch,
+                               contextOpen,
+                               onToggleContext,
                            }: Props) {
     return (
         <>
@@ -71,11 +75,13 @@ export function ChatHeader({
                         <Pin size={18}/>
                         {pinned.length > 0 && <span className="chats__header-badge">{pinned.length}</span>}
                     </button>
-                    <button className="chats__header-btn" title="Голосовой звонок">
-                        <Phone size={18}/>
-                    </button>
-                    <button className="chats__header-btn" title="Видеозвонок">
-                        <Video size={18}/>
+                    {/* Тоггл правой панели контекста — в одном ряду с остальными действиями */}
+                    <button
+                        className="chats__header-btn"
+                        onClick={onToggleContext}
+                        title={contextOpen ? "Скрыть панель чата" : "Показать панель чата"}
+                    >
+                        {contextOpen ? <PanelRightClose size={18}/> : <PanelRightOpen size={18}/>}
                     </button>
                 </div>
             </div>

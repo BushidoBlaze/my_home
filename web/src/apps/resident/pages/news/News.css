@@ -477,6 +477,25 @@
     gap: 12px;
     min-width: 0;
     min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.news-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.news-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 99px;
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 .news-list__item {
@@ -971,6 +990,70 @@
     font-family: Inter, system-ui, sans-serif;
     font-size: 0.875rem;
     color: #7c8a84;
+}
+
+/* ─── Форма комментария ─── */
+.news-detail__comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.news-detail__comment-input {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 72px;
+    padding: 12px 14px;
+    border: 1px solid #dfe7e3;
+    border-radius: 14px;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #0f3d2e;
+    background: #f8faf9;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.news-detail__comment-input:focus {
+    outline: none;
+    background: #fff;
+    border-color: #45b97b;
+    box-shadow: 0 0 0 3px rgba(69, 185, 123, 0.15);
+}
+
+.news-detail__comment-input::placeholder {
+    color: #9aa8a2;
+}
+
+.news-detail__comment-form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.news-detail__comment-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border: none;
+    border-radius: 12px;
+    background: #1f7a5a;
+    color: #fff;
+    font-family: Inter, system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.news-detail__comment-submit:hover:not(:disabled) {
+    background: #196048;
+}
+
+.news-detail__comment-submit:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 .news-detail__comment-list {

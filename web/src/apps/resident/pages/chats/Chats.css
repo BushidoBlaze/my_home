@@ -1,24 +1,27 @@
 .chats {
     display: flex;
-    height: calc(100vh - 48px);
-    background: #f4f6f5;
-    border-radius: 20px;
+    height: 100vh;
+    background: #ffffff;
     overflow: hidden;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
 }
 
+/* Sidebar */
 .chats__sidebar {
-    width: 320px;
+    width: 250px;
     flex-shrink: 0;
-    background: #fff;
-    border-right: 1px solid #eef3f0;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    /* Плавная анимация при сворачивании / разворачивании */
+    transition: width 0.22s ease;
 }
 
 .chats__sidebar-header {
-    padding: 16px 16px 14px;
-    border-bottom: 1px solid #eef3f0;
+    padding: 16px 18px;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -33,19 +36,21 @@
 
 .chats__sidebar-title {
     font-family: "SF Pro", sans-serif;
+    font-size: 17px;
     font-weight: 700;
-    font-size: 1.125rem;
-    color: #0f3d2e;
+    letter-spacing: -0.01em;
+    color: #0f172a;
 }
 
 .chats__sidebar-count {
-    background: #e8f5ee;
-    color: #1f7a5a;
     font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
+    font-size: 11.5px;
     font-weight: 700;
+    color: #64748b;
+    background: #f1f5f9;
     padding: 2px 7px;
-    border-radius: 20px;
+    border-radius: 99px;
+    margin-left: 6px;
 }
 
 /* Поиск по чатам */
@@ -53,21 +58,16 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 10px 12px 4px;
-    padding: 8px 12px;
-    background: #f4f6f5;
-    border-radius: 10px;
-    border: 1.5px solid transparent;
-    transition: border-color 0.15s, background 0.15s;
-}
-
-.chats__sidebar-search:focus-within {
-    background: #fff;
-    border-color: #d4e8de;
+    margin: 10px 12px 8px;
+    padding: 0 10px;
+    height: 34px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 }
 
 .chats__sidebar-search-icon {
-    color: #aaa;
+    color: #94a3b8;
     flex-shrink: 0;
 }
 
@@ -76,18 +76,17 @@
     border: none;
     background: transparent;
     font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #111;
+    font-size: 13px;
+    color: #0f172a;
     outline: none;
 }
 
 .chats__sidebar-search-input::placeholder {
-    color: #bbb;
+    color: #94a3b8;
 }
 
 /* Пустое состояние сайдбара */
 .chats__sidebar-empty {
-    list-style: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -111,26 +110,27 @@
 }
 
 .chats__sidebar-empty-title {
-    font-family: "SF Pro", sans-serif;
-    font-weight: 700;
-    font-size: 0.9375rem;
-    color: #0f3d2e;
-    margin: 0;
+    font-family: Inter, sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-top: 8px;
 }
 
 .chats__sidebar-empty-text {
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
+    font-size: 13px;
+    color: #64748b;
     line-height: 1.5;
-    margin: 0;
+    margin-top: 4px;
     max-width: 200px;
 }
 
 .chats__sidebar-empty-btns {
     display: flex;
     gap: 8px;
-    margin-top: 4px;
+    justify-content: center;
+    margin-top: 14px;
 }
 
 .chats__sidebar-empty-btn {
@@ -139,50 +139,57 @@
     gap: 6px;
     padding: 8px 14px;
     border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
-    color: #fff;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #0f172a;
     font-family: "Inter", sans-serif;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 13px;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: background 0.15s;
 }
 
-.chats__sidebar-empty-btn:hover { opacity: 0.88; }
+.chats__sidebar-empty-btn:hover {
+    background: #f1f5f9;
+}
 
 .chats__list-no-results {
-    list-style: none;
     text-align: center;
     padding: 32px 16px;
     font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #aaa;
+    font-size: 13px;
+    color: #94a3b8;
 }
 
 .chats__list {
     flex: 1;
     overflow-y: auto;
-    padding: 8px 0;
+    padding: 4px 0;
 }
 
 .chats__item {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
+    gap: 10px;
+    padding: 10px 14px;
     cursor: pointer;
-    transition: background 0.15s;
     border-left: 3px solid transparent;
+    transition: background 0.12s;
 }
 
-.chats__item:hover {
-    background: #f7faf8;
+.chats__item:not(.chats__item--active):hover {
+    background: rgba(211, 211, 211, 0.28);
 }
 
 .chats__item--active {
-    background: #edf7f2;
-    border-left-color: #1f7a5a;
+    background: #dffff0;
+    border-left-color: #04805c;
+}
+
+.chats__item--active .chats__item-name,
+.chats__item--active .chats__item-time,
+.chats__item--active .chats__item-last,
+.chats__item--active .chats__item-members {
+    color: #000000;
 }
 
 /* Обёртка аватара для позиционирования бейджа */
@@ -195,7 +202,7 @@
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    background-color: #04805c;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -232,9 +239,9 @@
 
 .chats__item-name {
     font-family: "SF Pro", sans-serif;
+    font-size: 13.5px;
     font-weight: 600;
-    font-size: 0.875rem;
-    color: #111;
+    color: #0f172a;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -242,52 +249,52 @@
 
 .chats__item-time {
     font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
-    color: #aaa;
+    font-size: 10.5px;
+    color: #64748b;
     flex-shrink: 0;
 }
 
 .chats__item-bottom {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 6px;
+    margin-top: 3px;
 }
 
 .chats__item-last {
+    flex: 1;
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
+    font-size: 12px;
+    color: #64748b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 160px;
 }
 
 .chats__item-members {
     font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
-    color: #aaa;
+    font-size: 11px;
+    color: #94a3b8;
     flex-shrink: 0;
 }
 
+/* Telegram-стиль: маленький круглый бейдж справа в нижней строке.
+   В flex-родителе chats__item-bottom его естественно прижимает к правому краю,
+   потому что .chats__item-last имеет flex: 1. */
 .chats__item-unread {
-    position: absolute;
-    top: -2px;
-    right: -2px;
+    font-family: "Inter", sans-serif;
+    font-size: 10.5px;
+    font-weight: 700;
     min-width: 18px;
     height: 18px;
-    border-radius: 999px;
+    border-radius: 99px;
     padding: 0 5px;
-    background: #2ecc71;
-    color: #fff;
-    font-family: "Inter", sans-serif;
-    font-size: 0.625rem;
-    font-weight: 700;
+    background: #10b981;
+    color: #ffffff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #fff;
-    box-shadow: 0 1px 4px rgba(46, 204, 113, 0.4);
+    flex-shrink: 0;
 }
 
 .chats__window {
@@ -296,6 +303,7 @@
     flex-direction: column;
     min-width: 0;
     position: relative;
+    background: #f8fafc;
 }
 
 .chats__window--drag::after {
@@ -313,9 +321,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 20px;
-    background: #fff;
-    border-bottom: 1px solid #eef3f0;
+    padding: 14px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    gap: 14px;
 }
 
 .chats__header-left {
@@ -353,9 +362,9 @@
 
 .chats__header-name {
     font-family: "SF Pro", sans-serif;
+    font-size: 15px;
     font-weight: 600;
-    font-size: 1rem;
-    color: #0f3d2e;
+    color: #0f172a;
     line-height: 1.2;
 }
 
@@ -379,8 +388,9 @@
 
 .chats__header-members {
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #888;
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
 }
 
 .chats__header-actions {
@@ -390,22 +400,20 @@
 
 .chats__header-btn {
     position: relative;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    padding: 8px;
+    border-radius: 8px;
     border: none;
     background: transparent;
-    color: #666;
+    color: #64748b;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background 0.15s, color 0.15s;
 }
 
 .chats__header-btn:hover {
-    background: #f0f4f2;
-    color: #1f7a5a;
+    color: #04805c;
 }
 
 .chats__header-badge {
@@ -449,9 +457,9 @@
 }
 
 .chats__pinned {
-    padding: 12px 16px;
-    background: #f0fff4;
-    border-bottom: 1px solid #bbf7d0;
+    padding: 10px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .chats__pinned-header {
@@ -466,30 +474,37 @@
 }
 
 .chats__pinned-item {
+    padding: 6px 10px;
+    background: #f8fafc;
+    border-left: 3px solid #10b981;
+    border-radius: 8px;
+    margin-top: 4px;
     font-family: "Inter", sans-serif;
-    font-size: 0.8125rem;
-    color: #333;
-    padding: 4px 0;
+    font-size: 12.5px;
+    color: #334155;
 }
 
 .chats__pinned-sender {
     font-weight: 600;
+    color: #0f172a;
     margin-right: 6px;
 }
 
 .chats__pinned-text {
-    color: #555;
+    color: #334155;
 }
 
 .chats__messages {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 20px;
+    padding: 20px 28px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 12px;
     position: relative;
-    background: #f8faf9;
+    /* Тёплый нейтрально-изумрудный фон — фон во всю ширину */
+    background: #eaf1ec;
+    scrollbar-color: #cbd5e1 transparent;
 }
 
 .chats__loading {
@@ -500,45 +515,48 @@
     padding: 20px 0;
 }
 
+/* Дата-разделитель в стиле Telegram: маленькая полупрозрачная капсула
+   по центру, без рамки, со «стеклянным» бэкдропом. Капсула живёт на
+   <span> внутри обёртки — обёртка только центрирует. */
 .chats__date-divider {
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin: 16px 0 8px;
-    gap: 10px;
-}
+    margin: 12px 0 8px;
 
-.chats__date-divider::before,
-.chats__date-divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eef3f0;
+    /* Сбрасываем всё, что висело на обёртке раньше */
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 
 .chats__date-divider span {
-    flex-shrink: 0;
-    background: #f0f4f2;
-    border: 1px solid #e8ede9;
-    border-radius: 20px;
+    display: inline-block;
     padding: 3px 12px;
+
     font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    color: #888;
-    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+    /* Без UPPERCASE — Telegram пишет «Сегодня», «Вчера», «12 мая» в обычном регистре */
+    text-transform: none;
+    letter-spacing: 0;
+
+    background: rgba(0, 0, 0, 0.29);
+    border-radius: 999px;
+
+    /* Лёгкое стекло — пилюля красиво «парит» над фоном треда */
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
 }
 
 .chats__msg {
     display: flex;
     align-items: flex-end;
     gap: 8px;
-    max-width: 70%;
+    /* На узком экране — до 80% ширины, на широком — кап ~640px (читаемая мера).
+       Пузырь сам прижимается к своему краю через align-self в дочерних классах. */
+    max-width: min(80%, 640px);
     position: relative;
-}
-
-.chats__msg:hover .chats__msg-actions {
-    opacity: 1;
 }
 
 .chats__msg--own {
@@ -605,30 +623,52 @@
     background: #bbb;
 }
 
+/* Цитата ответа внутри пузыря — Telegram-стиль:
+   изумрудная полоска слева, имя жирным, текст в одну строку с многоточием */
 .chats__msg-reply {
-    background: rgba(0, 0, 0, 0.05);
-    border-left: 3px solid #2ecc71;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
     padding: 4px 8px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid #10b981;
+    border-radius: 6px;
 }
 
 .chats__msg-reply-name {
     font-family: "Inter", sans-serif;
-    font-size: 0.6875rem;
+    font-size: 12px;
     font-weight: 600;
-    color: #1f7a5a;
-    display: block;
+    color: #047857;
+    line-height: 1.3;
 }
 
 .chats__msg-reply-text {
     font-family: "Inter", sans-serif;
-    font-size: 0.75rem;
-    color: #555;
-    display: block;
+    font-size: 12.5px;
+    color: #475569;
+    line-height: 1.35;
+
+    /* Одна строка с многоточием — длинные цитаты не раздувают пузырь */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 280px;
+}
+
+/* В своих изумрудных пузырях цитата на светлом полупрозрачном фоне */
+.chats__msg--own .chats__msg-reply {
+    background: rgba(255, 255, 255, 0.18);
+    border-left-color: rgba(255, 255, 255, 0.9);
+}
+
+.chats__msg--own .chats__msg-reply-name {
+    color: #ffffff;
+}
+
+.chats__msg--own .chats__msg-reply-text {
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .chats__msg-bubble {
@@ -638,10 +678,20 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     position: relative;
     min-width: 0;
+    /* Пузырь ужимается по контенту: короткое сообщение не растягивается
+       на всю ширину контейнера .chats__msg-body (как было). */
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Свои сообщения: содержимое тела (reply-цитата, пузырь, реакции)
+   прижимается к правому краю — так короткие пузыри не висят слева */
+.chats__msg--own .chats__msg-body {
+    align-items: flex-end;
 }
 
 .chats__msg--own .chats__msg-bubble {
-    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
+    background: #10b981;
     border-radius: 16px 16px 4px 16px;
 }
 
@@ -709,44 +759,72 @@
     background: #e8f5ee;
 }
 
+/* Плавающая пилюля действий рядом с сообщением — стиль Telegram:
+   белый фон, очень мягкая тень, скругление 999px, иконки 28px,
+   проявление на hover родителя + лёгкое всплытие снизу. */
 .chats__msg-actions {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 2px;
-    opacity: 0;
-    transition: opacity 0.15s;
-    position: relative;
+
+    padding: 4px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: 999px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 14px -2px rgba(15, 23, 42, 0.08),
+        0 1px 3px rgba(15, 23, 42, 0.05);
+
     align-self: flex-end;
-    background: #fff;
-    border-radius: 12px;
-    padding: 4px 6px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border: 1px solid #eef3f0;
-    margin-bottom: 4px;
     flex-shrink: 0;
+    margin-bottom: 4px;
+
+    /* Скрыто по умолчанию, проявляется при hover сообщения */
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
+/* Родитель .chats__msg при наведении показывает свою панель действий */
+.chats__msg:hover .chats__msg-actions {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Свои сообщения — действия слева от пузыря */
 .chats__msg-actions--own {
     order: -1;
 }
 
 .chats__msg-action {
-    width: 26px;
-    height: 26px;
-    border-radius: 7px;
-    border: none;
-    background: transparent;
-    color: #888;
+    width: 28px;
+    height: 28px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    color: #64748b;
+    background: transparent;
+
+    border: none;
+    border-radius: 999px;
+
     cursor: pointer;
-    transition: all 0.15s;
+    transition: background 0.12s ease, color 0.12s ease;
 }
 
 .chats__msg-action:hover {
-    background: #e8f5ee;
-    color: #1f7a5a;
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.chats__msg-action:active {
+    background: #d1fae5;
 }
 
 .chats__msg-action--danger:hover {
@@ -821,10 +899,12 @@
     30%            { transform: translateY(-5px); background: #1f7a5a; }
 }
 
+/* Тонкая горизонтальная полоса композера во всю ширину — стиль Telegram desktop.
+   Белый фон, отбивка тонкой линией от треда сообщений, без скругления. */
 .chats__input-area {
-    background: #fff;
-    border-top: 1px solid #eef3f0;
-    padding: 12px 16px;
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    padding: 6px 16px;
     position: relative;
 }
 
@@ -836,7 +916,8 @@
     border-left: 3px solid #2ecc71;
     border-radius: 8px;
     padding: 8px 12px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 4px;
 }
 
 .chats__reply-bar-content {
@@ -844,6 +925,17 @@
     align-items: center;
     gap: 8px;
     color: #1f7a5a;
+
+    /* flex:1 + min-width:0 чтобы блок занимал ширину родителя
+       и не выталкивал крестик закрытия за границу */
+    flex: 1;
+    min-width: 0;
+}
+
+/* Внутренний div с именем и текстом (без отдельного класса в JSX).
+   min-width:0 нужен для работы ellipsis на дочернем .chats__reply-bar-text. */
+.chats__reply-bar-content > div {
+    flex: 1;
     min-width: 0;
 }
 
@@ -880,7 +972,8 @@
     gap: 10px;
     border-radius: 12px;
     padding: 8px 12px;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 4px;
     font-family: "Inter", sans-serif;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -920,10 +1013,12 @@
     flex-shrink: 0;
 }
 
+/* Плоский ряд элементов: вложение → textarea → инструменты → отправить.
+   Никакого фона, рамки и тени — всё это даёт родительский .chats__input-area. */
 .chats__input-row {
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: 2px;
 }
 
 .chats__input-tools {
@@ -934,69 +1029,100 @@
 }
 
 .chats__input-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     border: none;
-    background: #f0f4f2;
-    color: #666;
+    background: transparent;
+    color: #64748b;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     flex-shrink: 0;
-    transition: all 0.15s;
+    transition: background 0.15s, color 0.15s;
 }
 
 .chats__input-btn:hover {
-    background: #e8f5ee;
-    color: #1f7a5a;
+    background: #f1f5f9;
+    color: #0f172a;
 }
 
 .chats__input {
     flex: 1;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: 1.5px solid #e8e8e8;
-    background: #fafafa;
+    min-width: 0;
+
+    /* Внутри белой капсулы — без собственного фона, рамки и тени */
+    /* Высота одной строки = 8 + 20 + 8 = 36px, ровно как у кнопок-кружков */
+    padding: 8px 6px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
     font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #111;
+    font-size: 14px;
+    line-height: 20px;
+    color: #0f172a;
+
     outline: none;
     resize: none;
-    max-height: 120px;
-    line-height: 1.5;
-    transition: border-color 0.2s;
+
+    /* Авто-рост управляется из useLayoutEffect: scrollHeight → style.height.
+       Потолок задан здесь, дальше включается внутренний скролл (≈6 строк). */
+    min-height: 36px;
+    max-height: 160px;
+    overflow-y: auto;
+
+    /* Скрываем визуальный скроллбар, но колесо/тач/клавиатура по-прежнему скроллят */
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;       /* IE / старый Edge */
+
+    /* box-sizing нужен чтобы scrollHeight корректно матчился с CSS-высотой */
+    box-sizing: border-box;
+
+    transition: height 0.1s ease;
 }
 
-.chats__input:focus {
-    border-color: #1f7a5a;
-    background: #fff;
+/* WebKit / Blink — Chrome, Safari, новый Edge */
+.chats__input::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
 }
 
+/* Фокус теперь визуализирует обёртка .chats__input-row через :focus-within */
+
+/* Кнопка отправки — только иконка-самолётик. Без фона, рамки и круга.
+   Цвет иконки переключается между серым (нет текста) и изумрудным (есть). */
 .chats__send-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    border: none;
-    background: #e8e8e8;
-    color: #aaa;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    padding: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+
     cursor: not-allowed;
-    flex-shrink: 0;
-    transition: all 0.2s;
+    transition: color 0.15s ease, transform 0.1s ease;
 }
 
 .chats__send-btn--active {
-    background: linear-gradient(135deg, #1f7a5a, #2ecc71);
-    color: #fff;
+    color: #10b981;
     cursor: pointer;
 }
 
 .chats__send-btn--active:hover {
-    opacity: 0.9;
+    color: #047857;
+}
+
+.chats__send-btn--active:active {
+    transform: scale(0.92);
 }
 
 .chats__drop-overlay {
@@ -1084,39 +1210,40 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 32px;
+    padding: 40px 24px;
+    text-align: center;
+    color: #64748b;
 }
 
 .chats__empty-icon-wrap {
     width: 72px;
     height: 72px;
     border-radius: 22px;
-    background: linear-gradient(135deg, #e9f6ef 0%, #f5fbf7 100%);
-    border: 1px solid #dcebe3;
+    background: linear-gradient(135deg, #d1fae5 0%, #f8fafc 100%);
+    border: 1px solid #a7f3d0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1f7a5a;
-    box-shadow: 0 8px 24px rgba(31, 122, 90, 0.08);
+    color: #047857;
     margin-bottom: 4px;
 }
 
 .chats__empty-title {
     font-family: "SF Pro", sans-serif;
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: #0f3d2e;
-    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-top: 8px;
 }
 
 .chats__empty-subtitle {
     font-family: "Inter", sans-serif;
-    font-size: 0.875rem;
-    color: #888;
+    font-size: 13px;
+    color: #64748b;
     text-align: center;
     max-width: 280px;
     line-height: 1.6;
-    margin: 0;
+    margin-top: 4px;
 }
 
 .chats__settings-backdrop {
@@ -2154,3 +2281,621 @@
         font-size: 1.125rem;
     }
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   Правая context-панель: профиль/группа, закреплённые, участники
+   На узких экранах (<1280px) скрывается, контент остаётся в модалке настроек.
+══════════════════════════════════════════════════════════════ */
+
+.chats__context {
+    width: 320px;
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+    border-left: 1px solid #e2e8f0;
+    overflow-y: auto;
+    /* Плавная анимация при сворачивании / разворачивании */
+    transition: width 0.22s ease, border-color 0.22s ease;
+}
+
+/* ── Свёрнутые состояния ───────────────────────────────────────
+   Модификаторы на корне .chats управляют шириной боковин.
+   В свёрнутом сайдбаре остаётся только хедер с кнопкой PanelLeftOpen
+   для обратного разворачивания.
+   ────────────────────────────────────────────────────────────── */
+
+/* Левая колонка — компактный режим: только хедер с тоггл-кнопкой */
+/* Ширина под 46px аватар + отступы. Сам список чатов остаётся видимым в виде ряда фото */
+.chats--sidebar-collapsed .chats__sidebar {
+    width: 68px;
+}
+
+.chats--sidebar-collapsed .chats__sidebar-header {
+    padding: 16px 8px;
+    justify-content: center;
+}
+
+/* В свёрнутом режиме скрываем всё, кроме списка чатов и кнопки-тоггл */
+.chats--sidebar-collapsed .chats__sidebar-header-left,
+.chats--sidebar-collapsed .chats__sidebar-search,
+.chats--sidebar-collapsed .chats__sidebar-empty,
+.chats--sidebar-collapsed .chats__list-no-results {
+    display: none;
+}
+
+/* В компактном режиме оставляем видимой только кнопку-тоггл */
+.chats--sidebar-collapsed .chats__sidebar-actions > :not(.chats__sidebar-collapse-btn) {
+    display: none;
+}
+
+/* Элемент списка превращается в центрированную аватарку для быстрого переключения */
+.chats--sidebar-collapsed .chats__item {
+    justify-content: center;
+    padding: 8px 4px;
+    gap: 0;
+}
+
+.chats--sidebar-collapsed .chats__item-info {
+    display: none;
+}
+
+/* Бейдж непрочитанных переезжает в правый верхний угол аватара */
+/* В свёрнутом сайдбаре бейдж приклеен к углу аватара (модификатор --corner).
+   Внутренний бейдж в .chats__item-bottom скрывается вместе с .chats__item-info. */
+.chats__item-unread--corner {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+
+    font-size: 9.5px;
+    border: 2px solid #ffffff;
+}
+
+/* Правая context-панель — полное скрытие */
+.chats--no-context .chats__context {
+    width: 0;
+    border-left-color: transparent;
+}
+
+/* Профиль / шапка группы */
+.chats__context-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid #eef3f0;
+}
+
+.chats__context-avatar {
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #ecfdf5;
+    color: #047857;
+    overflow: hidden;
+
+    font-family: "SF Pro", sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.chats__context-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chats__context-name {
+    margin: 8px 0 0;
+    font-family: "SF Pro", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0e1f17;
+    text-align: center;
+    line-height: 1.25;
+}
+
+.chats__context-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    font-family: Inter, sans-serif;
+    font-size: 12.5px;
+    color: #6a766f;
+}
+
+.chats__context-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #c8d2c9;
+}
+
+.chats__context-dot--online {
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.chats__context-status-online {
+    color: #047857;
+}
+
+/* Ряд быстрых действий: звонок / видео / уведомления */
+.chats__context-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.chats__context-action-btn {
+    width: 36px;
+    height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f7f9f7;
+    color: #3f4b44;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+}
+
+.chats__context-action-btn:hover {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #047857;
+}
+
+.chats__context-action-btn--active {
+    color: #b45309;
+    background: #fef3c7;
+    border-color: #fde68a;
+}
+
+/* Секции (О чате / Закреплённые / Участники) */
+.chats__context-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eef3f0;
+}
+
+.chats__context-section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin: 0 0 10px;
+
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #6a766f;
+}
+
+.chats__context-description {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #3f4b44;
+}
+
+/* Список закреплённых */
+.chats__context-pinned-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.chats__context-pinned-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding: 8px 10px;
+    background: #f7f9f7;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+    border-left: 2px solid #10b981;
+
+    text-align: left;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+}
+
+.chats__context-pinned-item:hover {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    border-left-color: #047857;
+}
+
+.chats__context-pinned-sender {
+    font-family: Inter, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #047857;
+}
+
+.chats__context-pinned-text {
+    font-family: Inter, sans-serif;
+    font-size: 12.5px;
+    color: #3f4b44;
+    line-height: 1.4;
+
+    /* Обрезаем длинные сообщения по двум строкам */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Список участников */
+.chats__context-members {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chats__context-member {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chats__context-member-avatar {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ecfdf5;
+    color: #047857;
+
+    border-radius: 50%;
+    overflow: visible;
+
+    font-family: "SF Pro", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.chats__context-member-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Зелёная точка-индикатор «онлайн» в правом нижнем углу аватара */
+.chats__context-member-online {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+
+    width: 10px;
+    height: 10px;
+
+    background: #10b981;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+}
+
+.chats__context-member-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.chats__context-member-name {
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    color: #0e1f17;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chats__context-member-you {
+    color: #6a766f;
+    font-weight: 400;
+}
+
+.chats__context-member-role {
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    color: #047857;
+    text-transform: lowercase;
+}
+
+/* Кнопка «Показать все/всех» */
+.chats__context-show-all {
+    margin-top: 10px;
+    padding: 0;
+
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-family: Inter, sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #047857;
+}
+
+.chats__context-show-all:hover {
+    text-decoration: underline;
+}
+
+/* Подвал с кнопкой полных настроек чата */
+.chats__context-footer {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid #eef3f0;
+}
+
+.chats__context-settings {
+    width: 100%;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    background: #f7f9f7;
+    color: #3f4b44;
+
+    border: 1px solid #e3e8e3;
+    border-radius: 10px;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+}
+
+.chats__context-settings:hover {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #047857;
+}
+
+/* Узкие экраны — скрываем панель, чтобы не давить тред */
+@media (max-width: 1280px) {
+    .chats__context {
+        display: none;
+    }
+}
+
+
+/* ── Пустое состояние треда (нет сообщений) ───────────────────
+   Полупрозрачная карточка по центру .chats__messages с иконкой,
+   мягким изумрудным свечением и плавным появлением.
+   pointer-events: none — не перехватывает клики по фону.
+   ───────────────────────────────────────────────────────────── */
+.chats__empty-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 260px;
+    height: 260px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 28px 24px;
+    text-align: center;
+
+    /* Тонкое стекло поверх фона треда */
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(248, 250, 252, 0.7) 100%);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 10px 30px -12px rgba(15, 23, 42, 0.12),
+        0 2px 6px rgba(15, 23, 42, 0.04);
+
+    pointer-events: none;
+    animation: chats-empty-fade-in 0.4s ease both;
+}
+
+/* Мягкое изумрудное свечение за иконкой */
+.chats__empty-card-glow {
+    position: absolute;
+    top: 36px;
+    width: 120px;
+    height: 120px;
+
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0) 65%);
+
+    pointer-events: none;
+    animation: chats-empty-pulse 3.2s ease-in-out infinite;
+}
+
+/* Иконка в круге с лёгкой обводкой и тонкой тенью */
+.chats__empty-card-icon {
+    position: relative;
+    z-index: 1;
+
+    width: 56px;
+    height: 56px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #047857;
+    background: #ffffff;
+
+    border-radius: 50%;
+    border: 1px solid rgba(167, 243, 208, 0.7);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 12px rgba(16, 185, 129, 0.18);
+}
+
+.chats__empty-card-title {
+    position: relative;
+    z-index: 1;
+    margin: 4px 0 0;
+
+    font-family: "SF Pro", sans-serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #0f172a;
+}
+
+.chats__empty-card-text {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: 200px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #64748b;
+}
+
+/* Плавное появление при первой отрисовке */
+@keyframes chats-empty-fade-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -46%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Тихая пульсация свечения за иконкой */
+@keyframes chats-empty-pulse {
+    0%, 100% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+
+/* ── Telegram-стиль pinned-бар над тредом ──────────────────────
+   Узкая полоска под шапкой чата: иконка пина, лейбл, последний
+   закреплённый текст в одну строку с многоточием. Клик —
+   разворачивает полный список (если пинов больше одного).
+   ───────────────────────────────────────────────────────────── */
+.chats__pinned-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 8px 24px;
+
+    background: #ffffff;
+    border: none;
+    border-bottom: 1px solid #e2e8f0;
+    border-left: 3px solid #10b981;
+
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.chats__pinned-bar:hover {
+    background: #f8fafc;
+}
+
+.chats__pinned-bar-icon {
+    color: #047857;
+    flex-shrink: 0;
+}
+
+.chats__pinned-bar-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.chats__pinned-bar-label {
+    font-family: "Inter", sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #047857;
+}
+
+.chats__pinned-bar-text {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: #0f172a;
+
+    /* Одна строка с многоточием — главное требование */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Короткая подсветка сообщения, к которому проскроллили (по клику на pinned-бар) */
+.chats__msg-highlight {
+    animation: chats-msg-highlight 1.6s ease;
+    border-radius: 12px;
+}
+
+@keyframes chats-msg-highlight {
+    0% {
+        background: rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+    20% {
+        background: rgba(16, 185, 129, 0.18);
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0.12);
+    }
+    100% {
+        background: rgba(16, 185, 129, 0);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+
