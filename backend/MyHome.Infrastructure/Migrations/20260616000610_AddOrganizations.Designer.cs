@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyHome.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyHome.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260616000610_AddOrganizations")]
+    partial class AddOrganizations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,8 +215,6 @@ namespace MyHome.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("\"InviteCode\" IS NOT NULL");
 
-                    b.HasIndex("ServiceRequestId");
-
                     b.ToTable("Chats");
                 });
 
@@ -327,16 +328,11 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<DateTime>("DueAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("ComplianceDeadlines");
                 });
@@ -361,12 +357,7 @@ namespace MyHome.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Expenses");
                 });
@@ -814,11 +805,16 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
 
                     b.HasIndex("ResidentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceRequests");
                 });
@@ -1158,16 +1154,6 @@ namespace MyHome.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
-            modelBuilder.Entity("MyHome.Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.ServiceRequest", "ServiceRequest")
-                        .WithMany()
-                        .HasForeignKey("ServiceRequestId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ServiceRequest");
-                });
-
             modelBuilder.Entity("MyHome.Domain.Entities.ChatMember", b =>
                 {
                     b.HasOne("MyHome.Domain.Entities.Chat", "Chat")
@@ -1211,22 +1197,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Navigation("ReplyTo");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.ComplianceDeadline", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.Expense", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.MessageReaction", b =>
@@ -1405,10 +1375,14 @@ namespace MyHome.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("MyHome.Domain.Entities.User", "Resident")
-                        .WithMany("ServiceRequests")
+                        .WithMany()
                         .HasForeignKey("ResidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MyHome.Domain.Entities.User", null)
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Assignee");
 

@@ -1,18 +1,9 @@
-// =============================================================================
-// DTO (Data Transfer Object) — это «контракт» того, что наш API отдаёт клиенту.
-// Эти C# классы 1-в-1 соответствуют TypeScript-типам в
-// web/src/api/managerDashboard.api.ts. Если поменяете тут — поменяйте и там.
-//
-// `record` в C# — это короткая запись для неизменяемого класса со значениями.
-// Хорошо подходит для DTO, потому что:
-//   1. Не нужно писать конструктор и свойства руками.
-//   2. JSON-сериализатор корректно сериализует поля.
-//   3. Нельзя случайно мутировать ответ после его создания.
-// =============================================================================
+// DTO ответов дашборда. Зеркалят TS-типы в web/src/api/managerDashboard.api.ts -
+// меняешь тут, поменяй и там.
 
 namespace MyHome.Api.Dtos;
 
-// ---------- 1. KPI-карточки -------------------------------------------------
+// 1. KPI-карточки
 
 public record KpiCardDto(
     string Id,           // "tickets" | "unassigned" | "alerts" | "collection" | "meters"
@@ -29,7 +20,7 @@ public record KpiResponseDto(
     List<KpiCardDto> Cards
 );
 
-// ---------- 2. Приоритетные заявки ------------------------------------------
+// 2. Приоритетные заявки
 
 public record PriorityTicketDto(
     string Id,
@@ -50,7 +41,7 @@ public record PriorityTicketsResponseDto(
     int Total            // полное число открытых приоритетных заявок (для «ещё N»)
 );
 
-// ---------- 3. Собираемость за текущий месяц --------------------------------
+// 3. Собираемость за текущий месяц
 
 public record CollectionsResponseDto(
     decimal Plan,              // плановый процент, напр. 92
@@ -62,7 +53,7 @@ public record CollectionsResponseDto(
     string PeriodLabel         // "май 2026"
 );
 
-// ---------- 4. Регуляторные сроки -------------------------------------------
+// 4. Регуляторные сроки
 
 public record ComplianceDeadlineDto(
     string Id,
@@ -81,7 +72,7 @@ public record ComplianceResponseDto(
     int Total
 );
 
-// ---------- 5. Лента активности (только важные события) --------------------
+// 5. Лента активности
 
 public record ActivityTextPartDto(
     string Text,
@@ -103,7 +94,7 @@ public record ActivityResponseDto(
     List<ActivityEventDto> Items
 );
 
-// ---------- 6. Активные голосования -----------------------------------------
+// 6. Активные голосования
 
 public record ActiveVoteDto(
     string Id,

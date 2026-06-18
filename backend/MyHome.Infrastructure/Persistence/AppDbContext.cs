@@ -30,9 +30,9 @@ public class AppDbContext : DbContext
     public DbSet<Poll> Polls => Set<Poll>();
     public DbSet<PollOption> PollOptions => Set<PollOption>();
     public DbSet<PollVote> PollVotes => Set<PollVote>();
-    public DbSet<Subscription> Subscriptions => Set<Subscription>();
-    public DbSet<UserApartment> UserApartments => Set<UserApartment>();
     public DbSet<ComplianceDeadline> ComplianceDeadlines => Set<ComplianceDeadline>();
+    public DbSet<Building> Buildings => Set<Building>();
+    public DbSet<Organization> Organizations => Set<Organization>();
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -42,13 +42,14 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(a => a.ResidentId);
 
+        // явно цепляем Resident к User.ServiceRequests по ResidentId,
+        // иначе EF добавит лишний теневой FK UserId на ту же таблицу
         modelBuilder.Entity<ServiceRequest>()
             .HasOne(r => r.Resident)
-            .WithMany()
+            .WithMany(u => u.ServiceRequests)
             .HasForeignKey(r => r.ResidentId);
 
-        // Опциональная связь с исполнителем. SetNull — если исполнителя удалят,
-        // заявка не пропадёт, а просто станет «без исполнителя».
+        // исполнитель необязателен: удалили сотрудника - заявка остаётся без исполнителя
         modelBuilder.Entity<ServiceRequest>()
             .HasOne(r => r.Assignee)
             .WithMany()
@@ -264,22 +265,50 @@ public class AppDbContext : DbContext
             .HasIndex(v => new { v.PollId, v.UserId })
             .IsUnique(); // один голос на опрос
 
-        // Subscriptions
-        modelBuilder.Entity<Subscription>()
-            .HasOne(s => s.User)
-            .WithMany()
-            .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        // дом и пользователь принадлежат УК. FK nullable: удалили УК - ссылки
+        // обнуляются, сами данные не каскадим
+        modelBuilder.Entity<Building>()
+            .HasOne<Organization>()
+            .WithMany(o => o.Buildings)
+            .HasForeignKey(b => b.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull);
 
-        modelBuilder.Entity<Subscription>()
-            .HasIndex(s => s.UserId)
-            .IsUnique(); // одна подписка на пользователя
-
-        // UserApartments
-        modelBuilder.Entity<UserApartment>()
-            .HasOne(a => a.User)
+        modelBuilder.Entity<User>()
+            .HasOne<Organization>()
             .WithMany()
-            .HasForeignKey(a => a.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasForeignKey(u => u.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // расходы и сроки тоже привязали к УК (раньше висели без связей)
+        modelBuilder.Entity<Expense>()
+            .HasOne<Organization>()
+            .WithMany()
+            .HasForeignKey(e => e.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<ComplianceDeadline>()
+            .HasOne<Organization>()
+            .WithMany()
+            .HasForeignKey(c => c.OrganizationId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // чат по заявке - нормальный FK вместо висячего Guid
+        modelBuilder.Entity<Chat>()
+            .HasOne(c => c.ServiceRequest)
+            .WithMany()
+            .HasForeignKey(c => c.ServiceRequestId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // адрес дома уникален - двух одинаковых домов в реестре быть не должно,
+        // корпус входит в ключ
+        modelBuilder.Entity<Building>()
+            .HasIndex(b => new { b.City, b.Street, b.House, b.Block })
+            .IsUnique();
+
+        // лицевой счёт уникален (если задан)
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.AccountNumber)
+            .IsUnique()
+            .HasFilter("\"AccountNumber\" IS NOT NULL");
     }
 }

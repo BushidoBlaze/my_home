@@ -1,38 +1,11 @@
-// =============================================================================
-// ManagerDashboardController — 6 endpoint-ов, которые питают /manager/home.
-//
-// Что такое контроллер?
-//   Это класс, на методы которого приходят HTTP-запросы. Атрибут [Route]
-//   задаёт префикс пути, атрибут [HttpGet("…")] на методе задаёт суффикс.
-//   Здесь все URL начинаются с /api/manager/dashboard/…
-//
-// Что такое [Authorize(Roles = "Manager")]?
-//   ASP.NET достаёт из JWT-токена роль пользователя и не пускает в метод
-//   никого, кроме менеджера УК. Жилец получит 403.
-//
-// Что такое AppDbContext?
-//   Это Entity Framework Core — ORM, который превращает обычные C# запросы
-//   (LINQ) в SQL. Все таблицы доступны через свойства: _db.ServiceRequests,
-//   _db.Polls, и т.д. Здесь PostgreSQL.
-//
-// Что я делаю в каждом методе?
-//   1. Беру нужные данные из БД через LINQ к _db.<сущность>.
-//   2. Считаю агрегаты (Count, Sum) или формирую списки (Select).
-//   3. Форматирую строки на стороне сервера (даты, проценты, дельты).
-//   4. Заворачиваю всё в DTO из MyHome.Api.Dtos.
-//   5. Возвращаю Ok(dto) — это HTTP 200 + JSON.
-//
-// Что НЕ делаю:
-//   — Не реализую compliance (регуляторные сроки), потому что в Domain нет
-//     соответствующей сущности. Отдаю заглушку с TODO — добавим entity позже.
-//   — Не считаю SLA на стороне БД честно (нужно поле Priority, DueAt).
-//     Использую существующие поля как лучшее приближение.
-// =============================================================================
+// Дашборд менеджера: 6 ручек для /manager/home (KPI, заявки, собираемость,
+// сроки, лента, голосования). Всё скоупится по организации текущего менеджера.
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyHome.Api.Dtos;
+using MyHome.Api.Security;
 using MyHome.Domain.Entities;
 using MyHome.Infrastructure.Persistence;
 using System.Globalization;
@@ -48,19 +21,15 @@ public class ManagerDashboardController : ControllerBase
 
     public ManagerDashboardController(AppDbContext db) => _db = db;
 
-    // -------------------------------------------------------------------------
-    // 1) GET /api/manager/dashboard/stats
-    // KPI-строка из 5 карточек: открытые / без исполнителя / аварии /
-    // собираемость / показания.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/stats — строка KPI из 5 карточек
     [HttpGet("stats")]
     public async Task<ActionResult<KpiResponseDto>> GetStats()
     {
-        // Считаем агрегаты ОДНИМ запросом к БД, чтобы не делать 5 round-trip-ов.
-        // EF Core развернёт это в один SQL с подзапросами.
-        // Все четыре счётчика берём ОДНИМ запросом через агрегат по таблице.
-        // Теперь все условия — на реальных полях, никаких хаков по подстроке.
+        // все счётчики одним запросом, чтобы не гонять 5 раз в БД
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var stats = await _db.ServiceRequests
+            .Where(r => r.Resident.OrganizationId == orgId)
             .GroupBy(_ => 1)
             .Select(g => new
             {
@@ -71,28 +40,26 @@ public class ManagerDashboardController : ControllerBase
             })
             .FirstOrDefaultAsync() ?? new { Open = 0, Unassigned = 0, Alerts = 0, NewToday = 0 };
 
-        // Собираемость текущего месяца:
-        //   actual % = (получено за месяц) / (начислено за месяц) * 100
+        // собираемость за месяц = получено / начислено * 100
         var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
         var accrued = await _db.UtilityBills
-            .Where(b => b.CreatedAt >= monthStart)
+            .Where(b => b.CreatedAt >= monthStart && b.User.OrganizationId == orgId)
             .SumAsync(b => (decimal?)b.Amount) ?? 0m;
         var received = await _db.UtilityBills
-            .Where(b => b.PaidAt != null && b.PaidAt >= monthStart)
+            .Where(b => b.PaidAt != null && b.PaidAt >= monthStart && b.User.OrganizationId == orgId)
             .SumAsync(b => (decimal?)b.Amount) ?? 0m;
         var collectionPct = accrued > 0 ? Math.Round(received / accrued * 100m, 1) : 0m;
 
-        // Показания счётчиков за месяц.
         var metersThisMonth = await _db.MeterReadings
-            .CountAsync(m => m.CreatedAt >= monthStart);
-        // Грубая оценка «целевого» количества показаний — число активных квартир.
-        var activeApartments = await _db.Apartments.CountAsync();
+            .CountAsync(m => m.CreatedAt >= monthStart && m.User.OrganizationId == orgId);
+        // за "план" по показаниям берём число активных квартир (грубо)
+        var activeApartments = await _db.Apartments.CountAsync(a => a.Resident.OrganizationId == orgId);
         var metersTarget = activeApartments > 0 ? activeApartments : metersThisMonth;
         var metersPct = metersTarget > 0
             ? (int)Math.Round((double)metersThisMonth / metersTarget * 100)
             : 0;
 
-        // Складываем 5 карточек. Порядок здесь определяет порядок отображения.
+        // порядок карточек = порядок на экране
         var cards = new List<KpiCardDto>
         {
             new(
@@ -145,30 +112,26 @@ public class ManagerDashboardController : ControllerBase
         return Ok(new KpiResponseDto(DateTime.UtcNow, cards));
     }
 
-    // -------------------------------------------------------------------------
-    // 2) GET /api/manager/dashboard/priority-tickets?limit=6
-    // Приоритетная очередь заявок для диспетчера.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/priority-tickets?limit=6 — очередь для диспетчера
     [HttpGet("priority-tickets")]
     public async Task<ActionResult<PriorityTicketsResponseDto>> GetPriorityTickets([FromQuery] int limit = 6)
     {
-        // Берём открытые заявки. .Include() подгружает связанные сущности —
-        // здесь жилец (адрес) и исполнитель (имя).
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var openQuery = _db.ServiceRequests
             .Include(r => r.Resident)
             .Include(r => r.Assignee)
-            .Where(r => r.Status != "Done");
+            .Where(r => r.Status != "Done" && r.Resident.OrganizationId == orgId);
 
         var total = await openQuery.CountAsync();
 
-        // Сортировка: сначала High (0), потом Med (1), потом Low (2), внутри — по дате.
-        // Это превращает приоритет в число для ORDER BY.
+        // High -> Med -> Low, внутри приоритета по дате
         var items = await openQuery
             .OrderBy(r => r.Priority == "High" ? 0 : r.Priority == "Med" ? 1 : 2)
             .ThenBy(r => r.CreatedAt)
             .Take(limit)
             .Select(r => new PriorityTicketDto(
-                Id: $"Т-{r.Id.ToString().Substring(0, 4).ToUpper()}",
+                Id: r.Id.ToString(),
                 Title: r.Title,
                 SubTitle: r.Priority == "High" ? "Аварийная"
                         : r.Priority == "Med"  ? "Срочная"
@@ -181,43 +144,42 @@ public class ManagerDashboardController : ControllerBase
                 Sla: FormatSla(r.CreatedAt),
                 SlaTone: SlaTone(r.CreatedAt),
                 Status: MapStatus(r.Status),
-                StatusTone: r.Status == "InProgress" ? "info" : r.Status == "New" ? "" : "violet"
+                StatusTone: r.Status == "InProgress" ? "info" : r.Status == "Review" ? "warning" : ""
             ))
             .ToListAsync();
 
         return Ok(new PriorityTicketsResponseDto(DateTime.UtcNow, items, total));
     }
 
-    // -------------------------------------------------------------------------
-    // 3) GET /api/manager/dashboard/collections
-    // Собираемость за текущий месяц + тренд за последние 9 месяцев.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/collections — собираемость + тренд за 9 мес.
     [HttpGet("collections")]
     public async Task<ActionResult<CollectionsResponseDto>> GetCollections()
     {
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var now = DateTime.UtcNow;
         var monthStart = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
 
         var accrued = await _db.UtilityBills
-            .Where(b => b.CreatedAt >= monthStart)
+            .Where(b => b.CreatedAt >= monthStart && b.User.OrganizationId == orgId)
             .SumAsync(b => (decimal?)b.Amount) ?? 0m;
         var received = await _db.UtilityBills
-            .Where(b => b.PaidAt != null && b.PaidAt >= monthStart)
+            .Where(b => b.PaidAt != null && b.PaidAt >= monthStart && b.User.OrganizationId == orgId)
             .SumAsync(b => (decimal?)b.Amount) ?? 0m;
         var debt = accrued - received;
         var actualPct = accrued > 0 ? Math.Round(received / accrued * 100m, 1) : 0m;
 
-        // Тренд: считаем процент собираемости за каждый из последних 9 месяцев.
+        // процент собираемости по каждому из последних 9 месяцев
         var trend = new List<decimal>();
         for (int i = 8; i >= 0; i--)
         {
             var ms = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-i);
             var me = ms.AddMonths(1);
             var accruedM = await _db.UtilityBills
-                .Where(b => b.CreatedAt >= ms && b.CreatedAt < me)
+                .Where(b => b.CreatedAt >= ms && b.CreatedAt < me && b.User.OrganizationId == orgId)
                 .SumAsync(b => (decimal?)b.Amount) ?? 0m;
             var receivedM = await _db.UtilityBills
-                .Where(b => b.PaidAt != null && b.PaidAt >= ms && b.PaidAt < me)
+                .Where(b => b.PaidAt != null && b.PaidAt >= ms && b.PaidAt < me && b.User.OrganizationId == orgId)
                 .SumAsync(b => (decimal?)b.Amount) ?? 0m;
             trend.Add(accruedM > 0 ? Math.Round(receivedM / accruedM * 100m, 0) : 0m);
         }
@@ -233,20 +195,18 @@ public class ManagerDashboardController : ControllerBase
         ));
     }
 
-    // -------------------------------------------------------------------------
-    // 4) GET /api/manager/dashboard/compliance?limit=5
-    // Регуляторные сроки. Читаем из таблицы ComplianceDeadlines, сортируем по
-    // ближайшему дедлайну. Статус (горит / скоро / норма) вычисляем на лету
-    // от числа оставшихся дней.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/compliance?limit=5 — регуляторные сроки,
+    // статус (горит/скоро/норма) считаем на лету от числа оставшихся дней
     [HttpGet("compliance")]
     public async Task<ActionResult<ComplianceResponseDto>> GetCompliance([FromQuery] int limit = 5)
     {
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+
         var now = DateTime.UtcNow;
 
-        // Берём только незавершённые сроки, сортируем по «горячести».
+        // только незакрытые сроки своей УК, ближайшие сверху
         var query = _db.ComplianceDeadlines
-            .Where(c => c.CompletedAt == null)
+            .Where(c => c.CompletedAt == null && c.OrganizationId == orgId)
             .OrderBy(c => c.DueAt);
 
         var total = await query.CountAsync();
@@ -254,7 +214,7 @@ public class ManagerDashboardController : ControllerBase
 
         var items = rows.Select(c =>
         {
-            // Целое число дней до дедлайна. Отрицательное если просрочено.
+            // дней до дедлайна, отрицательное = просрочено
             var daysLeft = (int)Math.Floor((c.DueAt - now).TotalDays);
             return new ComplianceDeadlineDto(
                 Id: c.Id.ToString(),
@@ -271,23 +231,18 @@ public class ManagerDashboardController : ControllerBase
         return Ok(new ComplianceResponseDto(now, items, total));
     }
 
-    /// <summary>
-    /// Бизнес-правило: до 7 дней — «горит» (надо начинать срочно),
-    /// до 21 дня — «скоро» (планировать), дальше — «норма».
-    /// </summary>
+    // <=7 дней горит, <=21 скоро, дальше норма
     private static string ComputeComplianceStatus(int daysLeft) =>
         daysLeft <= 7 ? "burning" : daysLeft <= 21 ? "soon" : "ok";
 
-    // -------------------------------------------------------------------------
-    // 5) GET /api/manager/dashboard/activity?limit=6
-    // Сжатая лента важных событий — берём из таблицы Notifications.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/activity?limit=6 — лента событий из Notifications
     [HttpGet("activity")]
     public async Task<ActionResult<ActivityResponseDto>> GetActivity([FromQuery] int limit = 6)
     {
-        // Берём последние уведомления, превращаем в формат ленты активности.
-        // В реальности здесь нужно отфильтровать «важные» (тип, источник).
+        // последние уведомления как лента (потом можно фильтровать по типу/важности)
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
         var notes = await _db.Notifications
+            .Where(n => n.User.OrganizationId == orgId)
             .OrderByDescending(n => n.CreatedAt)
             .Take(limit)
             .ToListAsync();
@@ -308,17 +263,15 @@ public class ManagerDashboardController : ControllerBase
         return Ok(new ActivityResponseDto(DateTime.UtcNow, items));
     }
 
-    // -------------------------------------------------------------------------
-    // 6) GET /api/manager/dashboard/active-votes?limit=5
-    // Активные голосования с подсчётом голосов и кворумом.
-    // -------------------------------------------------------------------------
+    // GET /api/manager/dashboard/active-votes?limit=5 — активные опросы + кворум
     [HttpGet("active-votes")]
     public async Task<ActionResult<ActiveVotesResponseDto>> GetActiveVotes([FromQuery] int limit = 5)
     {
-        var totalEligible = await _db.Users.CountAsync(u => u.Role == "Resident");
+        var orgId = await ManagerScope.CurrentOrgIdAsync(_db, User);
+        var totalEligible = await _db.Users.CountAsync(u => u.Role == "Resident" && u.OrganizationId == orgId);
 
         var polls = await _db.Polls
-            .Where(p => p.Status == "Active" && p.EndsAt > DateTime.UtcNow)
+            .Where(p => p.Status == "Active" && p.EndsAt > DateTime.UtcNow && p.CreatedBy.OrganizationId == orgId)
             .OrderBy(p => p.EndsAt)
             .Take(limit)
             .Select(p => new
@@ -347,10 +300,7 @@ public class ManagerDashboardController : ControllerBase
         return Ok(new ActiveVotesResponseDto(DateTime.UtcNow, items));
     }
 
-    // =========================================================================
-    // ------- Хелперы форматирования. В реальном проекте лучше вынести в
-    //         отдельный сервис, но для одного контроллера достаточно тут. -----
-    // =========================================================================
+    // хелперы форматирования
 
     private static string MapCategory(string c) => c switch
     {
@@ -366,7 +316,10 @@ public class ManagerDashboardController : ControllerBase
     private static string MapStatus(string s) => s switch
     {
         "New" => "Новая",
+        // старый статус Assigned показываем как Новая
+        "Assigned" => "Новая",
         "InProgress" => "В работе",
+        "Review" => "На проверке",
         "Done" => "Выполнена",
         _ => s,
     };

@@ -1,33 +1,19 @@
 namespace MyHome.Domain.Entities;
 
-/// <summary>
-/// Регуляторный срок: периодическая проверка / обязательная работа,
-/// за пропуск которой УК получает штрафы ГЖИ.
-///
-/// Категории:
-///   "Lift" — техническое освидетельствование лифтов
-///   "Gas"  — ВДГО (внутридомовое газовое оборудование)
-///   "Fire" — пожарная безопасность (огнетушители, СОУЭ)
-///   "Duct" — дымоходы и вентканалы
-/// </summary>
+// Регуляторный срок - обязательная проверка/работа, за просрочку которой УК
+// штрафует ГЖИ. Category: Lift (лифты), Gas (ВДГО), Fire (пожарка), Duct (вентканалы).
 public class ComplianceDeadline
 {
     public Guid Id { get; set; }
 
-    /// <summary>Категория — см. xml-doc выше.</summary>
+    public Guid? OrganizationId { get; set; }   // чья УК
+
     public string Category { get; set; } = null!;
+    public string Title { get; set; } = null!;   // напр. "Освидетельствование лифта №2"
+    public string Address { get; set; } = null!; // напр. "Берёзовая, 14"
 
-    /// <summary>Заголовок: "Освидетельствование лифта №2".</summary>
-    public string Title { get; set; } = null!;
-
-    /// <summary>Адрес объекта: "Берёзовая, 14".</summary>
-    public string Address { get; set; } = null!;
-
-    /// <summary>Когда работа должна быть выполнена (UTC).</summary>
-    public DateTime DueAt { get; set; }
-
-    /// <summary>Когда срок был отмечен выполненным (NULL пока актуален).</summary>
-    public DateTime? CompletedAt { get; set; }
+    public DateTime DueAt { get; set; }          // дедлайн (UTC)
+    public DateTime? CompletedAt { get; set; }   // null пока не выполнено
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

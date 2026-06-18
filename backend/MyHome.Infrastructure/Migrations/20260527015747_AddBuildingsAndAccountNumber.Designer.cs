@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyHome.Infrastructure.Persistence;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,13 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyHome.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260527015747_AddBuildingsAndAccountNumber")]
+    partial class AddBuildingsAndAccountNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.28")
+                .HasAnnotation("ProductVersion", "8.0.26")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -155,9 +158,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Series")
                         .HasColumnType("text");
 
@@ -169,8 +169,6 @@ namespace MyHome.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("City", "Street", "House", "Block")
                         .IsUnique();
@@ -211,8 +209,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.HasIndex("InviteCode")
                         .IsUnique()
                         .HasFilter("\"InviteCode\" IS NOT NULL");
-
-                    b.HasIndex("ServiceRequestId");
 
                     b.ToTable("Chats");
                 });
@@ -327,16 +323,11 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<DateTime>("DueAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("ComplianceDeadlines");
                 });
@@ -361,12 +352,7 @@ namespace MyHome.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Expenses");
                 });
@@ -584,27 +570,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("MyHome.Domain.Entities.Organization", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subtitle")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Organizations");
-                });
-
             modelBuilder.Entity("MyHome.Domain.Entities.Poll", b =>
                 {
                     b.Property<Guid>("Id")
@@ -814,11 +779,16 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssigneeId");
 
                     b.HasIndex("ResidentId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceRequests");
                 });
@@ -852,6 +822,33 @@ namespace MyHome.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("ServiceReviews");
+                });
+
+            modelBuilder.Entity("MyHome.Domain.Entities.Subscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Plan")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Subscriptions");
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.SupportTicket", b =>
@@ -954,9 +951,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Property<string>("House")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -988,9 +982,37 @@ namespace MyHome.Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("OrganizationId");
-
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MyHome.Domain.Entities.UserApartment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserApartments");
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.UserSettings", b =>
@@ -1150,24 +1172,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyHome.Domain.Entities.Building", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany("Buildings")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.Chat", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.ServiceRequest", "ServiceRequest")
-                        .WithMany()
-                        .HasForeignKey("ServiceRequestId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ServiceRequest");
-                });
-
             modelBuilder.Entity("MyHome.Domain.Entities.ChatMember", b =>
                 {
                     b.HasOne("MyHome.Domain.Entities.Chat", "Chat")
@@ -1211,22 +1215,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Navigation("ReplyTo");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.ComplianceDeadline", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.Expense", b =>
-                {
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.MessageReaction", b =>
@@ -1405,10 +1393,14 @@ namespace MyHome.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("MyHome.Domain.Entities.User", "Resident")
-                        .WithMany("ServiceRequests")
+                        .WithMany()
                         .HasForeignKey("ResidentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MyHome.Domain.Entities.User", null)
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Assignee");
 
@@ -1434,6 +1426,17 @@ namespace MyHome.Infrastructure.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("MyHome.Domain.Entities.Subscription", b =>
+                {
+                    b.HasOne("MyHome.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MyHome.Domain.Entities.SupportTicket", b =>
                 {
                     b.HasOne("MyHome.Domain.Entities.User", "User")
@@ -1451,12 +1454,18 @@ namespace MyHome.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ApartmentId");
 
-                    b.HasOne("MyHome.Domain.Entities.Organization", null)
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Apartment");
+                });
+
+            modelBuilder.Entity("MyHome.Domain.Entities.UserApartment", b =>
+                {
+                    b.HasOne("MyHome.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.UtilityBill", b =>
@@ -1487,11 +1496,6 @@ namespace MyHome.Infrastructure.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("MyHome.Domain.Entities.Organization", b =>
-                {
-                    b.Navigation("Buildings");
                 });
 
             modelBuilder.Entity("MyHome.Domain.Entities.Poll", b =>
