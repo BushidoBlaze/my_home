@@ -1,0 +1,16 @@
+# IDE / tooling
+.idea/
+.claude/
+.vs/
+
+# Локальные настройки разработки (могут содержать секреты)
+backend/MyHome.Api/appsettings.Development.json
+
+# Загруженные пользователями файлы (плейсхолдеры папок оставляем)
+backend/MyHome.Api/wwwroot/avatars/*
+backend/MyHome.Api/wwwroot/services/*
+backend/MyHome.Api/wwwroot/marketplace/*
+backend/MyHome.Api/wwwroot/chat-avatars/*
+backend/MyHome.Api/wwwroot/chat-files/*
+backend/MyHome.Api/wwwroot/news-files/*
+!backend/MyHome.Api/wwwroot/**/.gitkeep
