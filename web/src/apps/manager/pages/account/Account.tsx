@@ -1,11 +1,17 @@
+// plugins
 import {useEffect, useRef, useState, type JSX} from "react";
 import {useNavigate} from "react-router-dom";
-import {
-    User, Mail, Phone, MessageSquare, Hash, Lock, Building2, Briefcase,
-    ShieldCheck, Clock, Calendar, Home, Eye,
-    Edit2, Check, X, Camera, ChevronDown, ChevronUp, LogOut,
+import {User, Mail, Phone, MessageSquare, Hash, Lock, Building2, Briefcase, ShieldCheck, Clock, Calendar, Home, Eye,
+    Edit2, Check, X, Camera, ChevronDown, ChevronUp, LogOut
 } from "lucide-react";
+
+// api
 import {usersApi} from "@/api/users.api.ts";
+
+// hooks
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
+
+// styles
 import "./Account.css";
 
 const API_URL = import.meta.env.VITE_API_URL ?? "";
@@ -51,10 +57,10 @@ function formatDateRu(iso?: string): string {
 function buildFallback(base?: Partial<Me>): Me {
     return {
         id: base?.id ?? "demo",
-        fullName: base?.fullName ?? localStorage.getItem("fullName") ?? "Атласов Раян Алексеевич",
-        email: base?.email ?? "r.atlasov@zk-uk.ru",
-        role: base?.role ?? "Manager",
-        phone: base?.phone ?? "+7 (902) 664-93-93",
+        fullName: base?.fullName ?? localStorage.getItem("fullName") ?? "Ошибка загрузки...",
+        email: base?.email ?? "Ошибка загрузки...",
+        role: base?.role ?? "Ошибка загрузки...",
+        phone: base?.phone ?? "Ошибка загрузки...",
         telegram: "@atlasov_uk",
         extension: "142",
         organization: "УК «Зелёный квартал»",
@@ -71,6 +77,8 @@ function buildFallback(base?: Partial<Me>): Me {
 }
 
 export default function Account(): JSX.Element {
+    useDocumentTitle('Аккаунт');
+
     const navigate = useNavigate();
 
     const [me, setMe] = useState<Me | null>(null);
@@ -100,6 +108,14 @@ export default function Account(): JSX.Element {
     const [pwError, setPwError] = useState("");
     const [pwSuccess, setPwSuccess] = useState(false);
     const [pwLoading, setPwLoading] = useState(false);
+
+    // Email
+    const [emOpen, setEmOpen] = useState(false);
+    const [emNew, setEmNew] = useState("");
+    const [emPwd, setEmPwd] = useState("");
+    const [emError, setEmError] = useState("");
+    const [emSuccess, setEmSuccess] = useState(false);
+    const [emLoading, setEmLoading] = useState(false);
 
     const seedForm = (data: Me) => {
         setFullName(data.fullName);
@@ -139,9 +155,7 @@ export default function Account(): JSX.Element {
         try {
             await usersApi.updateMe({fullName, phone});
             localStorage.setItem("fullName", fullName);
-        } catch {
-            // Демо-режим без бэка — сохраняем локально.
-        } finally {
+        } catch {/* демо-режим без бэка — сохраняем локально. */} finally {
             setMe(next);
             setEditMode(false);
             setSaveSuccess(true);
@@ -187,6 +201,28 @@ export default function Account(): JSX.Element {
         }
     }
 
+    async function handleEmailChange() {
+        setEmError("");
+        if (!emNew || !emPwd) return setEmError("Заполните все поля");
+        if (!emNew.includes("@")) return setEmError("Введите корректный email");
+        setEmLoading(true);
+        try {
+            const res = await usersApi.changeEmail({newEmail: emNew, password: emPwd});
+            setMe(prev => prev ? {...prev, email: res.email} : prev);
+            setEmSuccess(true);
+            setEmNew("");
+            setEmPwd("");
+            setTimeout(() => {
+                setEmSuccess(false);
+                setEmOpen(false);
+            }, 1500);
+        } catch (err) {
+            setEmError(err instanceof Error ? err.message : "Ошибка смены email");
+        } finally {
+            setEmLoading(false);
+        }
+    }
+
     function handleLogout() {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
@@ -215,7 +251,7 @@ export default function Account(): JSX.Element {
                 )}
             </div>
 
-            {/* ─── Профиль ────────────────────────────────────── */}
+            {/* профиль */}
             <div className="mgr-account__card">
                 <div className="mgr-account__profile">
                     <div className="mgr-account__avatar-wrap">
@@ -269,7 +305,7 @@ export default function Account(): JSX.Element {
                 </div>
             </div>
 
-            {/* ─── Личные / контактные данные ─────────────────── */}
+            {/* личные / контактные данные */}
             <div className="mgr-account__card">
                 <div className="mgr-account__section-title">
                     <User size={16}/> Контактные данные
@@ -347,7 +383,7 @@ export default function Account(): JSX.Element {
                 </div>
             </div>
 
-            {/* ─── Рабочие данные ─────────────────────────────── */}
+            {/* рабочие данные */}
             <div className="mgr-account__card">
                 <div className="mgr-account__section-title">
                     <Briefcase size={16}/> Рабочие данные
@@ -400,11 +436,32 @@ export default function Account(): JSX.Element {
                 </div>
             </div>
 
-            {/* ─── Безопасность ───────────────────────────────── */}
+            {/* безопасность */}
             <div className="mgr-account__card">
                 <div className="mgr-account__section-title">
                     <Lock size={16}/> Безопасность
                 </div>
+
+                <button className="mgr-account__pw-toggle" onClick={() => setEmOpen(v => !v)}>
+                    <div className="mgr-account__pw-toggle-left">
+                        <Mail size={16}/> <span>Сменить email</span>
+                    </div>
+                    {emOpen ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
+                </button>
+
+                {emOpen && (
+                    <div className="mgr-account__pw-form">
+                        {emError && <p className="mgr-account__pw-error">{emError}</p>}
+                        {emSuccess && <p className="mgr-account__pw-success">Email успешно изменён</p>}
+                        <input className="mgr-account__input" type="email" placeholder="Новый email"
+                               value={emNew} onChange={e => setEmNew(e.target.value)}/>
+                        <input className="mgr-account__input" type="password" placeholder="Текущий пароль"
+                               value={emPwd} onChange={e => setEmPwd(e.target.value)}/>
+                        <button className="mgr-account__pw-submit" onClick={handleEmailChange} disabled={emLoading}>
+                            <Mail size={15}/> {emLoading ? "Сохраняем…" : "Обновить email"}
+                        </button>
+                    </div>
+                )}
 
                 <button className="mgr-account__pw-toggle" onClick={() => setPwOpen(v => !v)}>
                     <div className="mgr-account__pw-toggle-left">

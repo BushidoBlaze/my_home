@@ -22,6 +22,13 @@ export interface User {
     area?: number;
     rooms?: number;
     apartmentRole?: string;
+
+    /** Лицевой счёт в УК (формат 740-XXXX-XXXX). */
+    accountNumber?: string;
+
+    /** УК пользователя (для менеджера — его организация). */
+    organizationId?: string | null;
+    organizationName?: string | null;
 }
 
 export interface UpdateMeDto {
@@ -58,7 +65,13 @@ export const usersApi = {
         uploadFileJson<{ url: string }>("/users/avatar", file),
 
     changePassword: (data: { oldPassword: string; newPassword: string }) =>
-        requestJson<string>("/users/password", {
+        requestJson<{ message: string }>("/users/password", {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }),
+
+    changeEmail: (data: { newEmail: string; password: string }) =>
+        requestJson<{ email: string }>("/users/email", {
             method: "PUT",
             body: JSON.stringify(data),
         }),

@@ -1,16 +1,14 @@
-import {usersApi} from "@/api/users.api.ts";
-import {subscriptionApi, type SubscriptionInfo, type UserApartmentItem} from "@/api/subscription.api.ts";
 // plugins
 import {useEffect, useState, useRef} from "react";
-
 import {
-    User, Mail, Phone, Calendar, Lock, Home, Users,
-    Ruler, DoorOpen, ChevronDown, ChevronUp, Edit2, Check, X, Camera,
-    Crown, Plus, Building2, Sparkles,
+    User, Mail, Phone, Calendar, Lock, Home, Users, Ruler, DoorOpen, ChevronDown, ChevronUp, Edit2, Check, X, Camera,
 } from "lucide-react";
 
 // api
+import {usersApi} from "@/api/users.api.ts";
 
+// hooks
+import {useDocumentTitle} from "@/shared/hooks/useDocumentTitle.ts";
 
 // styles
 import "./Account.css";
@@ -56,6 +54,8 @@ function getRoleLabel(role: string) {
 }
 
 export default function Account() {
+    useDocumentTitle('Аккаунт');
+
     // Данные пользователя
     const [me, setMe] = useState<Me | null>(null);
     const [loading, setLoading] = useState(true);
@@ -89,6 +89,7 @@ export default function Account() {
     // Аватар
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [avatarLoading, setAvatarLoading] = useState(false);
+    const [avatarError, setAvatarError] = useState("");
 
     // Смена пароля
     const [pwOpen, setPwOpen] = useState(false);
@@ -99,34 +100,16 @@ export default function Account() {
     const [pwSuccess, setPwSuccess] = useState(false);
     const [pwLoading, setPwLoading] = useState(false);
 
+    // Смена email
+    const [emOpen, setEmOpen] = useState(false);
+    const [emNew, setEmNew] = useState("");
+    const [emPwd, setEmPwd] = useState("");
+    const [emError, setEmError] = useState("");
+    const [emSuccess, setEmSuccess] = useState(false);
+    const [emLoading, setEmLoading] = useState(false);
+
     // Секция квартиры — открыта по умолчанию
     const [aptOpen, setAptOpen] = useState(true);
-
-    // Подписка
-    const [subscription, setSubscription] = useState<SubscriptionInfo>({plan: "Basic"});
-    const [upgradeLoading, setUpgradeLoading] = useState(false);
-
-    // Список квартир
-    const [apartments, setApartments] = useState<UserApartmentItem[]>([]);
-
-    async function handleUpgrade() {
-        setUpgradeLoading(true);
-        try {
-            const result = await subscriptionApi.upgradeSubscription();
-            setSubscription(result);
-        } finally {
-            setUpgradeLoading(false);
-        }
-    }
-
-    async function addApartment() {
-        try {
-            const newApt = await subscriptionApi.addApartment({});
-            setApartments(prev => [...prev, newApt]);
-        } catch (e: unknown) {
-            alert(e instanceof Error ? e.message : "Ошибка");
-        }
-    }
 
     // Загружаем данные пользователя при монтировании
     useEffect(() => {
@@ -151,8 +134,6 @@ export default function Account() {
                 setApartmentRole(data.apartmentRole || "Собственник");
             })
             .finally(() => setLoading(false));
-        subscriptionApi.getSubscription().then(setSubscription).catch(() => {});
-        subscriptionApi.getMyApartments().then(setApartments).catch(() => {});
     }, []);
 
     // Сохранение всех данных профиля
@@ -182,18 +163,25 @@ export default function Account() {
 
     // Загрузка аватара — отправляем файл на бэк
     async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
+        const input = e.target;
+        const file = input.files?.[0];
         if (!file || !me) return;
 
         setAvatarLoading(true);
+        setAvatarError("");
         try {
             const res = await usersApi.uploadAvatar(file);
             // Добавляем timestamp чтобы браузер не кешировал старое фото
             setMe({...me, avatarUrl: res.url + "?t=" + Date.now()});
         } catch (err) {
             console.error("Ошибка загрузки аватара:", err);
+            // Раньше ошибка проглатывалась и пользователь не понимал, почему фото не меняется
+            setAvatarError(err instanceof Error ? err.message : "Не удалось загрузить аватар");
+            window.setTimeout(() => setAvatarError(""), 4000);
         } finally {
             setAvatarLoading(false);
+            // Сброс value — без этого onChange не сработает при повторном выборе того же файла
+            input.value = "";
         }
     }
 
@@ -228,6 +216,36 @@ export default function Account() {
             setPwError(err instanceof Error ? err.message : "Ошибка смены пароля");
         } finally {
             setPwLoading(false);
+        }
+    }
+
+    // Смена email — подтверждаем текущим паролем
+    async function handleEmailChange() {
+        setEmError("");
+        if (!emNew || !emPwd) {
+            setEmError("Заполните все поля");
+            return;
+        }
+        if (!emNew.includes("@")) {
+            setEmError("Введите корректный email");
+            return;
+        }
+
+        setEmLoading(true);
+        try {
+            const res = await usersApi.changeEmail({newEmail: emNew, password: emPwd});
+            setMe(prev => prev ? {...prev, email: res.email} : prev);
+            setEmSuccess(true);
+            setEmNew("");
+            setEmPwd("");
+            setTimeout(() => {
+                setEmSuccess(false);
+                setEmOpen(false);
+            }, 1500);
+        } catch (err) {
+            setEmError(err instanceof Error ? err.message : "Ошибка смены email");
+        } finally {
+            setEmLoading(false);
         }
     }
 
@@ -300,6 +318,13 @@ export default function Account() {
                             style={{display: "none"}}
                             onChange={handleAvatarChange}
                         />
+
+                        {/* Ошибка загрузки — авто-скрывается через 4с */}
+                        {avatarError && (
+                            <div className="account__avatar-error" role="alert">
+                                {avatarError}
+                            </div>
+                        )}
                     </div>
 
                     {/* Имя и роль */}
@@ -359,7 +384,7 @@ export default function Account() {
                         )}
                     </div>
 
-                    {/* Email нельзя менять */}
+                    {/* email меняется в секции «Сменить email» ниже */}
                     <div className="account__field">
                         <label className="account__label"><Mail size={13}/> Email</label>
                         <span className="account__value account__value--muted">{me.email}</span>
@@ -400,6 +425,46 @@ export default function Account() {
                         )}
                     </div>
                 </div>
+
+                <div className="account__divider"/>
+
+                {/* Секция смены email — сворачивается */}
+                <button className="account__pw-toggle" onClick={() => setEmOpen(v => !v)}>
+                    <div className="account__pw-toggle-left">
+                        <Mail size={16}/> <span>Сменить email</span>
+                    </div>
+                    {emOpen ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
+                </button>
+
+                {emOpen && (
+                    <div className="account__pw-form">
+                        {emError && <p className="account__pw-error">{emError}</p>}
+                        {emSuccess && <p className="account__pw-success">Email успешно изменён!</p>}
+
+                        <input
+                            className="account__input"
+                            type="email"
+                            placeholder="Новый email"
+                            value={emNew}
+                            onChange={e => setEmNew(e.target.value)}
+                        />
+                        <input
+                            className="account__input"
+                            type="password"
+                            placeholder="Текущий пароль"
+                            value={emPwd}
+                            onChange={e => setEmPwd(e.target.value)}
+                        />
+                        <button
+                            className="account__pw-submit"
+                            onClick={handleEmailChange}
+                            disabled={emLoading}
+                        >
+                            <Mail size={15}/>
+                            {emLoading ? "Сохраняем..." : "Обновить email"}
+                        </button>
+                    </div>
+                )}
 
                 <div className="account__divider"/>
 
@@ -447,93 +512,6 @@ export default function Account() {
                         </button>
                     </div>
                 )}
-            </div>
-
-            {/* ─── Карточка: Подписка и квартиры ─── */}
-            <div className="account__card">
-                <div className="account__sub-header">
-                    <div className="account__section-title">
-                        <Crown size={16}/> Подписка и квартиры
-                    </div>
-                    <span className={`account__plan-badge ${subscription.plan === "Premium" ? "account__plan-badge--premium" : ""}`}>
-                        {subscription.plan === "Premium" ? <><Sparkles size={11}/> Премиум</> : "Базовый"}
-                    </span>
-                </div>
-
-                {/* Планы */}
-                <div className="account__plans">
-                    <div className={`account__plan ${subscription.plan !== "Premium" ? "account__plan--active" : ""}`}>
-                        <div className="account__plan-name">Базовый</div>
-                        <div className="account__plan-price">Бесплатно</div>
-                        <ul className="account__plan-features">
-                            <li><Check size={12}/> 1 квартира</li>
-                            <li><Check size={12}/> Все основные функции</li>
-                            <li className="account__plan-feature--off"><X size={12}/> Несколько квартир</li>
-                            <li className="account__plan-feature--off"><X size={12}/> Приоритетная поддержка</li>
-                        </ul>
-                    </div>
-
-                    <div className={`account__plan account__plan--premium ${subscription.plan === "Premium" ? "account__plan--active" : ""}`}>
-                        <div className="account__plan-crown"><Crown size={14}/></div>
-                        <div className="account__plan-name">Премиум</div>
-                        <div className="account__plan-price">199 ₽<span>/мес</span></div>
-                        <ul className="account__plan-features">
-                            <li><Check size={12}/> До 5 квартир</li>
-                            <li><Check size={12}/> Все основные функции</li>
-                            <li><Check size={12}/> Единый кабинет</li>
-                            <li><Check size={12}/> Приоритетная поддержка</li>
-                        </ul>
-                        {subscription.plan !== "Premium" && (
-                            <button
-                                className="account__upgrade-btn"
-                                onClick={handleUpgrade}
-                                disabled={upgradeLoading}
-                            >
-                                <Sparkles size={14}/>
-                                {upgradeLoading ? "Оформляем..." : "Подключить Премиум"}
-                            </button>
-                        )}
-                        {subscription.plan === "Premium" && (
-                            <div className="account__active-tag"><Check size={12}/> Активна</div>
-                        )}
-                    </div>
-                </div>
-
-                <div className="account__divider"/>
-
-                {/* Список квартир */}
-                <div className="account__section-title" style={{marginBottom: 4}}>
-                    <Building2 size={16}/> Мои квартиры
-                </div>
-
-                <div className="account__apts">
-                    {apartments.map(apt => (
-                        <div key={apt.id} className={`account__apt ${apt.isActive ? "account__apt--active" : ""}`}>
-                            <div className="account__apt-icon">
-                                <Home size={16}/>
-                            </div>
-                            <div className="account__apt-info">
-                                <span className="account__apt-label">{apt.label}</span>
-                                <span className="account__apt-addr">{apt.address}</span>
-                            </div>
-                            {apt.isActive && <span className="account__apt-current">Текущая</span>}
-                        </div>
-                    ))}
-
-                    {/* Кнопка добавить */}
-                    {subscription.plan === "Premium" ? (
-                        apartments.length < 5 && (
-                            <button className="account__apt-add" onClick={addApartment}>
-                                <Plus size={16}/> Добавить квартиру
-                            </button>
-                        )
-                    ) : (
-                        <div className="account__apt-locked">
-                            <Lock size={14}/>
-                            <span>Добавление квартир доступно на тарифе <strong>Премиум</strong></span>
-                        </div>
-                    )}
-                </div>
             </div>
 
             {/* ─── Карточка: Данные квартиры ─── */}
