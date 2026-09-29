@@ -6,7 +6,6 @@ import type {ResidentRequest} from "../model/types.ts";
 // Хук-агрегатор данных главной страницы жителя для блока заявок.
 // Отдельные состояния для первичной загрузки (loading/error) и для action-операций
 // (actionLoadingId/actionError) — чтобы ошибка отмены заявки не ломала весь блок.
-//
 // Уведомления намеренно сюда не входят: они общие для всего кабинета и живут в ResidentTopBar.
 export function useResidentHome() {
     const [requests, setRequests] = useState<ResidentRequest[]>([]);

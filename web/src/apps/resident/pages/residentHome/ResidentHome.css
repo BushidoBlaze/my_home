@@ -1,48 +1,58 @@
-/* Resident Home — главная страница жителя: квартира, платёж, заявки, события и объявления */
-.resident-home,
-.resident-home * {
-    font-family: "SF Pro Display", "SF Pro", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-.resident-home .mono,
-.resident-home .tnum {
-    font-feature-settings: "tnum" 1;
-}
-
+/*Главный контейнер*/
 .resident-home {
+    width: 100%;
+
     display: flex;
     flex-direction: column;
-    width: 100%;
-    color: #0f172a;
-    background: #f5f7f5;
+
+    background-color: #f5f7f5;
 }
 
+/*Второстепеннный контейнер с основной информацией*/
 .resident-home__content {
-    padding: 0 32px 36px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+
+    padding: 0 32px 36px;
 }
 
-/*HERO — квартира + платёж*/
+/*Секция hero - ваша квартира + ближайший платёж*/
 .resident-home__hero {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
     gap: 20px;
 }
 
+/*Секция - ваша квартира в hero*/
 .resident-home__apartment {
-    position: relative;
-    overflow: hidden;
+    min-height: 232px;
+
     border-radius: 20px;
+
+    position: relative;
     padding: 28px;
+
     color: #ffffff;
     background: linear-gradient(135deg, #0e3d2c 0%, #064e3b 55%, #047857 100%);
-    min-height: 232px;
+
+    overflow: hidden;
 }
 
-.resident-home__apartment-pattern {
+/*Декор - Ваша квартира*/
+.resident-home__apartment-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    letter-spacing: 0.4px;
+
+    color: rgba(255, 255, 255, 0.65);
+}
+
+/*Ваша квартира - icon */
+.resident-home__apartment-icon {
     position: absolute;
     right: -40px;
     width: 320px;
@@ -51,62 +61,77 @@
     pointer-events: none;
 }
 
+/*Ваша квартира - Основной контейнер*/
 .resident-home__apartment-inner {
-    position: relative;
+    height: 100%;
+
     display: flex;
     flex-direction: column;
     gap: 18px;
-    height: 100%;
+
+    position: relative;
 }
 
-.resident-home__apartment-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.resident-home__apartment-label {
-    color: rgba(255, 255, 255, 0.65);
-}
-
+/*Адрес дома*/
 .resident-home__apartment-address {
+    font-family: Inter, Arial, Helvetica, sans-serif;
     font-size: 26px;
     font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    line-height: 1.2;
 }
 
+/*Информация по дому: (Квартира + площадь)*/
 .resident-home__apartment-info {
-    font-size: 16px;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.4px;
     opacity: 0.85;
+
     margin-top: 4px;
-    letter-spacing: -0.01em;
 }
 
+/*Контейнер статистики (название / значение)*/
 .resident-home__apartment-stats {
     display: flex;
-    gap: 22px;
+    align-items: center;
     flex-wrap: wrap;
+    gap: 22px;
+
     margin-top: auto;
 }
 
+/*ui элемент в секции статистика - полоса ( | )*/
 .resident-home__apartment-separator {
     width: 1px;
+    align-self: stretch;
     background: rgba(255, 255, 255, 0.18);
 }
 
-.resident-home__apartment-stat-label {
-    font-size: 11px;
-    opacity: 0.65;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+/*Статистика - Контейнер (название + значение в ряд)*/
+.resident-home__apartment-stat {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
 }
 
+/*Статистика - Название*/
+.resident-home__apartment-stat-label {
+    font-family: Raleway, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    opacity: 0.65;
+}
+
+/*Статистика - Значение*/
 .resident-home__apartment-stat-value {
+    font-family: Inter, Arial, Helvetica, sans-serif;
     font-size: 22px;
     font-weight: 700;
+    text-align: center;
+
     margin-top: 2px;
-    letter-spacing: -0.02em;
 }
 
 .resident-home__apartment-actions {
@@ -136,17 +161,8 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-.resident-home__apartment-button--primary {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.resident-home__apartment-button--primary:hover {
-    background: rgba(255, 255, 255, 0.22);
-}
-
 /* Карточка ближайшего платежа — сумма, дата, кнопки оплаты, прогресс-Donut */
 .resident-home__payment {
-    padding: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;

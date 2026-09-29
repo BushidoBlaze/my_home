@@ -19,49 +19,63 @@ export function ApartmentBlock({user}: ApartmentBlockProps): JSX.Element {
         ? `${user.street}, ${user.house}`
         : "Адрес не указан";
 
-    // Площадь — опциональная часть строки. Не показываем " · undefined м²", если её нет.
+    // Площадь — опциональная часть строки. Не показываем · undefined м²", если её нет.
     const info = user?.apartmentNumber
-        ? `Квартира ${user.apartmentNumber}${user.area ? ` · ${user.area} м²` : ""}`
+        ? `Квартира ${user.apartmentNumber}${user.area ? ` / ${user.area} м²` : ""}`
         : "Квартира не привязана";
 
     return (
         <div className="resident-home__apartment">
-            {/* Декоративная иконка в правом углу карточки — фоновый паттерн, не интерактивна */}
-            <MapPinHouse className="resident-home__apartment-pattern" size={48} strokeWidth={0.5}/>
+
+            {/*Декоративная иконка*/}
+            <MapPinHouse className="resident-home__apartment-icon" size={48} strokeWidth={0.5}/>
 
             <div className="resident-home__apartment-inner">
-                <div className="resident-home__apartment-eyebrow">
-                    <span className="t-eyebrow resident-home__apartment-label">Ваша квартира</span>
-                </div>
+                <span className="resident-home__apartment-label">
+                    Ваша квартира
+                </span>
 
                 <div>
                     <div className="resident-home__apartment-address">{address}</div>
                     <div className="resident-home__apartment-info">{info}</div>
                 </div>
 
-                {/* 4 статистики через вертикальные сепараторы. "—" — fallback для пустых значений */}
+                {/*4 статистики по дому (Подъезд / Этаж / Жильцы / Комнаты) и fallback "—" для пустых значений*/}
                 <div className="resident-home__apartment-stats">
                     <ApartmentStat label="Подъезд" value={user?.entrance || "—"}/>
                     <span className="resident-home__apartment-separator"/>
+
                     <ApartmentStat label="Этаж" value={user?.floor || "—"}/>
                     <span className="resident-home__apartment-separator"/>
+
                     <ApartmentStat label="Жильцов" value={user?.residents?.toString() || "—"}/>
                     <span className="resident-home__apartment-separator"/>
+
                     <ApartmentStat label="Комнат" value={user?.rooms?.toString() || "—"}/>
                 </div>
 
                 {/* Кнопки-ссылки. "Соседи" и "Документы" ведут на /account (раздел в профиле),
                     "О доме" — на /help (статья FAQ). Бэкенда для соседей/документов пока нет. */}
                 <div className="resident-home__apartment-actions">
-                    <Link to="/resident/account"
-                          className="resident-home__apartment-button resident-home__apartment-button--primary">
-                        <Users size={14}/> Соседи
+                    <Link
+                        to="/resident/account"
+                        className="resident-home__apartment-button">
+                        <Users size={14}/>
+                        Соседи
                     </Link>
-                    <Link to="/resident/account" className="resident-home__apartment-button">
-                        <Key size={14}/> Документы
+
+                    <Link
+                        to="/resident/account"
+                        className="resident-home__apartment-button">
+                        <Key size={14}/>
+                        Документы
                     </Link>
-                    <Link to="/resident/help" className="resident-home__apartment-button">
-                        <Building2 size={14}/> О доме
+
+                    <Link
+                        to="/resident/help"
+                        className="resident-home__apartment-button">
+                        <Building2 size={14}/>
+                        О доме
                     </Link>
                 </div>
             </div>
